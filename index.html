@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C.A.B. // WORKSTATION</title>
   
-  <!-- Tipografías de alta definición 32-bit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- API de Google Calendar -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
@@ -212,6 +210,7 @@
       position: relative;
     }
 
+    /* CONTORNOS EXCLUSIVOS DE AGENDA GOOGLE CALENDAR */
     .card.sync-ok {
       border-color: var(--green) !important;
       animation: pulseGreenBorder 3.5s infinite alternate ease-in-out;
@@ -265,14 +264,12 @@
       color: #ffffff;
     }
 
-    .materia-tag-verde {
+    .materia-tag {
       font-family: 'Chakra Petch', sans-serif;
-      color: var(--green);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-right: 6px;
-      text-shadow: 0 0 8px rgba(16, 185, 129, 0.45);
     }
 
     .actividad-texto {
@@ -467,7 +464,6 @@
       gap: 8px;
     }
 
-    /* GAVETA DE DESGLOSE HACIA ABAJO (ACCORDION DRAWER) */
     .card-details-drawer {
       margin-top: 8px;
       padding: 14px;
@@ -584,7 +580,6 @@
       box-shadow: 0 0 4px #ffffff;
     }
 
-    /* MATERIAS VIEW */
     .materia-bloque {
       margin-bottom: 28px;
       background: #0c1220;
@@ -614,7 +609,6 @@
       font-family: 'Chakra Petch', sans-serif;
       font-size: 1.15rem;
       font-weight: 700;
-      color: #7dd3fc;
       letter-spacing: 1.5px;
     }
 
@@ -625,7 +619,6 @@
       margin-top: 4px;
     }
 
-    /* EVALUACIÓN VIEW */
     .eval-materia-card {
       background: #0d1424;
       border: 1px solid #1e293b;
@@ -692,7 +685,6 @@
       align-items: center;
     }
 
-    /* MATRIZ SEMESTRAL */
     .table-container {
       width: 100%;
       overflow-x: auto;
@@ -993,7 +985,6 @@
       line-height: 1.45;
     }
 
-    /* MODAL DE EDICIÓN MANUAL DE TAREAS */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -1074,7 +1065,7 @@
       <div id="lista-materias"></div>
     </section>
 
-    <!-- 3: EVALUACIÓN (CON CUADROS DE VALOR POR PARCIAL) -->
+    <!-- 3: EVALUACIÓN -->
     <section id="vista-evaluacion" class="view-panel">
       <div class="section-header">
         <h2>3ER PARCIAL // RENDIMIENTO</h2>
@@ -1277,6 +1268,19 @@
       "Orientación Juvenil y Profesional I"
     ];
 
+    // MAPA OFICIAL DE COLORES DISTINTIVOS POR MATERIA
+    const COLORES_MATERIAS = {
+      "Álgebra": "#f87171", // Rojizo
+      "Expresión Oral y Escrita I": "#3b82f6", // Azul
+      "Historia de México Contemporáneo I": "#f97316", // Naranja
+      "Inglés I": "#facc15", // Amarillo
+      "Filosofía I": "#c084fc", // Púrpura neón
+      "Computación Básica I": "#34d399", // Verde esmeralda
+      "DHP": "#f472b6", // Fucsia / Rosa
+      "Desarrollo Personal": "#a3e635", // Verde lima
+      "Orientación Juvenil y Profesional I": "#2dd4bf" // Turquesa / Cian
+    };
+
     function normalizarMateria(nombre) {
       if (!nombre) return "Álgebra";
       const m = nombre.toLowerCase().trim();
@@ -1290,6 +1294,11 @@
       if (m.includes("desarrollo personal") || m.includes("personal") || m.includes("dp")) return "Desarrollo Personal";
       if (m.includes("orientación") || m.includes("orientacion") || m.includes("juvenil") || m.includes("profesional") || m.includes("oyp") || m.includes("ojp")) return "Orientación Juvenil y Profesional I";
       return nombre;
+    }
+
+    function getColorMateria(nombre) {
+      const norm = normalizarMateria(nombre);
+      return COLORES_MATERIAS[norm] || "#38bdf8";
     }
 
     let tareas = JSON.parse(localStorage.getItem("tareas_batiz")) || [
@@ -1374,18 +1383,12 @@
       }
     }
 
-    // --- FUNCIÓN DE DESGLOSE HACIA ABAJO ---
     function toggleDesgloseDetalles(id) {
       const el = document.getElementById("drawer-detalles-" + id);
       if (!el) return;
-      if (el.style.display === "none" || !el.style.display) {
-        el.style.display = "block";
-      } else {
-        el.style.display = "none";
-      }
+      el.style.display = (el.style.display === "none" || !el.style.display) ? "block" : "none";
     }
 
-    // --- FUNCIONES DEL MODIFICADOR MANUAL ---
     function abrirEditorManualDirecto(idPreseleccionado = null) {
       const modal = document.getElementById("modal-editor-tarea");
       const selectTarea = document.getElementById("edit-select-tarea");
@@ -1919,12 +1922,12 @@
           guardarLocal();
           render();
           const p3Info = calcularP3Materia(materia);
-          agregarMensajeChat("bot", `BONO ASIGNADO: +${extraPts}% en ${materia.toUpperCase()}. Total en P3: <strong>${p3Info.puntosAcumulados}%</strong>${p3Info.colchon > 0 ? ' (Colchón: +' + p3Info.colchon + '%)' : ''}.`);
+          agregarMensajeChat("bot", `BONO ASIGNADO: +${extraPts}% en <span style="color:${getColorMateria(materia)}; font-weight:700;">${materia.toUpperCase()}</span>. Total en P3: <strong>${p3Info.puntosAcumulados}%</strong>${p3Info.colchon > 0 ? ' (Colchón: +' + p3Info.colchon + '%)' : ''}.`);
           return;
         }
       }
 
-      // 4. Agregar o actualizar detalles desde J.A.R.V.I.S
+      // 4. Agregar o actualizar detalles
       if (lower.includes("detalles") || lower.includes("nota") || lower.includes("notas")) {
         let tarea = null;
         let mejorScore = 0;
@@ -1947,13 +1950,13 @@
             tarea.detalles = partes[1].trim();
             guardarLocal();
             render();
-            agregarMensajeChat("bot", `DETALLES ACTUALIZADOS: ${tarea.materia.toUpperCase()}: "${tarea.actividad}"<br>• <em>${tarea.detalles}</em>`);
+            agregarMensajeChat("bot", `DETALLES ACTUALIZADOS: <span style="color:${getColorMateria(tarea.materia)}; font-weight:700;">${tarea.materia.toUpperCase()}</span>: "${tarea.actividad}"<br>• <em>${tarea.detalles}</em>`);
             return;
           }
         }
       }
 
-      // 5. Calificaciones P1 y P2 en la tabla (cifras numéricas)
+      // 5. Calificaciones P1 y P2 en la tabla
       const p1p2Match = lower.match(/(?:en\s+)?p([12])\s+(?:de\s+)?([a-záéíóúñ\s]+).*?(\d+(?:\.\d+)?)/i) ||
                         lower.match(/([a-záéíóúñ\s]+)\s+p([12]).*?(\d+(?:\.\d+)?)/i) ||
                         lower.match(/p([12])\s*=?\s*(\d+(?:\.\d+)?)/i);
@@ -1980,7 +1983,7 @@
           calificacionesSemestre[materia][numParcial] = Math.min(Math.max(nota, 0), 100);
           guardarLocal();
           render();
-          agregarMensajeChat("bot", `REGISTRO: ${materia.toUpperCase()} ${numParcial.toUpperCase()} = <strong>${nota.toFixed(0)}</strong>. Matriz semestral actualizada.`);
+          agregarMensajeChat("bot", `REGISTRO: <span style="color:${getColorMateria(materia)}; font-weight:700;">${materia.toUpperCase()}</span> ${numParcial.toUpperCase()} = <strong>${nota.toFixed(0)}</strong>. Matriz semestral actualizada.`);
           return;
         }
       }
@@ -2020,7 +2023,7 @@
           const ptsGanados100 = ((notaObt / tarea.base) * 100).toFixed(1);
           const p3Info = calcularP3Materia(tarea.materia);
 
-          agregarMensajeChat("bot", `CALIFICACIÓN: "${tarea.actividad}" asignada con ${notaObt} / ${tarea.puntos} en BASE DEL PROFESOR (+${ptsGanados100}% en PORCENTAJE). Total en ${tarea.materia.toUpperCase()}: <strong>${p3Info.puntosAcumulados}%</strong>.`);
+          agregarMensajeChat("bot", `CALIFICACIÓN: "${tarea.actividad}" asignada con ${notaObt} / ${tarea.puntos} en BASE DEL PROFESOR (+${ptsGanados100}% en PORCENTAJE). Total en <span style="color:${getColorMateria(tarea.materia)}; font-weight:700;">${tarea.materia.toUpperCase()}</span>: <strong>${p3Info.puntosAcumulados}%</strong>.`);
           return;
         }
       }
@@ -2079,7 +2082,7 @@
           parcial: 3
         };
         setTimeout(() => {
-          agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: ${tareaEnEspera.materia.toUpperCase()}: "${tareaEnEspera.actividad}". INDICA LA FECHA DE ENTREGA.`);
+          agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: <span style="color:${getColorMateria(tareaEnEspera.materia)}; font-weight:700;">${tareaEnEspera.materia.toUpperCase()}</span>: "${tareaEnEspera.actividad}". INDICA LA FECHA DE ENTREGA.`);
         }, 120);
         return;
       }
@@ -2105,13 +2108,13 @@
 
       if (esOrdinal) {
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: ${nueva.materia.toUpperCase()}: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [CLASIFICACIÓN: ORDINALES].`);
+          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [CLASIFICACIÓN: ORDINALES].`);
           render();
         }, 120);
       } else {
         const pesoBase100 = ((nueva.puntos / nueva.base) * 100).toFixed(0);
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: ${nueva.materia.toUpperCase()}: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${pesoBase100}%].`);
+          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${pesoBase100}%].`);
           render();
         }, 120);
       }
@@ -2133,6 +2136,7 @@
         const doom = calcularCuentaRegresiva(t.fecha);
         const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
         const syncClase = t.sincronizada ? 'sync-ok' : 'sync-pending';
+        const colorMat = getColorMateria(t.materia);
         
         let bloqueVisual = '';
 
@@ -2182,7 +2186,7 @@
         return `
           <div class="card ${syncClase} ${t.completada ? 'completada' : ''}">
             <div class="card-top">
-              <span class="materia-tag-verde">${normalizarMateria(t.materia).toUpperCase()}:</span>
+              <span class="materia-tag" style="color:${colorMat}; text-shadow:0 0 8px ${colorMat}66;">${normalizarMateria(t.materia).toUpperCase()}:</span>
               <span class="actividad-texto">${t.actividad}</span>
             </div>
 
@@ -2207,7 +2211,6 @@
               </div>
             </div>
 
-            <!-- GAVETA DE DESGLOSE HACIA ABAJO -->
             <div id="drawer-detalles-${t.id}" class="card-details-drawer" style="display:none;">
               <div class="details-top-bar">
                 <span class="details-title-tag">DETALLES & NOTAS DE LA ACTIVIDAD:</span>
@@ -2227,6 +2230,7 @@
 
       materiasEl.innerHTML = materiasConTareas.length ? materiasConTareas.map(mat => {
         const tareasMat = tareas.filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase()).sort((a, b) => new Date(`${a.fecha}T${a.hora}`) - new Date(`${b.fecha}T${b.hora}`));
+        const colorMat = getColorMateria(mat);
         
         const puntosTotales100 = tareasMat.reduce((acc, curr) => {
           if (curr.tipo === 'ordinal') return acc;
@@ -2242,8 +2246,8 @@
           <div class="materia-bloque">
             <div class="materia-header">
               <div class="materia-title-row">
-                <span class="materia-titulo">${mat.toUpperCase()}</span>
-                <span class="badge" style="border: 1px solid #7dd3fc; color:#7dd3fc; background: rgba(56, 189, 248, 0.1);">${estadoPonderacion}</span>
+                <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
+                <span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${estadoPonderacion}</span>
               </div>
               
               <div class="materia-universal-bar">
@@ -2323,7 +2327,6 @@
                     </div>
                   </div>
 
-                  <!-- GAVETA DE DESGLOSE EN MATERIAS -->
                   <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
                     <div class="details-top-bar">
                       <span class="details-title-tag">DETALLES & NOTAS DE LA ACTIVIDAD:</span>
@@ -2346,12 +2349,13 @@
         const p3Info = calcularP3Materia(mat);
         const tareasP3 = tareas.filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase() && (t.parcial === 3 || !t.parcial));
         const colorBarra = p3Info.puntosAcumulados >= 80 ? 'success' : (p3Info.puntosAcumulados >= 60 ? 'warning' : '');
+        const colorMat = getColorMateria(mat);
 
         return `
           <div class="eval-materia-card">
             <div class="eval-materia-header">
               <div class="eval-materia-topline">
-                <span class="materia-tag-verde" style="font-size:1.15rem;">${mat.toUpperCase()}</span>
+                <span class="materia-tag" style="font-size:1.15rem; color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
                 <div class="eval-grade-display">
                   <span>${p3Info.puntosAcumulados}%</span>
                   ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15);">+${p3Info.colchon}% COLCHÓN</span>` : ''}
@@ -2431,13 +2435,14 @@
         `;
       }).join("");
 
-      // Nivel 2: Matriz Semestral Ponderada
+      // Nivel 2: Matriz Semestral
       let sumaPromediosSemestre = 0;
       let materiasEvaluadasCount = 0;
 
       matrizBody.innerHTML = MATERIAS_OFICIALES.map(mat => {
         const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
         const pesos = pesosParciales[mat] || { p1: 33.3, p2: 33.3, p3: 33.4 };
+        const colorMat = getColorMateria(mat);
 
         const p1Val = califs.p1 !== null && califs.p1 !== undefined ? califs.p1 : "";
         const p2Val = califs.p2 !== null && califs.p2 !== undefined ? califs.p2 : "";
@@ -2474,7 +2479,7 @@
 
         return `
           <tr>
-            <td style="font-weight:700;"><span class="materia-tag-verde">${mat.toUpperCase()}</span></td>
+            <td style="font-weight:700;"><span class="materia-tag" style="color:${colorMat}; text-shadow:0 0 6px ${colorMat}55;">${mat.toUpperCase()}</span></td>
             
             <td>
               <div class="partial-cell-content">
