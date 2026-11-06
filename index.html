@@ -25,6 +25,7 @@
       --danger: #ef4444;
       --danger-glow: rgba(239, 68, 68, 0.35);
       --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.45);
       --text-main: #ffffff;
       --bevel-high: rgba(255, 255, 255, 0.08);
       --bevel-shadow: rgba(0, 0, 0, 0.6);
@@ -50,7 +51,7 @@
     }
 
     .app-container {
-      max-width: 860px;
+      max-width: 920px;
       margin: 0 auto;
     }
 
@@ -202,7 +203,7 @@
       margin-bottom: 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       box-shadow: 
         inset 1px 1px 0px var(--bevel-high),
         inset -1px -1px 0px var(--bevel-shadow),
@@ -318,17 +319,50 @@
       border-color: #475569;
     }
 
-    .ponderacion-block {
+    .ordinal-card-box {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px dashed var(--amber);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-ordinal {
+      font-family: 'Chakra Petch', sans-serif;
+      background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
+      border: 1px solid #fbbf24;
+      color: #ffffff;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 6px rgba(251, 191, 36, 0.6);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
+    }
+
+    .dual-bars-wrapper {
+      background: rgba(11, 16, 28, 0.7);
+      border: 1px solid #1a253a;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bar-row-block {
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
 
-    .bar-label-row {
+    .bar-label-sub {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: #ffffff;
       font-weight: 700;
       letter-spacing: 0.5px;
@@ -336,7 +370,7 @@
 
     .bar-container {
       width: 100%;
-      height: 12px;
+      height: 15px;
       background: #080d1a;
       border: 1px solid #1e293b;
       position: relative;
@@ -351,6 +385,11 @@
       box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
     }
 
+    .bar-fill.bar-gold {
+      background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
+      box-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
+    }
+
     .bar-fill.warning {
       background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
       box-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
@@ -361,12 +400,29 @@
       box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
     }
 
+    .input-mini {
+      width: 60px;
+      background: #070b14;
+      border: 1px solid #2a3a5a;
+      color: #ffffff;
+      padding: 5px 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+    }
+
+    .input-mini:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px var(--accent-glow);
+    }
+
     .card-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 4px;
-      padding-top: 12px;
+      padding-top: 10px;
       border-top: 1px solid #1a2333;
       flex-wrap: wrap;
       gap: 10px;
@@ -409,6 +465,38 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    /* GAVETA DE DESGLOSE HACIA ABAJO (ACCORDION DRAWER) */
+    .card-details-drawer {
+      margin-top: 8px;
+      padding: 14px;
+      background: #090e1a;
+      border: 1px solid #1c2b46;
+      border-left: 3px solid var(--accent);
+      animation: panelFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .details-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .details-title-tag {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .details-text-content {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+      white-space: pre-wrap;
     }
 
     button {
@@ -496,7 +584,7 @@
       box-shadow: 0 0 4px #ffffff;
     }
 
-    /* ESTILOS DE LA PESTAÑA MATERIAS */
+    /* MATERIAS VIEW */
     .materia-bloque {
       margin-bottom: 28px;
       background: #0c1220;
@@ -537,13 +625,13 @@
       margin-top: 4px;
     }
 
-    /* ESTILOS DE LA PESTAÑA EVALUACIÓN */
+    /* EVALUACIÓN VIEW */
     .eval-materia-card {
       background: #0d1424;
       border: 1px solid #1e293b;
       padding: 18px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      margin-bottom: 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.45);
     }
 
     .eval-materia-header {
@@ -565,7 +653,7 @@
 
     .eval-grade-display {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #ffffff;
       display: flex;
@@ -573,27 +661,35 @@
       gap: 8px;
     }
 
+    .coverage-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
     .eval-activities-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .eval-act-card {
+      background: #111827;
+      border: 1px solid #1f293d;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .eval-act-item {
-      background: #111827;
-      border: 1px solid #1f293d;
-      padding: 12px 14px;
+    .eval-act-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .eval-act-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
 
     /* MATRIZ SEMESTRAL */
@@ -611,44 +707,109 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
     }
 
     .matrix-table th {
       font-family: 'Chakra Petch', sans-serif;
       background: #111a2e;
       color: var(--accent);
-      padding: 12px;
+      padding: 16px 14px;
       border-bottom: 2px solid #1e293b;
       letter-spacing: 1px;
       font-weight: 700;
+      text-align: center;
+    }
+
+    .matrix-table th:first-child {
+      text-align: left;
     }
 
     .matrix-table td {
-      padding: 12px;
+      padding: 16px 14px;
       border-bottom: 1px solid #192338;
       color: #ffffff;
+      vertical-align: middle;
     }
 
     .matrix-table tr:hover {
       background: rgba(56, 189, 248, 0.04);
     }
 
+    .partial-cell-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
     .input-cell {
-      width: 70px;
+      width: 76px;
       background: #060913;
       border: 1px solid #23314d;
       color: #ffffff;
       padding: 6px;
-      font-size: 0.85rem;
+      font-size: 1.05rem;
       font-weight: 700;
       text-align: center;
       outline: none;
+      height: 36px;
     }
 
     .input-cell:focus {
       border-color: var(--accent);
       box-shadow: 0 0 6px var(--accent-glow);
+    }
+
+    .p3-grade-display {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #38bdf8;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .weight-box {
+      background: #080d18;
+      border: 1px solid #1e2d48;
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .weight-label {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.68rem;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .input-weight {
+      width: 50px;
+      background: #0c1220;
+      border: 1px solid #23314d;
+      color: #fbbf24;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 2px 4px;
+      outline: none;
+    }
+
+    .input-weight:focus {
+      border-color: #fbbf24;
+      box-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
+    }
+
+    .weight-unit {
+      font-size: 0.75rem;
+      color: #fbbf24;
+      font-weight: 700;
     }
 
     .hud-promedio-box {
@@ -676,13 +837,13 @@
       color: #ffffff;
       text-shadow: 0 0 16px var(--accent-glow);
       line-height: 1;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .hud-meta {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.85rem;
-      color: #cbd5e1;
+      color: #94a3b8;
       letter-spacing: 1px;
     }
 
@@ -787,7 +948,7 @@
       letter-spacing: 1px;
     }
 
-    input, select {
+    input, select, textarea {
       background-color: #080c14;
       border: 1px solid #23314d;
       color: #ffffff;
@@ -796,7 +957,7 @@
       outline: none;
     }
 
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: var(--accent);
     }
 
@@ -831,6 +992,44 @@
       margin-bottom: 14px;
       line-height: 1.45;
     }
+
+    /* MODAL DE EDICIÓN MANUAL DE TAREAS */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 8, 15, 0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .modal-container {
+      background: #0f1626;
+      border: 2px solid var(--card-border-default);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 1px 1px 0px var(--bevel-high);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -851,8 +1050,11 @@
     <!-- 1: CRONOGRAMA -->
     <section id="vista-cronograma" class="view-panel active">
       <div class="section-header">
-        <h2>ENTREGAS ACTIVAS</h2>
-        <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
+        <h2>ENTREGAS ACTIVAS // PONDERACIONES</h2>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
+          <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
+        </div>
       </div>
 
       <div class="filter-bar">
@@ -864,26 +1066,26 @@
       <div id="lista-cronograma"></div>
     </section>
 
-    <!-- 2: MATERIAS (CALENDARIO DE ENTREGAS POR ASIGNATURA CON BARRAS) -->
+    <!-- 2: MATERIAS (SOLO VISUALIZADOR) -->
     <section id="vista-materias" class="view-panel">
       <div class="section-header">
-        <h2>DISTRIBUCIÓN POR ASIGNATURA</h2>
+        <h2>DISTRIBUCIÓN POR ASIGNATURA // VISUALIZADOR</h2>
       </div>
       <div id="lista-materias"></div>
     </section>
 
-    <!-- 3: EVALUACIÓN (3ER PARCIAL BASE 100 + MATRIZ SEMESTRAL COMPLETA) -->
+    <!-- 3: EVALUACIÓN (CON CUADROS DE VALOR POR PARCIAL) -->
     <section id="vista-evaluacion" class="view-panel">
       <div class="section-header">
-        <h2>3ER PARCIAL // RENDIMIENTO (BASE 100 PTS)</h2>
+        <h2>3ER PARCIAL // RENDIMIENTO</h2>
       </div>
       <div id="lista-evaluacion-p3"></div>
 
       <div class="section-header" style="margin-top: 36px;">
         <h2>MATRIZ SEMESTRAL DE CALIFICACIONES</h2>
       </div>
-      <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:10px;">
-        * Ingresa tus calificaciones de P1 y P2 directamente en las celdas (o pídeselo a J.A.R.V.I.S). P3 se calcula automáticamente con tus actividades acumuladas de arriba.
+      <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:12px;">
+        * Ingresa tus calificaciones en la celda superior y el valor porcentual de cada parcial en el cuadro <strong>VALOR %</strong>. El promedio se calcula proporcionalmente sin alterar tus notas individuales.
       </p>
 
       <div class="table-container">
@@ -891,22 +1093,20 @@
           <thead>
             <tr>
               <th>ASIGNATURA</th>
-              <th style="text-align:center;">1ER PARCIAL</th>
-              <th style="text-align:center;">2DO PARCIAL</th>
-              <th style="text-align:center;">3ER PARCIAL</th>
-              <th style="text-align:center;">PROMEDIO</th>
-              <th style="text-align:center;">ESTADO</th>
+              <th>1ER PARCIAL</th>
+              <th>2DO PARCIAL</th>
+              <th>3ER PARCIAL</th>
+              <th>PROMEDIO</th>
             </tr>
           </thead>
           <tbody id="tabla-matriz-body"></tbody>
         </table>
       </div>
 
-      <!-- HUD Promedio Semestral General -->
       <div class="hud-promedio-box">
-        <div class="hud-title">PROMEDIO GENERAL SEMESTRAL PROYECTADO</div>
-        <div class="hud-number" id="hud-promedio-general">0.00</div>
-        <div class="hud-meta" id="hud-estado-academico">ESTADO: SIN REGISTROS SUFICIENTES</div>
+        <div class="hud-title">PROMEDIO GENERAL SEMESTRAL PONDERADO</div>
+        <div class="hud-number" id="hud-promedio-general">0.0</div>
+        <div class="hud-meta" id="hud-estado-academico">ESCALA PONDERADA EN BASE 100 ACTIVA</div>
       </div>
     </section>
 
@@ -920,12 +1120,13 @@
 
         <div id="chat-history" class="chat-history">
           <div class="chat-msg bot">
-            J.A.R.V.I.S EN LÍNEA // CECyT 9 1IM9.<br>
-            • <strong>Registrar tarea:</strong> <em>"problemario de historia para el 25 de noviembre vale 20 pts"</em>.<br>
-            • <strong>Calificar actividad:</strong> <em>"en infografía de historia saqué 10/10"</em>.<br>
+            J.A.R.V.I.S EN LÍNEA // CECyT 9 1IM9[cite: 1].<br>
+            • <strong>Porcentual:</strong> <em>"problemario de historia para el 25 de noviembre vale 20/30"</em>.<br>
+            • <strong>Ordinal:</strong> <em>"tarea ordinal de álgebra entrega de apuntes para el 22 de noviembre"</em>.<br>
+            • <strong>Agregar detalles:</strong> <em>"agrega detalles a la tarea de historia: llevar fotos impresas"</em>.<br>
+            • <strong>Calificar:</strong> <em>"en infografía de historia saqué 10 de 10"</em>.<br>
             • <strong>Puntos extra:</strong> <em>"en historia tengo 5 puntos extra"</em>.<br>
-            • <strong>Parciales anteriores:</strong> <em>"en P1 de Álgebra saqué 8.5"</em> o <em>"Filosofía P2 9.0"</em>.<br>
-            • <strong>Reinicio de semestre:</strong> <em>"reinicio de semestre"</em> para purgar y arrancar nuevo semestre.
+            • <strong>Reinicio:</strong> <em>"reinicio de semestre"</em> para purgar y arrancar nuevo término.
           </div>
         </div>
 
@@ -940,6 +1141,12 @@
       </div>
 
       <form id="form-tarea" onsubmit="agregarTareaManual(event)">
+        <label>CLASIFICACIÓN DE LA ACTIVIDAD:
+          <select id="input-tipo" onchange="alternarCamposPonderacion(this.value)">
+            <option value="porcentual">PORCENTUAL (CON IMPACTO EN CALIFICACIÓN)</option>
+            <option value="ordinal">ORDINAL (FORMATIVA // SIN IMPACTO PONDERADO)</option>
+          </select>
+        </label>
         <label>ASIGNATURA:
           <select id="input-materia" required></select>
         </label>
@@ -954,14 +1161,17 @@
             <input type="text" id="input-hora" value="12:00:00" readonly style="color:#ffffff; background:#05080f;">
           </label>
         </div>
-        <div class="row">
-          <label>VALOR DE LA TAREA:
-            <input type="number" id="input-puntos" value="20" min="1" max="100" required>
+        <div class="row" id="row-ponderacion-inputs">
+          <label>PUNTOS DE LA TAREA (BASE DEL PROFESOR):
+            <input type="number" id="input-puntos" value="20" min="1" max="100">
           </label>
-          <label>BASE DEL PARCIAL:
-            <input type="number" id="input-base" value="100" min="1" max="100" title="Si el parcial se califica sobre 30, pon 30. Si es estándar, pon 100." required>
+          <label>VALOR TOTAL (BASE DEL PROFESOR):
+            <input type="number" id="input-base" value="100" min="1" max="100" title="Si el profesor califica sobre 30, pon 30. Si es estándar, pon 100.">
           </label>
         </div>
+        <label>DETALLES / NOTAS DE LA ACTIVIDAD:
+          <textarea id="input-detalles" placeholder="Ingresa especificaciones, rúbricas o apuntes importantes para esta entrega..." style="height:65px; resize:vertical;"></textarea>
+        </label>
         <button type="submit" class="btn-32 btn-32-primary" style="margin-top:6px;">GUARDAR REGISTRO</button>
       </form>
     </section>
@@ -1001,8 +1211,60 @@
     </section>
   </div>
 
+  <!-- MODAL FLOTANTE DE CONTROL MANUAL DE EDICIÓN -->
+  <div id="modal-editor-tarea" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 style="font-size:1.05rem;">MODIFICADOR MANUAL // CONTROL DE ENTREGA</h2>
+        <button class="btn-32 btn-32-danger" onclick="cerrarEditorManual()">X</button>
+      </div>
+
+      <label>SELECCIONAR ACTIVIDAD A MODIFICAR:
+        <select id="edit-select-tarea" onchange="cargarDatosEnFormularioEdicion(this.value)"></select>
+      </label>
+
+      <label>ASIGNATURA:
+        <select id="edit-materia"></select>
+      </label>
+
+      <label>NOMBRE DE LA ACTIVIDAD:
+        <input type="text" id="edit-actividad" required>
+      </label>
+
+      <label>CLASIFICACIÓN:
+        <select id="edit-tipo" onchange="alternarCamposEdicionPonderacion(this.value)">
+          <option value="porcentual">PORCENTUAL (CON IMPACTO EN CALIFICACIÓN)</option>
+          <option value="ordinal">ORDINAL (FORMATIVA // SIN IMPACTO PONDERADO)</option>
+        </select>
+      </label>
+
+      <div class="row">
+        <label>FECHA LÍMITE:
+          <input type="date" id="edit-fecha" required>
+        </label>
+      </div>
+
+      <div class="row" id="row-edit-ponderacion">
+        <label>PUNTOS (BASE DEL PROFESOR):
+          <input type="number" id="edit-puntos" min="1" max="100">
+        </label>
+        <label>BASE TOTAL (BASE DEL PROFESOR):
+          <input type="number" id="edit-base" min="1" max="100">
+        </label>
+      </div>
+
+      <label>DETALLES / NOTAS EXPLICATIVAS:
+        <textarea id="edit-detalles" style="height:90px; resize:vertical;"></textarea>
+      </label>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; gap:8px; flex-wrap:wrap;">
+        <button class="btn-32 btn-32-primary" style="flex:1;" onclick="guardarEdicionManualTarea()">GUARDAR CAMBIOS</button>
+        <button class="btn-32" onclick="cerrarEditorManual()">CANCELAR</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Asignaturas oficiales exactas del grupo 1IM9 (CECyT 9)
     const MATERIAS_OFICIALES = [
       "Álgebra",
       "Filosofía I",
@@ -1015,7 +1277,6 @@
       "Orientación Juvenil y Profesional I"
     ];
 
-    // Función universal para normalizar nombres y evitar discrepancias
     function normalizarMateria(nombre) {
       if (!nombre) return "Álgebra";
       const m = nombre.toLowerCase().trim();
@@ -1032,19 +1293,24 @@
     }
 
     let tareas = JSON.parse(localStorage.getItem("tareas_batiz")) || [
-      { id: 1, materia: "Historia de México Contemporáneo I", actividad: "Infografia visita Museo de la Mujer", fecha: "2026-11-23", hora: "12:00:00", puntos: 10, base: 100, notaObtenida: 10, notaMax: 10, completada: false, sincronizada: false, parcial: 3 },
-      { id: 2, materia: "Historia de México Contemporáneo I", actividad: "Debate construccion de la nacion", fecha: "2026-11-30", hora: "12:00:00", puntos: 20, base: 100, notaObtenida: null, notaMax: 20, completada: false, sincronizada: false, parcial: 3 }
+      { id: 1, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Infografia visita Museo de la Mujer", fecha: "2026-11-23", hora: "12:00:00", puntos: 10, base: 100, califX: null, detalles: "Visita al Museo de la Mujer. Entregar infografía en formato digital con fuentes bibliográficas y fotografías.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 2, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Debate construccion de la nacion", fecha: "2026-11-30", hora: "12:00:00", puntos: 20, base: 100, califX: null, detalles: "Debate sobre el proceso de construcción del Estado-Nación mexicano. Preparar argumentos por equipo.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 3, tipo: 'porcentual', materia: "Álgebra", actividad: "Problemario Productos Notables", fecha: "2026-11-28", hora: "12:00:00", puntos: 20, base: 30, califX: null, detalles: "Ejercicios de productos notables y factorización. Procedimiento completo a mano con hojas milimétricas.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "12:00:00", puntos: 0, base: 0, califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
     ];
 
-    // Migración inmediata de materias guardadas previamente con nombres cortos
     tareas = tareas.map(t => ({
       ...t,
-      materia: normalizarMateria(t.materia)
+      tipo: t.tipo || 'porcentual',
+      materia: normalizarMateria(t.materia),
+      puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
+      base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
+      detalles: t.detalles || "",
+      califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
     }));
 
     let calificacionesSemestre = JSON.parse(localStorage.getItem("calif_semestre_batiz")) || {};
 
-    // Migrar calificaciones anteriores a nombres normalizados
     for (let k in calificacionesSemestre) {
       const norm = normalizarMateria(k);
       if (norm !== k) {
@@ -1056,6 +1322,21 @@
     MATERIAS_OFICIALES.forEach(m => {
       if (!calificacionesSemestre[m]) {
         calificacionesSemestre[m] = { p1: null, p2: null, extraP3: 0 };
+      } else {
+        if (calificacionesSemestre[m].p1 !== null && calificacionesSemestre[m].p1 <= 10 && calificacionesSemestre[m].p1 > 0) {
+          calificacionesSemestre[m].p1 = Number((calificacionesSemestre[m].p1 * 10).toFixed(1));
+        }
+        if (calificacionesSemestre[m].p2 !== null && calificacionesSemestre[m].p2 <= 10 && calificacionesSemestre[m].p2 > 0) {
+          calificacionesSemestre[m].p2 = Number((calificacionesSemestre[m].p2 * 10).toFixed(1));
+        }
+      }
+    });
+
+    let pesosParciales = JSON.parse(localStorage.getItem("pesos_parciales_batiz")) || {};
+
+    MATERIAS_OFICIALES.forEach(m => {
+      if (!pesosParciales[m]) {
+        pesosParciales[m] = { p1: 33.3, p2: 33.3, p3: 33.4 };
       }
     });
 
@@ -1068,6 +1349,7 @@
     function guardarLocal() {
       localStorage.setItem("tareas_batiz", JSON.stringify(tareas));
       localStorage.setItem("calif_semestre_batiz", JSON.stringify(calificacionesSemestre));
+      localStorage.setItem("pesos_parciales_batiz", JSON.stringify(pesosParciales));
     }
 
     function setFiltro(tipo) {
@@ -1076,6 +1358,87 @@
       const activeBtn = document.getElementById('flt-' + tipo);
       if (activeBtn) activeBtn.classList.add('active');
       render();
+    }
+
+    function alternarCamposPonderacion(tipo) {
+      const row = document.getElementById("row-ponderacion-inputs");
+      if (row) {
+        row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
+      }
+    }
+
+    function alternarCamposEdicionPonderacion(tipo) {
+      const row = document.getElementById("row-edit-ponderacion");
+      if (row) {
+        row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
+      }
+    }
+
+    // --- FUNCIÓN DE DESGLOSE HACIA ABAJO ---
+    function toggleDesgloseDetalles(id) {
+      const el = document.getElementById("drawer-detalles-" + id);
+      if (!el) return;
+      if (el.style.display === "none" || !el.style.display) {
+        el.style.display = "block";
+      } else {
+        el.style.display = "none";
+      }
+    }
+
+    // --- FUNCIONES DEL MODIFICADOR MANUAL ---
+    function abrirEditorManualDirecto(idPreseleccionado = null) {
+      const modal = document.getElementById("modal-editor-tarea");
+      const selectTarea = document.getElementById("edit-select-tarea");
+      const selectMat = document.getElementById("edit-materia");
+
+      selectMat.innerHTML = MATERIAS_OFICIALES.map(m => `<option value="${m}">${m.toUpperCase()}</option>`).join("");
+      selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}</option>`).join("");
+
+      if (idPreseleccionado) {
+        selectTarea.value = idPreseleccionado;
+      }
+
+      cargarDatosEnFormularioEdicion(selectTarea.value);
+      modal.style.display = "flex";
+    }
+
+    function cerrarEditorManual() {
+      document.getElementById("modal-editor-tarea").style.display = "none";
+    }
+
+    function cargarDatosEnFormularioEdicion(idStr) {
+      const id = Number(idStr);
+      const t = tareas.find(x => x.id === id);
+      if (!t) return;
+
+      document.getElementById("edit-materia").value = t.materia;
+      document.getElementById("edit-actividad").value = t.actividad;
+      document.getElementById("edit-tipo").value = t.tipo || 'porcentual';
+      document.getElementById("edit-fecha").value = t.fecha;
+      document.getElementById("edit-puntos").value = t.puntos;
+      document.getElementById("edit-base").value = t.base;
+      document.getElementById("edit-detalles").value = t.detalles || "";
+      alternarCamposEdicionPonderacion(t.tipo || 'porcentual');
+    }
+
+    function guardarEdicionManualTarea() {
+      const id = Number(document.getElementById("edit-select-tarea").value);
+      const t = tareas.find(x => x.id === id);
+      if (!t) return;
+
+      const tipo = document.getElementById("edit-tipo").value;
+      t.materia = normalizarMateria(document.getElementById("edit-materia").value);
+      t.actividad = document.getElementById("edit-actividad").value.trim() || t.actividad;
+      t.tipo = tipo;
+      t.fecha = document.getElementById("edit-fecha").value || t.fecha;
+      t.puntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-puntos").value) || 20);
+      t.base = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-base").value) || 100);
+      t.detalles = document.getElementById("edit-detalles").value.trim();
+      t.sincronizada = false;
+
+      guardarLocal();
+      render();
+      cerrarEditorManual();
     }
 
     function formatearFechaLarga(fechaStr) {
@@ -1129,7 +1492,31 @@
       });
     }, 1000);
 
-    // --- CÁLCULO ESTRICTO DE P3 SOBRE 100 PTS ---
+    function actualizarBaseTarea(id, campo, valor) {
+      const valNum = parseFloat(valor);
+      if (isNaN(valNum) || valNum <= 0) return;
+      tareas = tareas.map(t => {
+        if (t.id === id) {
+          return { ...t, [campo]: valNum };
+        }
+        return t;
+      });
+      guardarLocal();
+      render();
+    }
+
+    function actualizarCalifTarea(id, valor) {
+      const valNum = parseFloat(valor);
+      tareas = tareas.map(t => {
+        if (t.id === id) {
+          return { ...t, califX: isNaN(valNum) ? null : Math.max(0, valNum) };
+        }
+        return t;
+      });
+      guardarLocal();
+      render();
+    }
+
     function calcularP3Materia(materia) {
       const matNorm = normalizarMateria(materia);
       const tareasMat = tareas.filter(t => normalizarMateria(t.materia).toLowerCase() === matNorm.toLowerCase() && (t.parcial === 3 || !t.parcial));
@@ -1137,14 +1524,15 @@
       let puntosProgramadosBase100 = 0;
 
       tareasMat.forEach(t => {
-        const base = t.base || 100;
-        const pesoBase100 = (t.puntos / base) * 100;
-        puntosProgramadosBase100 += pesoBase100;
+        if (t.tipo !== 'ordinal') {
+          const base = t.base || 100;
+          const pesoBase100 = (t.puntos / base) * 100;
+          puntosProgramadosBase100 += pesoBase100;
 
-        if (t.notaObtenida !== null && t.notaObtenida !== undefined) {
-          const max = t.notaMax || 100;
-          const rendimiento = Math.min(Math.max(t.notaObtenida / max, 0), 1.5);
-          puntosGanadosBase100 += rendimiento * pesoBase100;
+          if (t.califX !== null && t.califX !== undefined) {
+            const ptsGanados = (t.califX / base) * 100;
+            puntosGanadosBase100 += ptsGanados;
+          }
         }
       });
 
@@ -1156,8 +1544,7 @@
       return {
         puntosAcumulados: Number(califBase100.toFixed(1)),
         colchon: Number(colchon.toFixed(1)),
-        puntosProgramados: Number(puntosProgramadosBase100.toFixed(1)),
-        califOficial10: Number((califBase100 / 10).toFixed(1))
+        puntosProgramados: Number(puntosProgramadosBase100.toFixed(1))
       };
     }
 
@@ -1170,9 +1557,19 @@
       if (isNaN(valNum)) {
         calificacionesSemestre[matNorm][parcialKey] = null;
       } else {
-        if (valNum > 10) valNum = valNum / 10;
-        calificacionesSemestre[matNorm][parcialKey] = Math.min(Math.max(valNum, 0), 10);
+        if (valNum <= 10 && valNum > 0) valNum = valNum * 10;
+        calificacionesSemestre[matNorm][parcialKey] = Math.min(Math.max(valNum, 0), 100);
       }
+      guardarLocal();
+      render();
+    }
+
+    function actualizarPesoMateria(mat, parcialKey, valor) {
+      const matNorm = normalizarMateria(mat);
+      const valNum = parseFloat(valor);
+      if (isNaN(valNum) || valNum <= 0) return;
+      if (!pesosParciales[matNorm]) pesosParciales[matNorm] = { p1: 33.3, p2: 33.3, p3: 33.4 };
+      pesosParciales[matNorm][parcialKey] = valNum;
       guardarLocal();
       render();
     }
@@ -1190,7 +1587,6 @@
       }
     }
 
-    // --- GOOGLE CALENDAR API INTEGRATION ---
     function guardarClientId() {
       const val = document.getElementById("input-client-id").value.trim();
       if (!val) return alert("CLIENT ID INVÁLIDO.");
@@ -1268,7 +1664,7 @@
 
       const evento = {
         summary: `[${t.materia}] ${t.actividad}`,
-        description: `Entrega académica C.A.B. (CECyT 9 Bátiz - 1IM9).\nPonderación: ${t.puntos}/${t.base || 100} pts.`,
+        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica C.A.B. (CECyT 9 Bátiz - 1IM9).\nPonderación: ${t.puntos}/${t.base || 100} pts.\nDetalles: ${t.detalles || 'Sin notas'}`,
         start: { dateTime: fechaInicio.toISOString() },
         end: { dateTime: fechaFin.toISOString() },
         reminders: {
@@ -1336,7 +1732,7 @@
     }
 
     function exportarTareas() {
-      const respaldoCompleto = { tareas, calificacionesSemestre };
+      const respaldoCompleto = { tareas, calificacionesSemestre, pesosParciales };
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(respaldoCompleto, null, 2));
       const a = document.createElement("a");
       a.setAttribute("href", dataStr);
@@ -1354,10 +1750,11 @@
         try {
           const importadas = JSON.parse(evt.target.result);
           if (importadas.tareas && importadas.calificacionesSemestre) {
-            tareas = importadas.tareas.map(t => ({ ...t, materia: normalizarMateria(t.materia) }));
+            tareas = importadas.tareas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), detalles: t.detalles || "" }));
             calificacionesSemestre = importadas.calificacionesSemestre;
+            if (importadas.pesosParciales) pesosParciales = importadas.pesosParciales;
           } else if (Array.isArray(importadas)) {
-            tareas = importadas.map(t => ({ ...t, materia: normalizarMateria(t.materia) }));
+            tareas = importadas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), detalles: t.detalles || "" }));
           }
           guardarLocal();
           render();
@@ -1409,19 +1806,22 @@
 
     function agregarTareaManual(e) {
       e.preventDefault();
-      const puntos = Number(document.getElementById("input-puntos").value) || 20;
-      const base = Number(document.getElementById("input-base").value) || 100;
+      const tipo = document.getElementById("input-tipo").value;
+      const puntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("input-puntos").value) || 20);
+      const base = tipo === 'ordinal' ? 0 : (Number(document.getElementById("input-base").value) || 100);
+      const detalles = document.getElementById("input-detalles").value.trim();
 
       const nueva = {
         id: Date.now(),
+        tipo: tipo,
         materia: normalizarMateria(document.getElementById("input-materia").value.trim()),
         actividad: document.getElementById("input-actividad").value.trim(),
         fecha: document.getElementById("input-fecha").value,
         hora: "12:00:00",
         puntos: puntos,
         base: base,
-        notaObtenida: null,
-        notaMax: puntos,
+        detalles: detalles,
+        califX: null,
         completada: false,
         sincronizada: false,
         parcial: 3
@@ -1429,6 +1829,7 @@
       tareas.push(nueva);
       guardarLocal();
       e.target.reset();
+      alternarCamposPonderacion('porcentual');
       cambiarVista("cronograma");
     }
 
@@ -1507,7 +1908,7 @@
         return;
       }
 
-      // 3. Puntos Extra sobre 100
+      // 3. Puntos Extra
       if (lower.includes("extra") || lower.includes("bono") || lower.includes("colchon")) {
         const materia = normalizarMateria(lower);
         const puntosMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:punto|pts|puntos)/);
@@ -1518,45 +1919,13 @@
           guardarLocal();
           render();
           const p3Info = calcularP3Materia(materia);
-          agregarMensajeChat("bot", `BONO ASIGNADO: +${extraPts} pts en ${materia.toUpperCase()}. Total en P3: <strong>${p3Info.puntosAcumulados} / 100 PTS</strong>${p3Info.colchon > 0 ? ' (Colchón: +' + p3Info.colchon + ' pts)' : ''}.`);
+          agregarMensajeChat("bot", `BONO ASIGNADO: +${extraPts}% en ${materia.toUpperCase()}. Total en P3: <strong>${p3Info.puntosAcumulados}%</strong>${p3Info.colchon > 0 ? ' (Colchón: +' + p3Info.colchon + '%)' : ''}.`);
           return;
         }
       }
 
-      // 4. Calificaciones P1 y P2
-      const p1p2Match = lower.match(/(?:en\s+)?p([12])\s+(?:de\s+)?([a-záéíóúñ\s]+).*?(\d+(?:\.\d+)?)/i) ||
-                        lower.match(/([a-záéíóúñ\s]+)\s+p([12]).*?(\d+(?:\.\d+)?)/i) ||
-                        lower.match(/p([12])\s*=?\s*(\d+(?:\.\d+)?)/i);
-
-      if (p1p2Match && (lower.includes("p1") || lower.includes("p2") || lower.includes("primer parcial") || lower.includes("segundo parcial"))) {
-        const numParcial = (lower.includes("primer") || lower.includes("1er") || lower.includes("p1")) ? "p1" : "p2";
-        const materia = normalizarMateria(lower);
-        const numeros = lower.match(/(\d+(?:\.\d+)?)/g);
-        let nota = null;
-
-        if (numeros) {
-          for (let n of numeros) {
-            let val = parseFloat(n);
-            if (val > 2 || (val <= 10 && !lower.includes("p" + n))) {
-              nota = val;
-            }
-          }
-          if (nota === null) nota = parseFloat(numeros[numeros.length - 1]);
-        }
-
-        if (materia && nota !== null) {
-          if (nota > 10) nota = nota / 10;
-          if (!calificacionesSemestre[materia]) calificacionesSemestre[materia] = { p1: null, p2: null, extraP3: 0 };
-          calificacionesSemestre[materia][numParcial] = Math.min(Math.max(nota, 0), 10);
-          guardarLocal();
-          render();
-          agregarMensajeChat("bot", `REGISTRO: ${materia.toUpperCase()} ${numParcial.toUpperCase()} = <strong>${nota.toFixed(1)}</strong>. Matriz semestral actualizada.`);
-          return;
-        }
-      }
-
-      // 5. Calificar una Actividad del 3er Parcial
-      if (lower.includes("saqué") || lower.includes("saque") || lower.includes("obtuve") || lower.includes("califica")) {
+      // 4. Agregar o actualizar detalles desde J.A.R.V.I.S
+      if (lower.includes("detalles") || lower.includes("nota") || lower.includes("notas")) {
         let tarea = null;
         let mejorScore = 0;
         for (const t of tareas) {
@@ -1573,58 +1942,120 @@
         }
 
         if (tarea) {
-          const fracMatch = lower.match(/(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);
-          let notaObt = 100, notaMax = 100;
-          if (fracMatch) {
-            notaObt = parseFloat(fracMatch[1]);
-            notaMax = parseFloat(fracMatch[2]);
-          } else {
-            const singleMatch = lower.match(/(\d+(?:\.\d+)?)/);
-            if (singleMatch) {
-              notaObt = parseFloat(singleMatch[1]);
-              notaMax = notaObt <= 10 ? 10 : (notaObt <= 20 ? 20 : 100);
+          const partes = texto.split(/detalles?:|notas?:/i);
+          if (partes.length > 1) {
+            tarea.detalles = partes[1].trim();
+            guardarLocal();
+            render();
+            agregarMensajeChat("bot", `DETALLES ACTUALIZADOS: ${tarea.materia.toUpperCase()}: "${tarea.actividad}"<br>• <em>${tarea.detalles}</em>`);
+            return;
+          }
+        }
+      }
+
+      // 5. Calificaciones P1 y P2 en la tabla (cifras numéricas)
+      const p1p2Match = lower.match(/(?:en\s+)?p([12])\s+(?:de\s+)?([a-záéíóúñ\s]+).*?(\d+(?:\.\d+)?)/i) ||
+                        lower.match(/([a-záéíóúñ\s]+)\s+p([12]).*?(\d+(?:\.\d+)?)/i) ||
+                        lower.match(/p([12])\s*=?\s*(\d+(?:\.\d+)?)/i);
+
+      if (p1p2Match && (lower.includes("p1") || lower.includes("p2") || lower.includes("primer parcial") || lower.includes("segundo parcial"))) {
+        const numParcial = (lower.includes("primer") || lower.includes("1er") || lower.includes("p1")) ? "p1" : "p2";
+        const materia = normalizarMateria(lower);
+        const numeros = lower.match(/(\d+(?:\.\d+)?)/g);
+        let nota = null;
+
+        if (numeros) {
+          for (let n of numeros) {
+            let val = parseFloat(n);
+            if (val > 2 || (val <= 100 && !lower.includes("p" + n))) {
+              nota = val;
             }
           }
+          if (nota === null) nota = parseFloat(numeros[numeros.length - 1]);
+        }
 
-          const redefineMatch = lower.match(/vale\s*(\d+(?:\.\d+)?)\s*(?:\/|sobre|de)\s*(\d+(?:\.\d+)?)/);
-          if (redefineMatch) {
-            tarea.puntos = parseFloat(redefineMatch[1]);
-            tarea.base = parseFloat(redefineMatch[2]);
-          }
-
-          tarea.notaObtenida = notaObt;
-          tarea.notaMax = notaMax;
+        if (materia && nota !== null) {
+          if (nota <= 10 && nota > 0) nota = nota * 10;
+          if (!calificacionesSemestre[materia]) calificacionesSemestre[materia] = { p1: null, p2: null, extraP3: 0 };
+          calificacionesSemestre[materia][numParcial] = Math.min(Math.max(nota, 0), 100);
           guardarLocal();
           render();
-
-          const pesoBase100 = (tarea.puntos / (tarea.base || 100)) * 100;
-          const ptsGanados = ((notaObt / notaMax) * pesoBase100).toFixed(1);
-          const p3Info = calcularP3Materia(tarea.materia);
-
-          agregarMensajeChat("bot", `EVALUACIÓN: "${tarea.actividad}" calificada con ${notaObt}/${notaMax} (+${ptsGanados} pts). Total acumulado en ${tarea.materia.toUpperCase()}: <strong>${p3Info.puntosAcumulados} / 100 PTS</strong>.`);
+          agregarMensajeChat("bot", `REGISTRO: ${materia.toUpperCase()} ${numParcial.toUpperCase()} = <strong>${nota.toFixed(0)}</strong>. Matriz semestral actualizada.`);
           return;
         }
       }
 
-      // 6. Registro de nueva entrega
+      // 6. Calificar Actividad del 3er Parcial
+      if (lower.includes("saqué") || lower.includes("saque") || lower.includes("obtuve") || lower.includes("califica")) {
+        let tarea = null;
+        let mejorScore = 0;
+        for (const t of tareas) {
+          if (t.tipo === 'ordinal') continue;
+          let score = 0;
+          if (lower.includes(t.materia.toLowerCase())) score += 2;
+          const palabras = t.actividad.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+          for (const w of palabras) {
+            if (lower.includes(w)) score += 3;
+          }
+          if (score > mejorScore) {
+            mejorScore = score;
+            tarea = t;
+          }
+        }
+
+        if (tarea) {
+          const fracMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:\/|de)\s*(\d+(?:\.\d+)?)/);
+          let notaObt = tarea.puntos;
+          if (fracMatch) {
+            notaObt = parseFloat(fracMatch[1]);
+          } else {
+            const singleMatch = lower.match(/(\d+(?:\.\d+)?)/);
+            if (singleMatch) notaObt = parseFloat(singleMatch[1]);
+          }
+
+          tarea.califX = notaObt;
+          guardarLocal();
+          render();
+
+          const ptsGanados100 = ((notaObt / tarea.base) * 100).toFixed(1);
+          const p3Info = calcularP3Materia(tarea.materia);
+
+          agregarMensajeChat("bot", `CALIFICACIÓN: "${tarea.actividad}" asignada con ${notaObt} / ${tarea.puntos} en BASE DEL PROFESOR (+${ptsGanados100}% en PORCENTAJE). Total en ${tarea.materia.toUpperCase()}: <strong>${p3Info.puntosAcumulados}%</strong>.`);
+          return;
+        }
+      }
+
+      // 7. Registro de nueva entrega
+      const esOrdinal = lower.includes("ordinal") || lower.includes("ordinales") || lower.includes("sin valor") || lower.includes("sin porcentaje") || lower.includes("sin ponderacion") || lower.includes("sin ponderación");
+      const tipo = esOrdinal ? 'ordinal' : 'porcentual';
       const materia = normalizarMateria(lower);
       const fecha = extraerFecha(lower);
+      
       let puntos = 20;
       let base = 100;
 
-      const escalaMatch = lower.match(/vale\s*(\d+(?:\.\d+)?)\s*(?:\/|sobre|de)\s*(\d+(?:\.\d+)?)/);
-      if (escalaMatch) {
-        puntos = parseFloat(escalaMatch[1]);
-        base = parseFloat(escalaMatch[2]);
+      if (!esOrdinal) {
+        const escalaMatch = lower.match(/vale\s*(\d+(?:\.\d+)?)\s*(?:\/|sobre|de)\s*(\d+(?:\.\d+)?)/);
+        if (escalaMatch) {
+          puntos = parseFloat(escalaMatch[1]);
+          base = parseFloat(escalaMatch[2]);
+        } else {
+          const ptsMatch = lower.match(/(\d+)\s*(?:puntos|pts|ponderaci[oó]n)/);
+          if (ptsMatch) puntos = parseFloat(ptsMatch[1]);
+        }
       } else {
-        const ptsMatch = lower.match(/(\d+)\s*(?:puntos|pts|ponderaci[oó]n)/);
-        if (ptsMatch) puntos = parseFloat(ptsMatch[1]);
+        puntos = 0;
+        base = 0;
       }
 
       let actividad = texto
         .replace(/para el.*?entregar/i, "")
         .replace(/entregar/i, "")
         .replace(/vale \d+.*$/i, "")
+        .replace(/tarea ordinal/i, "")
+        .replace(/ordinal/i, "")
+        .replace(/sin valor/i, "")
+        .replace(/sin porcentaje/i, "")
         .replace(/en álgebra|en filosofía|en computación|en inglés|en dhp|en historia|en desarrollo personal|en orientación/i, "")
         .trim();
 
@@ -1634,34 +2065,36 @@
       if (!fecha) {
         tareaEnEspera = {
           id: Date.now(),
+          tipo: tipo,
           materia,
           actividad,
           fecha: "",
           hora: "12:00:00",
           puntos,
           base,
-          notaObtenida: null,
-          notaMax: puntos,
+          detalles: "",
+          califX: null,
           completada: false,
           sincronizada: false,
           parcial: 3
         };
         setTimeout(() => {
-          agregarMensajeChat("bot", `DETECTADO: ${tareaEnEspera.materia.toUpperCase()}: "${tareaEnEspera.actividad}" (${tareaEnEspera.puntos}/${tareaEnEspera.base} pts). INDICA LA FECHA DE ENTREGA.`);
+          agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: ${tareaEnEspera.materia.toUpperCase()}: "${tareaEnEspera.actividad}". INDICA LA FECHA DE ENTREGA.`);
         }, 120);
         return;
       }
 
       const nueva = {
         id: Date.now(),
+        tipo: tipo,
         materia,
         actividad,
         fecha,
         hora: "12:00:00",
         puntos,
         base,
-        notaObtenida: null,
-        notaMax: puntos,
+        detalles: "",
+        califX: null,
         completada: false,
         sincronizada: false,
         parcial: 3
@@ -1670,11 +2103,18 @@
       tareas.push(nueva);
       guardarLocal();
 
-      const pesoBase100 = ((nueva.puntos / nueva.base) * 100).toFixed(0);
-      setTimeout(() => {
-        agregarMensajeChat("bot", `ENTREGA REGISTRADA: ${nueva.materia.toUpperCase()}: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [VALOR: ${pesoBase100} / 100 PTS].`);
-        render();
-      }, 120);
+      if (esOrdinal) {
+        setTimeout(() => {
+          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: ${nueva.materia.toUpperCase()}: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [CLASIFICACIÓN: ORDINALES].`);
+          render();
+        }, 120);
+      } else {
+        const pesoBase100 = ((nueva.puntos / nueva.base) * 100).toFixed(0);
+        setTimeout(() => {
+          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: ${nueva.materia.toUpperCase()}: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${pesoBase100}%].`);
+          render();
+        }, 120);
+      }
     }
 
     // --- RENDERIZADO VISUAL ---
@@ -1693,8 +2133,51 @@
         const doom = calcularCuentaRegresiva(t.fecha);
         const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
         const syncClase = t.sincronizada ? 'sync-ok' : 'sync-pending';
-        const base = t.base || 100;
-        const porcentaje = Math.min(Math.max((t.puntos / base) * 100, 0), 100);
+        
+        let bloqueVisual = '';
+
+        if (t.tipo === 'ordinal') {
+          bloqueVisual = `
+            <div class="ordinal-card-box">
+              <span style="font-size:0.8rem; color:#cbd5e1; font-weight:700;">ACTIVIDAD FORMATIVA:</span>
+              <span class="badge-ordinal">ORDINALES</span>
+            </div>
+          `;
+        } else {
+          const puntosX = Number(t.puntos) || 20;
+          const baseX = Number(t.base) || 100;
+          const porcBaseX = Math.min((puntosX / baseX) * 100, 100);
+          const valorEn100 = ((puntosX / baseX) * 100).toFixed(1);
+
+          bloqueVisual = `
+            <div class="dual-bars-wrapper">
+              <div class="bar-row-block">
+                <div class="bar-label-sub">
+                  <span>BASE DEL PROFESOR</span>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <input type="number" class="input-mini" value="${puntosX}" min="1" max="100" onchange="actualizarBaseTarea(${t.id}, 'puntos', this.value)">
+                    <span>/</span>
+                    <input type="number" class="input-mini" value="${baseX}" min="1" max="100" onchange="actualizarBaseTarea(${t.id}, 'base', this.value)">
+                    <span>PTS</span>
+                  </div>
+                </div>
+                <div class="bar-container">
+                  <div class="bar-fill bar-gold" style="width: ${porcBaseX}%;"></div>
+                </div>
+              </div>
+
+              <div class="bar-row-block">
+                <div class="bar-label-sub">
+                  <span>PORCENTAJE</span>
+                  <span style="color:#38bdf8;">${valorEn100}%</span>
+                </div>
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: ${Math.min(valorEn100, 100)}%;"></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
 
         return `
           <div class="card ${syncClase} ${t.completada ? 'completada' : ''}">
@@ -1708,15 +2191,7 @@
               <span class="${doomClase}" data-fecha="${t.fecha}">${doom.texto}</span>
             </div>
 
-            <div class="ponderacion-block">
-              <div class="bar-label-row">
-                <span>VALOR:</span>
-                <span>${porcentaje.toFixed(0)} / 100 PTS</span>
-              </div>
-              <div class="bar-container">
-                <div class="bar-fill" style="width: ${porcentaje}%;"></div>
-              </div>
-            </div>
+            ${bloqueVisual}
 
             <div class="card-bottom">
               <div class="card-meta">
@@ -1725,16 +2200,26 @@
                 ${t.completada ? '<span class="badge" style="border: 1px solid #334155; color:#64748b; background:transparent;">ARCHIVADO</span>' : ''}
               </div>
               <div class="card-actions">
+                <button class="btn-32" onclick="toggleDesgloseDetalles(${t.id})">DETALLES ▾</button>
                 <button class="btn-32" onclick="agendarTareaDirecta(${t.id})">CALENDAR</button>
-                <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Desactivar / Archivar entrega">
+                <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
                 <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
               </div>
+            </div>
+
+            <!-- GAVETA DE DESGLOSE HACIA ABAJO -->
+            <div id="drawer-detalles-${t.id}" class="card-details-drawer" style="display:none;">
+              <div class="details-top-bar">
+                <span class="details-title-tag">DETALLES & NOTAS DE LA ACTIVIDAD:</span>
+                <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
+              </div>
+              <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas. Haz clic en EDITAR para agregar especificaciones o rúbricas.</em>'}</div>
             </div>
           </div>
         `;
       }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS QUE COINCIDAN CON EL FILTRO</p>";
 
-      // 2. Materias (Restaurado con Cobertura Total y Tarjetas Completas)
+      // 2. Materias
       const materiasEl = document.getElementById("lista-materias");
       const materiasConTareas = MATERIAS_OFICIALES.filter(mat =>
         tareas.some(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
@@ -1743,15 +2228,15 @@
       materiasEl.innerHTML = materiasConTareas.length ? materiasConTareas.map(mat => {
         const tareasMat = tareas.filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase()).sort((a, b) => new Date(`${a.fecha}T${a.hora}`) - new Date(`${b.fecha}T${b.hora}`));
         
-        // Calcular puntos totales de la materia sobre base 100
-        const puntosTotales = tareasMat.reduce((acc, curr) => {
+        const puntosTotales100 = tareasMat.reduce((acc, curr) => {
+          if (curr.tipo === 'ordinal') return acc;
           const b = curr.base || 100;
           return acc + ((curr.puntos / b) * 100);
         }, 0);
 
-        const puntosPorc = Math.min(puntosTotales, 100);
-        const barraUniversalColor = puntosTotales >= 100 ? 'success' : (puntosTotales >= 70 ? '' : 'warning');
-        const estadoPonderacion = puntosTotales >= 100 ? '100% COMPLETO' : `FALTAN ${Math.round(100 - puntosTotales)} PTS`;
+        const puntosPorc = Math.min(puntosTotales100, 100);
+        const barraUniversalColor = puntosTotales100 >= 100 ? 'success' : (puntosTotales100 >= 70 ? '' : 'warning');
+        const estadoPonderacion = puntosTotales100 >= 100 ? '100%' : `${Math.round(puntosTotales100)}%`;
 
         return `
           <div class="materia-bloque">
@@ -1762,11 +2247,11 @@
               </div>
               
               <div class="materia-universal-bar">
-                <div class="bar-label-row">
+                <div class="bar-label-sub">
                   <span>COBERTURA TOTAL DE EVALUACIÓN:</span>
-                  <span><strong>${puntosTotales.toFixed(0)}</strong> / 100 PTS ACUMULADOS</span>
+                  <span><strong>${puntosTotales100.toFixed(0)}%</strong></span>
                 </div>
-                <div class="bar-container" style="height: 14px;">
+                <div class="bar-container" style="height: 15px;">
                   <div class="bar-fill ${barraUniversalColor}" style="width: ${puntosPorc}%;"></div>
                 </div>
               </div>
@@ -1775,12 +2260,49 @@
             ${tareasMat.map(t => {
               const doom = calcularCuentaRegresiva(t.fecha);
               const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
-              const syncClase = t.sincronizada ? 'sync-ok' : 'sync-pending';
-              const base = t.base || 100;
-              const porcentaje = Math.min(Math.max((t.puntos / base) * 100, 0), 100);
+
+              let bloqueMateriaVisual = '';
+
+              if (t.tipo === 'ordinal') {
+                bloqueMateriaVisual = `
+                  <div class="ordinal-card-box">
+                    <span style="font-size:0.8rem; color:#cbd5e1; font-weight:700;">ACTIVIDAD FORMATIVA:</span>
+                    <span class="badge-ordinal">ORDINALES</span>
+                  </div>
+                `;
+              } else {
+                const puntosX = Number(t.puntos) || 20;
+                const baseX = Number(t.base) || 100;
+                const porcBaseX = Math.min((puntosX / baseX) * 100, 100);
+                const valorEn100 = ((puntosX / baseX) * 100).toFixed(1);
+
+                bloqueMateriaVisual = `
+                  <div class="dual-bars-wrapper">
+                    <div class="bar-row-block">
+                      <div class="bar-label-sub">
+                        <span>BASE DEL PROFESOR</span>
+                        <span>${puntosX} / ${baseX} PTS</span>
+                      </div>
+                      <div class="bar-container">
+                        <div class="bar-fill bar-gold" style="width: ${porcBaseX}%;"></div>
+                      </div>
+                    </div>
+
+                    <div class="bar-row-block">
+                      <div class="bar-label-sub">
+                        <span>PORCENTAJE</span>
+                        <span>${valorEn100}%</span>
+                      </div>
+                      <div class="bar-container">
+                        <div class="bar-fill" style="width: ${Math.min(valorEn100, 100)}%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }
 
               return `
-                <div class="card ${syncClase} ${t.completada ? 'completada' : ''}">
+                <div class="card ${t.completada ? 'completada' : ''}" style="margin-bottom:12px;">
                   <div class="card-top">
                     <span class="actividad-texto" style="font-weight:700; color:#ffffff;">${t.actividad}</span>
                   </div>
@@ -1790,27 +2312,24 @@
                     <span class="${doomClase}" data-fecha="${t.fecha}">${doom.texto}</span>
                   </div>
 
-                  <div class="ponderacion-block">
-                    <div class="bar-label-row">
-                      <span>VALOR:</span>
-                      <span>${porcentaje.toFixed(0)} / 100 PTS</span>
-                    </div>
-                    <div class="bar-container">
-                      <div class="bar-fill" style="width: ${porcentaje}%;"></div>
-                    </div>
-                  </div>
+                  ${bloqueMateriaVisual}
 
                   <div class="card-bottom">
                     <div class="card-meta">
                       <span>HORA: 12:00:00 HRS</span>
-                      ${t.sincronizada ? '<span class="badge badge-sync-ok">AGENDADO</span>' : '<span class="badge badge-sync-pending">PENDIENTE POR AGENDAR</span>'}
-                      ${t.completada ? '<span class="badge" style="border: 1px solid #334155; color:#64748b; background:transparent;">ARCHIVADO</span>' : ''}
                     </div>
                     <div class="card-actions">
-                      <button class="btn-32" onclick="agendarTareaDirecta(${t.id})">CALENDAR</button>
-                      <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})">
-                      <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
+                      <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
                     </div>
+                  </div>
+
+                  <!-- GAVETA DE DESGLOSE EN MATERIAS -->
+                  <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
+                    <div class="details-top-bar">
+                      <span class="details-title-tag">DETALLES & NOTAS DE LA ACTIVIDAD:</span>
+                      <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
+                    </div>
+                    <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
                   </div>
                 </div>
               `;
@@ -1819,7 +2338,7 @@
         `;
       }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
 
-      // 3. Vista EVALUACIÓN: P3 Base 100 + Matriz Semestral
+      // 3. Vista EVALUACIÓN
       const evalP3El = document.getElementById("lista-evaluacion-p3");
       const matrizBody = document.getElementById("tabla-matriz-body");
 
@@ -1832,37 +2351,78 @@
           <div class="eval-materia-card">
             <div class="eval-materia-header">
               <div class="eval-materia-topline">
-                <span class="materia-tag-verde" style="font-size:1.1rem;">${mat.toUpperCase()}</span>
+                <span class="materia-tag-verde" style="font-size:1.15rem;">${mat.toUpperCase()}</span>
                 <div class="eval-grade-display">
-                  <span>${p3Info.puntosAcumulados} / 100 PTS</span>
-                  ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15);">+${p3Info.colchon} PTS COLCHÓN</span>` : ''}
+                  <span>${p3Info.puntosAcumulados}%</span>
+                  ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15);">+${p3Info.colchon}% COLCHÓN</span>` : ''}
                 </div>
               </div>
-              <div class="bar-container" style="height:14px; margin-top:6px;">
+              <div class="bar-container" style="height:16px; margin-top:6px;">
                 <div class="bar-fill ${colorBarra}" style="width: ${p3Info.puntosAcumulados}%;"></div>
+              </div>
+              <div class="coverage-meta-row">
+                <span>TOTAL PROGRAMADO: ${p3Info.puntosProgramados}%</span>
+                <span style="color:#38bdf8;">TOTAL EVALUADO: ${p3Info.puntosAcumulados}%</span>
               </div>
             </div>
 
             <div class="eval-activities-list">
               ${tareasP3.length ? tareasP3.map(t => {
-                const base = t.base || 100;
-                const pesoBase100 = ((t.puntos / base) * 100).toFixed(0);
-                let badgeNota = "";
-
-                if (t.notaObtenida !== null && t.notaObtenida !== undefined) {
-                  const ptsGanados = ((t.notaObtenida / t.notaMax) * pesoBase100).toFixed(1);
-                  badgeNota = `<span class="badge" style="border:1px solid #10b981; color:#10b981; background:rgba(16,185,129,0.15); font-size:0.8rem;">CALIFICADO: ${t.notaObtenida}/${t.notaMax} (+${ptsGanados} pts)</span>`;
-                } else {
-                  badgeNota = `<span class="badge" style="border:1px solid #f59e0b; color:#fbbf24; background:rgba(245,158,11,0.15); font-size:0.8rem;">PENDIENTE DE EVALUAR</span>`;
+                if (t.tipo === 'ordinal') {
+                  return `
+                    <div class="eval-act-card" style="border-left: 3px solid var(--amber);">
+                      <div class="eval-act-header">
+                        <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                          <span class="badge-ordinal">ORDINALES</span>
+                          <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar entregada / pendiente">
+                        </div>
+                      </div>
+                      ${t.detalles ? `<div style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">${t.detalles}</div>` : ''}
+                    </div>
+                  `;
                 }
 
+                const puntosX = Number(t.puntos) || 20;
+                const baseX = Number(t.base) || 100;
+                
+                const califVal = t.califX !== null && t.califX !== undefined ? t.califX : "";
+                const califNum = parseFloat(califVal);
+                const hasGrade = !isNaN(califNum);
+                
+                const porcRendimientoX = hasGrade ? Math.min((califNum / puntosX) * 100, 100) : 0;
+                const aporteBase100 = hasGrade ? ((califNum / baseX) * 100).toFixed(1) : "0.0";
+
                 return `
-                  <div class="eval-act-item">
-                    <div class="eval-act-info">
-                      <strong style="color:#ffffff; font-size:0.9rem;">${t.actividad}</strong>
-                      <span style="font-size:0.75rem; color:#94a3b8;">VALOR: ${pesoBase100} / 100 PTS</span>
+                  <div class="eval-act-card">
+                    <div class="eval-act-header">
+                      <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
                     </div>
-                    <div>${badgeNota}</div>
+
+                    <div class="dual-bars-wrapper" style="background:#090d17;">
+                      <div class="bar-row-block">
+                        <div class="bar-label-sub">
+                          <span>BASE DEL PROFESOR</span>
+                          <div style="display:flex; align-items:center; gap:6px;">
+                            <input type="number" class="input-mini" step="0.1" min="0" max="${puntosX}" value="${califVal}" placeholder="--" onchange="actualizarCalifTarea(${t.id}, this.value)">
+                            <span>/ ${puntosX} PTS</span>
+                          </div>
+                        </div>
+                        <div class="bar-container">
+                          <div class="bar-fill bar-gold" style="width: ${porcRendimientoX}%;"></div>
+                        </div>
+                      </div>
+
+                      <div class="bar-row-block">
+                        <div class="bar-label-sub">
+                          <span>PORCENTAJE</span>
+                          <span style="color:#38bdf8;">${aporteBase100}%</span>
+                        </div>
+                        <div class="bar-container">
+                          <div class="bar-fill" style="width: ${Math.min(aporteBase100, 100)}%;"></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 `;
               }).join("") : "<p style='font-size:0.8rem; color:#64748b;'>Sin actividades registradas para el 3er parcial.</p>"}
@@ -1871,66 +2431,86 @@
         `;
       }).join("");
 
-      // Nivel 2: Matriz Semestral
+      // Nivel 2: Matriz Semestral Ponderada
       let sumaPromediosSemestre = 0;
       let materiasEvaluadasCount = 0;
 
       matrizBody.innerHTML = MATERIAS_OFICIALES.map(mat => {
         const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
+        const pesos = pesosParciales[mat] || { p1: 33.3, p2: 33.3, p3: 33.4 };
+
         const p1Val = califs.p1 !== null && califs.p1 !== undefined ? califs.p1 : "";
         const p2Val = califs.p2 !== null && califs.p2 !== undefined ? califs.p2 : "";
         const p3Info = calcularP3Materia(mat);
-        const p3Val = p3Info.califOficial10;
+        const p3Val = p3Info.puntosAcumulados;
 
         const p1Num = parseFloat(p1Val);
         const p2Num = parseFloat(p2Val);
 
+        let sumaPonderada = 0;
+        let pesoAcumulado = 0;
+
+        if (!isNaN(p1Num)) {
+          sumaPonderada += p1Num * (pesos.p1 || 33.3);
+          pesoAcumulado += (pesos.p1 || 33.3);
+        }
+        if (!isNaN(p2Num)) {
+          sumaPonderada += p2Num * (pesos.p2 || 33.3);
+          pesoAcumulado += (pesos.p2 || 33.3);
+        }
+        if (p3Val !== null && p3Val !== undefined) {
+          sumaPonderada += p3Val * (pesos.p3 || 33.4);
+          pesoAcumulado += (pesos.p3 || 33.4);
+        }
+
         let promedioMateria = null;
-        let estadoStr = "EN CURSO";
-        let estadoColor = "#94a3b8";
-
-        if (!isNaN(p1Num) && !isNaN(p2Num)) {
-          promedioMateria = (p1Num + p2Num + p3Val) / 3;
-          sumaPromediosSemestre += promedioMateria;
-          materiasEvaluadasCount++;
-
-          if (promedioMateria >= 8.0) {
-            estadoStr = "APROBADO // BIEN";
-            estadoColor = "#10b981";
-          } else if (promedioMateria >= 6.0) {
-            estadoStr = "APROBADO // RIESGO";
-            estadoColor = "#fbbf24";
-          } else {
-            estadoStr = "REPROBADO";
-            estadoColor = "#ef4444";
-          }
-        } else if (!isNaN(p1Num)) {
-          const parcialesListos = [p1Num, p3Val];
-          if (!isNaN(p2Num)) parcialesListos.push(p2Num);
-          promedioMateria = parcialesListos.reduce((a, b) => a + b, 0) / 3;
+        if (pesoAcumulado > 0) {
+          promedioMateria = sumaPonderada / pesoAcumulado;
           sumaPromediosSemestre += promedioMateria;
           materiasEvaluadasCount++;
         }
 
-        const promTxt = promedioMateria !== null ? promedioMateria.toFixed(2) : "--";
+        const promTxt = promedioMateria !== null ? promedioMateria.toFixed(1) : "--";
 
         return `
           <tr>
             <td style="font-weight:700;"><span class="materia-tag-verde">${mat.toUpperCase()}</span></td>
+            
+            <td>
+              <div class="partial-cell-content">
+                <input type="number" class="input-cell" step="1" min="0" max="100" value="${p1Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p1', this.value)">
+                <div class="weight-box" title="Porcentaje del 1er Parcial">
+                  <span class="weight-label">VALOR</span>
+                  <input type="number" class="input-weight" step="0.1" min="1" max="100" value="${pesos.p1}" onchange="actualizarPesoMateria('${mat}', 'p1', this.value)">
+                  <span class="weight-unit">%</span>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="partial-cell-content">
+                <input type="number" class="input-cell" step="1" min="0" max="100" value="${p2Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p2', this.value)">
+                <div class="weight-box" title="Porcentaje del 2do Parcial">
+                  <span class="weight-label">VALOR</span>
+                  <input type="number" class="input-weight" step="0.1" min="1" max="100" value="${pesos.p2}" onchange="actualizarPesoMateria('${mat}', 'p2', this.value)">
+                  <span class="weight-unit">%</span>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="partial-cell-content">
+                <div class="p3-grade-display">${p3Val.toFixed(1)}</div>
+                <div class="weight-box" title="Porcentaje del 3er Parcial">
+                  <span class="weight-label">VALOR</span>
+                  <input type="number" class="input-weight" step="0.1" min="1" max="100" value="${pesos.p3}" onchange="actualizarPesoMateria('${mat}', 'p3', this.value)">
+                  <span class="weight-unit">%</span>
+                </div>
+              </div>
+            </td>
+
             <td style="text-align:center;">
-              <input type="number" class="input-cell" step="0.1" min="0" max="10" value="${p1Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p1', this.value)">
-            </td>
-            <td style="text-align:center;">
-              <input type="number" class="input-cell" step="0.1" min="0" max="10" value="${p2Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p2', this.value)">
-            </td>
-            <td style="text-align:center; font-weight:700; color:#38bdf8;">
-              ${p3Val.toFixed(1)}
-            </td>
-            <td style="text-align:center; font-weight:700; font-size:0.95rem; color:${estadoColor};">
-              ${promTxt}
-            </td>
-            <td style="text-align:center;">
-              <span class="badge" style="border: 1px solid ${estadoColor}; color:${estadoColor}; font-size:0.75rem;">${estadoStr}</span>
+              <span style="font-family:'Chakra Petch', sans-serif; font-size:1.25rem; font-weight:700; color:#ffffff;">${promTxt}</span>
             </td>
           </tr>
         `;
@@ -1938,25 +2518,12 @@
 
       // HUD Promedio General
       const hudNumero = document.getElementById("hud-promedio-general");
-      const hudEstado = document.getElementById("hud-estado-academico");
 
       if (materiasEvaluadasCount > 0) {
-        const promGeneral = (sumaPromediosSemestre / materiasEvaluadasCount).toFixed(2);
+        const promGeneral = (sumaPromediosSemestre / materiasEvaluadasCount).toFixed(1);
         hudNumero.innerText = promGeneral;
-        if (promGeneral >= 8.5) {
-          hudEstado.innerText = "SITUACIÓN ACADÉMICA: EXCELENCIA // CANDIDATO A CUADRO DE HONOR";
-          hudEstado.style.color = "#10b981";
-        } else if (promGeneral >= 6.0) {
-          hudEstado.innerText = "SITUACIÓN ACADÉMICA: REGULAR // MATERIAS APROBADAS";
-          hudEstado.style.color = "#38bdf8";
-        } else {
-          hudEstado.innerText = "SITUACIÓN ACADÉMICA: EN RIESGO // REFORZAR CALIFICACIONES";
-          hudEstado.style.color = "#ef4444";
-        }
       } else {
-        hudNumero.innerText = "0.00";
-        hudEstado.innerText = "SITUACIÓN: INGRESA TUS NOTAS DE P1 Y P2 PARA PROYECTAR EL SEMESTRE";
-        hudEstado.style.color = "#94a3b8";
+        hudNumero.innerText = "0.0";
       }
     }
 
