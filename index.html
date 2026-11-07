@@ -933,7 +933,7 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      box-shadow: inset 1px 1px 0px var(--bevel-high), 0 6px 16px rgba(0,0,0,0.4);
+      box-shadow: inset 1px 1px 0px var(--bevel-high), 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
     label {
@@ -973,7 +973,7 @@
       border: 1px solid var(--card-border-default);
       padding: 18px;
       margin-bottom: 16px;
-      box-shadow: inset 1px 1px 0px var(--bevel-high), 0 6px 16px rgba(0,0,0,0.4);
+      box-shadow: inset 1px 1px 0px var(--bevel-high), 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
     .action-box h3 {
@@ -1117,17 +1117,16 @@
         <div id="chat-history" class="chat-history">
           <div class="chat-msg bot">
             J.A.R.V.I.S EN LÍNEA // CECyT 9 1IM9[cite: 1].<br>
-            • <strong>Con hora fija:</strong> <em>"tarea de historia para el 25 de noviembre a las 23:59 vale 20/100"</em>.<br>
-            • <strong>Sin hora (00:00):</strong> <em>"problemario de álgebra para el 28 de noviembre vale 20/30"</em>.<br>
-            • <strong>Desincronizar:</strong> <em>"desincronizar calendar"</em> para marcar todas como no agendadas.<br>
-            • <strong>Calificar:</strong> <em>"en infografía de historia saqué 10 de 10"</em>.<br>
-            • <strong>Puntos extra:</strong> <em>"en historia tengo 5 puntos extra"</em>.<br>
-            • <strong>Reinicio:</strong> <em>"reinicio de semestre"</em> para purgar y arrancar nuevo término.
+            • <strong>Porcentual con hora:</strong> <em>"problemario de historia para el 25 de noviembre a las 23:59 vale 20/30"</em>.<br>
+            • <strong>Porcentual sin hora:</strong> <em>"proyecto de computación para el 30 de noviembre vale 15/100"</em> (se agenda a las 00:00).<br>
+            • <strong>Ordinal:</strong> <em>"tarea ordinal de álgebra entrega de apuntes para el 22 de noviembre a las 14:00"</em>.<br>
+            • <strong>Desincronizar:</strong> <em>"desincronizar calendar"</em> para marcar todas como pendientes.<br>
+            • <strong>Calificar:</strong> <em>"en infografía de historia saqué 10 de 10"</em>.
           </div>
         </div>
 
         <div class="chat-input-row">
-          <textarea id="chat-input" placeholder="Ingresa entrega, calificación o comando a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
+          <textarea id="chat-input" placeholder="Ingresa entrega (con o sin hora), calificación o comando a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
           <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
         </div>
       </div>
@@ -1153,8 +1152,8 @@
           <label>FECHA LÍMITE:
             <input type="date" id="input-fecha" required>
           </label>
-          <label>HORA LÍMITE (00:00 = DÍA COMPLETO):
-            <input type="time" id="input-hora" value="00:00" required>
+          <label>HORA DE ENTREGA (DEJAR 00:00 SI NO HAY HORA FIJA):
+            <input type="time" id="input-hora" value="00:00">
           </label>
         </div>
         <div class="row" id="row-ponderacion-inputs">
@@ -1244,8 +1243,8 @@
         <label>FECHA LÍMITE:
           <input type="date" id="edit-fecha" required>
         </label>
-        <label>HORA LÍMITE:
-          <input type="time" id="edit-hora" value="00:00" required>
+        <label>HORA DE ENTREGA:
+          <input type="time" id="edit-hora" value="00:00">
         </label>
       </div>
 
@@ -1366,21 +1365,17 @@
       { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "00:00:00", puntos: 0, base: 0, forzarDual: false, califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
     ];
 
-    tareas = tareas.map(t => {
-      let horaNormalizada = t.hora || "00:00:00";
-      if (horaNormalizada.length === 5) horaNormalizada += ":00";
-      return {
-        ...t,
-        tipo: t.tipo || 'porcentual',
-        materia: normalizarMateria(t.materia),
-        hora: horaNormalizada,
-        puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
-        base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
-        forzarDual: Boolean(t.forzarDual),
-        detalles: t.detalles || "",
-        califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
-      };
-    });
+    tareas = tareas.map(t => ({
+      ...t,
+      tipo: t.tipo || 'porcentual',
+      materia: normalizarMateria(t.materia),
+      hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora),
+      puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
+      base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
+      forzarDual: Boolean(t.forzarDual),
+      detalles: t.detalles || "",
+      califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
+    }));
 
     let calificacionesSemestre = JSON.parse(localStorage.getItem("calif_semestre_batiz")) || {};
 
@@ -1474,7 +1469,7 @@
       tareas = tareas.map(t => ({ ...t, sincronizada: false }));
       guardarLocal();
       render();
-      alert("TODAS LAS TAREAS SE HAN MARCADO COMO NO AGENDADAS.\nAhora puedes sincronizarlas con la hora específica a Google Calendar.");
+      alert("TODAS LAS TAREAS SE HAN MARCADO COMO NO AGENDADAS.\nAhora puedes pulsar 'TODO A CALENDAR' para sincronizarlas con sus horas correspondientes.");
     }
 
     function abrirEditorManualDirecto(idPreseleccionado = null) {
@@ -1506,7 +1501,7 @@
       document.getElementById("edit-actividad").value = t.actividad;
       document.getElementById("edit-tipo").value = t.tipo || 'porcentual';
       document.getElementById("edit-fecha").value = t.fecha;
-      document.getElementById("edit-hora").value = (t.hora || "00:00:00").slice(0, 5);
+      document.getElementById("edit-hora").value = (t.hora && t.hora.length >= 5) ? t.hora.substring(0, 5) : "00:00";
       document.getElementById("edit-puntos").value = t.puntos;
       document.getElementById("edit-base").value = t.base;
       document.getElementById("edit-detalles").value = t.detalles || "";
@@ -1522,18 +1517,19 @@
       const nuevoPuntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-puntos").value) || 20);
       const nuevoBase = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-base").value) || 100);
 
-      let horaVal = document.getElementById("edit-hora").value || "00:00";
-      if (horaVal.length === 5) horaVal += ":00";
-
       if (t.puntos !== nuevoPuntos) {
         t.califX = null;
       }
+
+      let horaEdit = document.getElementById("edit-hora").value.trim();
+      if (!horaEdit) horaEdit = "00:00:00";
+      else if (horaEdit.length === 5) horaEdit += ":00";
 
       t.materia = normalizarMateria(document.getElementById("edit-materia").value);
       t.actividad = document.getElementById("edit-actividad").value.trim() || t.actividad;
       t.tipo = tipo;
       t.fecha = document.getElementById("edit-fecha").value || t.fecha;
-      t.hora = horaVal;
+      t.hora = horaEdit;
       t.puntos = nuevoPuntos;
       t.base = nuevoBase;
       t.detalles = document.getElementById("edit-detalles").value.trim();
@@ -1552,11 +1548,10 @@
       return fechaObj.toLocaleDateString("es-MX", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
     }
 
-    // CUENTA REGRESIVA DINÁMICA A LA HORA ESPECIFICADA
+    // CUENTA REGRESIVA CONFIGURADA CON FECHA Y HORA DINÁMICA
     function calcularCuentaRegresiva(fechaStr, horaStr = "00:00:00") {
-      let hVal = horaStr || "00:00:00";
-      if (hVal.length === 5) hVal += ":00";
-      const target = new Date(`${fechaStr}T${hVal}`);
+      const horaFinal = horaStr && horaStr.length >= 5 ? (horaStr.length === 5 ? horaStr + ":00" : horaStr) : "00:00:00";
+      const target = new Date(`${fechaStr}T${horaFinal}`);
       const ahora = new Date();
       const diff = target - ahora;
 
@@ -1772,15 +1767,14 @@
         return false;
       }
 
-      let hVal = t.hora || "00:00:00";
-      if (hVal.length === 5) hVal += ":00";
-      const inicioStr = `${t.fecha}T${hVal}`;
+      const horaEvento = (t.hora && t.hora.length >= 5) ? (t.hora.length === 5 ? t.hora + ":00" : t.hora) : "00:00:00";
+      const inicioStr = `${t.fecha}T${horaEvento}`;
       const fechaInicio = new Date(inicioStr);
       const fechaFin = new Date(fechaInicio.getTime() + 30 * 60000);
 
       const evento = {
         summary: `[${t.materia}] ${t.actividad}`,
-        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica C.A.B. (CECyT 9 Bátiz - 1IM9).\nPonderación: ${t.puntos}/${t.base || 100} pts.\nDetalles: ${t.detalles || 'Sin notas'}`,
+        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nHora: ${horaEvento}\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica C.A.B. (CECyT 9 Bátiz - 1IM9).\nPonderación: ${t.puntos}/${t.base || 100} pts.\nHora: ${horaEvento}\nDetalles: ${t.detalles || 'Sin notas'}`,
         start: { dateTime: fechaInicio.toISOString() },
         end: { dateTime: fechaFin.toISOString() },
         reminders: {
@@ -1866,19 +1860,11 @@
         try {
           const importadas = JSON.parse(evt.target.result);
           if (importadas.tareas && importadas.calificacionesSemestre) {
-            tareas = importadas.tareas.map(t => {
-              let hVal = t.hora || "00:00:00";
-              if (hVal.length === 5) hVal += ":00";
-              return { ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: hVal, forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" };
-            });
+            tareas = importadas.tareas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
             calificacionesSemestre = importadas.calificacionesSemestre;
             if (importadas.pesosParciales) pesosParciales = importadas.pesosParciales;
           } else if (Array.isArray(importadas)) {
-            tareas = importadas.map(t => {
-              let hVal = t.hora || "00:00:00";
-              if (hVal.length === 5) hVal += ":00";
-              return { ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: hVal, forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" };
-            });
+            tareas = importadas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
           }
           guardarLocal();
           render();
@@ -1935,8 +1921,9 @@
       const base = tipo === 'ordinal' ? 0 : (Number(document.getElementById("input-base").value) || 100);
       const detalles = document.getElementById("input-detalles").value.trim();
 
-      let horaVal = document.getElementById("input-hora").value || "00:00";
-      if (horaVal.length === 5) horaVal += ":00";
+      let horaInput = document.getElementById("input-hora").value.trim();
+      if (!horaInput) horaInput = "00:00:00";
+      else if (horaInput.length === 5) horaInput += ":00";
 
       const nueva = {
         id: Date.now(),
@@ -1944,7 +1931,7 @@
         materia: normalizarMateria(document.getElementById("input-materia").value.trim()),
         actividad: document.getElementById("input-actividad").value.trim(),
         fecha: document.getElementById("input-fecha").value,
-        hora: horaVal,
+        hora: horaInput,
         puntos: puntos,
         base: base,
         forzarDual: false,
@@ -1979,26 +1966,37 @@
       return null;
     }
 
-    // EXTRACTOR INTELIGENTE DE HORA EN J.A.R.V.I.S
-    function extraerHora(t) {
-      const matchTime = t.match(/\b([01]?\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?\s*(am|pm)?\b/i);
-      if (matchTime) {
-        let h = parseInt(matchTime[1]);
-        const m = matchTime[2];
-        const s = matchTime[3] || "00";
-        const ampm = matchTime[4] ? matchTime[4].toLowerCase() : null;
-        if (ampm === "pm" && h < 12) h += 12;
-        if (ampm === "am" && h === 12) h = 0;
-        return `${String(h).padStart(2, '0')}:${m}:${s}`;
+    // EXTRACTOR DE HORA INTELIGENTE EN JARVIS (PREDETERMINADO: 00:00:00)
+    function extraerHora(texto) {
+      if (!texto) return "00:00:00";
+      const t = texto.toLowerCase();
+
+      // Caso 1: "a las 14:30", "a las 2 pm", "a las 23:59"
+      const matchALas = t.match(/a las\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm|hrs)?/i);
+      if (matchALas) {
+        let h = parseInt(matchALas[1], 10);
+        let m = matchALas[2] ? parseInt(matchALas[2], 10) : 0;
+        const ap = matchALas[3] ? matchALas[3].toLowerCase() : null;
+        if (ap === "pm" && h < 12) h += 12;
+        if (ap === "am" && h === 12) h = 0;
+        if (h >= 0 && h < 24 && m >= 0 && m < 60) {
+          return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`;
+        }
       }
-      const matchSimple = t.match(/a las\s+(\d{1,2})\s*(am|pm)?\b/i);
-      if (matchSimple) {
-        let h = parseInt(matchSimple[1]);
-        const ampm = matchSimple[2] ? matchSimple[2].toLowerCase() : null;
-        if (ampm === "pm" && h < 12) h += 12;
-        if (ampm === "am" && h === 12) h = 0;
-        return `${String(h).padStart(2, '0')}:00:00`;
+
+      // Caso 2: Notación con dos puntos directa "23:59", "18:30"
+      const matchColon = t.match(/\b(\d{1,2}):(\d{2})\s*(am|pm|hrs)?\b/i);
+      if (matchColon) {
+        let h = parseInt(matchColon[1], 10);
+        let m = parseInt(matchColon[2], 10);
+        const ap = matchColon[3] ? matchColon[3].toLowerCase() : null;
+        if (ap === "pm" && h < 12) h += 12;
+        if (ap === "am" && h === 12) h = 0;
+        if (h >= 0 && h < 24 && m >= 0 && m < 60) {
+          return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`;
+        }
       }
+
       return "00:00:00";
     }
 
@@ -2204,11 +2202,12 @@
         .replace(/para el.*?entregar/i, "")
         .replace(/entregar/i, "")
         .replace(/vale \d+.*$/i, "")
+        .replace(/a las\s+\d{1,2}(?::\d{2})?\s*(?:am|pm|hrs)?/i, "")
+        .replace(/\b\d{1,2}:\d{2}\s*(?:am|pm|hrs)?\b/i, "")
         .replace(/tarea ordinal/i, "")
         .replace(/ordinal/i, "")
         .replace(/sin valor/i, "")
         .replace(/sin porcentaje/i, "")
-        .replace(/a las\s+[0-9:apm\s]+/i, "")
         .replace(/en álgebra|en filosofía|en computación|en inglés|en dhp|en historia|en desarrollo personal|en orientación/i, "")
         .trim();
 
@@ -2375,7 +2374,7 @@
 
             <div class="card-timing">
               <span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
-              <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora}">${doom.texto}</span>
+              <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
             </div>
 
             ${bloqueVisual}
@@ -2486,7 +2485,7 @@
 
                   <div class="card-timing">
                     <span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
-                    <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora}">${doom.texto}</span>
+                    <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
                   </div>
 
                   ${bloqueMateriaVisual}
