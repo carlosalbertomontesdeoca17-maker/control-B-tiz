@@ -7,7 +7,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
 
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -17,7 +17,7 @@
       --card-bg: #151d30;
       --card-border-default: #2a3a5a;
       --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.35);
+      --accent-glow: rgba(56, 189, 248, 0.4);
       --green: #10b981;
       --green-glow: rgba(16, 185, 129, 0.45);
       --danger: #ef4444;
@@ -29,11 +29,12 @@
       --bevel-shadow: rgba(0, 0, 0, 0.6);
     }
 
+    /* TIPOGRAFÍA GLOBAL CON 0 LIMPIO Y SIN PUNTO CENTRAL */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Chakra Petch', sans-serif;
     }
 
     body {
@@ -66,7 +67,6 @@
     }
 
     h1 {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 1.8rem;
       font-weight: 700;
       letter-spacing: 4px;
@@ -77,7 +77,6 @@
     }
 
     .subtitle {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.82rem;
       color: var(--accent);
       letter-spacing: 2px;
@@ -102,7 +101,6 @@
       background: linear-gradient(180deg, #1b253a 0%, #111827 100%);
       border: 1px solid #23314d;
       color: #ffffff;
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
@@ -155,7 +153,6 @@
     }
 
     h2 {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 1rem;
       letter-spacing: 1.5px;
       color: #ffffff;
@@ -173,7 +170,6 @@
       background: #0d1527;
       border: 1px solid #2a3a5a;
       color: #ffffff;
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.8rem;
       font-weight: 700;
       padding: 7px 14px;
@@ -264,7 +260,6 @@
     }
 
     .materia-tag {
-      font-family: 'Chakra Petch', sans-serif;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -283,7 +278,6 @@
     }
 
     .fecha-destacada {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.95rem;
       font-weight: 700;
       color: var(--accent);
@@ -292,7 +286,6 @@
     }
 
     .countdown-timer {
-      font-family: 'JetBrains Mono', monospace;
       font-size: 0.88rem;
       font-weight: 700;
       color: #fbbf24;
@@ -326,7 +319,6 @@
     }
 
     .badge-ordinal {
-      font-family: 'Chakra Petch', sans-serif;
       background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
       border: 1px solid #fbbf24;
       color: #ffffff;
@@ -357,7 +349,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.84rem;
       color: #ffffff;
       font-weight: 700;
@@ -402,7 +393,7 @@
       border: 1px solid #2a3a5a;
       color: #ffffff;
       padding: 5px 6px;
-      font-size: 0.88rem;
+      font-size: 0.95rem;
       font-weight: 700;
       text-align: center;
       outline: none;
@@ -417,8 +408,7 @@
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid rgba(56, 189, 248, 0.4);
       color: var(--accent);
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
       padding: 3px 8px;
       cursor: pointer;
@@ -430,6 +420,15 @@
       background: var(--accent);
       color: #0b0f19;
       box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    /* ESTILO VISUAL DE PORCENTAJES DESTACADOS Y AMPLIADOS */
+    .pct-destacado {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #38bdf8;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+      letter-spacing: 0.5px;
     }
 
     .card-bottom {
@@ -454,7 +453,6 @@
     }
 
     .badge {
-      font-family: 'Chakra Petch', sans-serif;
       padding: 4px 10px;
       font-size: 0.78rem;
       font-weight: 700;
@@ -499,7 +497,6 @@
     }
 
     .details-title-tag {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.78rem;
       font-weight: 700;
       color: var(--accent);
@@ -514,7 +511,6 @@
     }
 
     button {
-      font-family: 'Chakra Petch', sans-serif;
       cursor: pointer;
     }
 
@@ -624,7 +620,6 @@
     }
 
     .materia-titulo {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: 1.5px;
@@ -663,10 +658,10 @@
     }
 
     .eval-grade-display {
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 1.25rem;
+      font-size: 1.55rem;
       font-weight: 700;
-      color: #ffffff;
+      color: #38bdf8;
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -675,7 +670,7 @@
     .coverage-meta-row {
       display: flex;
       justify-content: space-between;
-      font-size: 0.76rem;
+      font-size: 0.84rem;
       color: #94a3b8;
       font-weight: 700;
       letter-spacing: 0.5px;
@@ -721,7 +716,6 @@
     }
 
     .matrix-table th {
-      font-family: 'Chakra Petch', sans-serif;
       background: #111a2e;
       color: var(--accent);
       padding: 16px 14px;
@@ -772,10 +766,10 @@
     }
 
     .p3-grade-display {
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: #38bdf8;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
       height: 36px;
       display: flex;
       align-items: center;
@@ -792,7 +786,6 @@
     }
 
     .weight-label {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.68rem;
       color: var(--accent);
       font-weight: 700;
@@ -804,8 +797,7 @@
       background: #0c1220;
       border: 1px solid #23314d;
       color: #fbbf24;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       font-weight: 700;
       text-align: center;
       padding: 3px 4px;
@@ -818,7 +810,7 @@
     }
 
     .weight-unit {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       color: #fbbf24;
       font-weight: 700;
     }
@@ -833,7 +825,6 @@
     }
 
     .hud-title {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.95rem;
       color: var(--accent);
       letter-spacing: 2px;
@@ -842,7 +833,6 @@
     }
 
     .hud-number {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 3rem;
       font-weight: 700;
       color: #ffffff;
@@ -852,7 +842,6 @@
     }
 
     .hud-meta {
-      font-family: 'JetBrains Mono', monospace;
       font-size: 0.85rem;
       color: #94a3b8;
       letter-spacing: 1px;
@@ -876,7 +865,6 @@
     }
 
     .terminal-tag {
-      font-family: 'Chakra Petch', sans-serif;
       background: var(--accent);
       color: #000;
       font-size: 0.72rem;
@@ -949,7 +937,6 @@
     }
 
     label {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.82rem;
       font-weight: 600;
       color: #ffffff;
@@ -990,7 +977,6 @@
     }
 
     .action-box h3 {
-      font-family: 'Chakra Petch', sans-serif;
       font-size: 0.9rem;
       margin-bottom: 8px;
       color: var(--accent);
@@ -1319,8 +1305,6 @@
       return COLORES_MATERIAS[norm] || "#38bdf8";
     }
 
-    // --- MANEJO DE FRACCIONES Y DECIMALES PERIÓDICOS EXACTOS ---
-    // Reconoce 33.3%, 33.33%, etc., internamente como (100 / 3) para exactitud total
     function valorRealPonderado(val) {
       const n = parseFloat(val);
       if (isNaN(n)) return 0;
@@ -1333,20 +1317,22 @@
       return n;
     }
 
-    function formatearValorPorcentual(val) {
+    // FORMATEADOR LIMPIO: ENTEROS SIN DECIMALES, DECIMALES LIMITADOS A 1 DÍGITO
+    function formatearPorcentajeNum(val) {
       if (val === null || val === undefined || isNaN(val)) return "0";
       const n = parseFloat(val);
-      // Muestra 33.33 de manera idéntica y simétrica en los tres parciales
-      if (Math.abs(n - 100 / 3) < 0.15 || n === 33.3 || n === 33.33 || n === 33.34) {
-        return "33.33";
+      if (Math.abs(n - Math.round(n)) < 0.001) {
+        return Math.round(n).toString();
       }
-      if (Math.abs(n - 200 / 3) < 0.15 || n === 66.6 || n === 66.66 || n === 66.67) {
-        return "66.67";
+      const fixed = n.toFixed(1);
+      if (fixed.endsWith(".0")) {
+        return Math.round(n).toString();
       }
-      if (Number.isInteger(n)) {
-        return n.toString();
-      }
-      return parseFloat(n.toFixed(2)).toString();
+      return parseFloat(fixed).toString();
+    }
+
+    function formatearPorcentaje(val) {
+      return `${formatearPorcentajeNum(val)}%`;
     }
 
     function calcularRedondeoSAES(promedio100) {
@@ -1408,7 +1394,6 @@
 
     let pesosParciales = JSON.parse(localStorage.getItem("pesos_parciales_batiz")) || {};
 
-    // INICIALIZACIÓN Y MIGRACIÓN LIMPIA: 33.33 SIMÉTRICO EN LOS TRES PARCIALES
     MATERIAS_OFICIALES.forEach(m => {
       if (!pesosParciales[m]) {
         pesosParciales[m] = { p1: 33.33, p2: 33.33, p3: 33.33 };
@@ -1516,7 +1501,6 @@
       const nuevoPuntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-puntos").value) || 20);
       const nuevoBase = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-base").value) || 100);
 
-      // Reinicio de calificación al cambiar los puntos absolutos
       if (t.puntos !== nuevoPuntos) {
         t.califX = null;
       }
@@ -1586,19 +1570,16 @@
       });
     }, 1000);
 
-    // CONTROLADOR IMPLÍCITO REACTIVO DESDE CRONOGRAMA
     function actualizarBaseTarea(id, campo, valor) {
       const valNum = parseFloat(valor);
       if (isNaN(valNum) || valNum <= 0) return;
       tareas = tareas.map(t => {
         if (t.id === id) {
           if (campo === 'puntos') {
-            // Cambio de valor: reinicia calificación en evaluación a null
             if (t.puntos !== valNum) {
               return { ...t, puntos: valNum, califX: null };
             }
           } else if (campo === 'base') {
-            // Cambio de base: conserva calificación, pero adapta el desglose visual
             if (t.base !== valNum) {
               return { ...t, base: valNum };
             }
@@ -1675,7 +1656,6 @@
       if (isNaN(valNum) || valNum <= 0) return;
       if (!pesosParciales[matNorm]) pesosParciales[matNorm] = { p1: 33.33, p2: 33.33, p3: 33.33 };
       
-      // Si el usuario ingresa 33.3 o 33.33, guarda 33.33 estándar
       if (Math.abs(valNum - 100 / 3) < 0.15 || valNum === 33.3 || valNum === 33.33 || valNum === 33.34) {
         pesosParciales[matNorm][parcialKey] = 33.33;
       } else {
@@ -2029,7 +2009,7 @@
           guardarLocal();
           render();
           const p3Info = calcularP3Materia(materia);
-          agregarMensajeChat("bot", `BONO ASIGNADO: +${extraPts}% en <span style="color:${getColorMateria(materia)}; font-weight:700;">${materia.toUpperCase()}</span>. Total en P3: <strong>${p3Info.puntosAcumulados}%</strong>${p3Info.colchon > 0 ? ' (Colchón: +' + p3Info.colchon + '%)' : ''}.`);
+          agregarMensajeChat("bot", `BONO ASIGNADO: +${formatearPorcentaje(extraPts)} en <span style="color:${getColorMateria(materia)}; font-weight:700;">${materia.toUpperCase()}</span>. Total en P3: <strong>${formatearPorcentaje(p3Info.puntosAcumulados)}</strong>${p3Info.colchon > 0 ? ' (Colchón: +' + formatearPorcentaje(p3Info.colchon) + ')' : ''}.`);
           return;
         }
       }
@@ -2124,10 +2104,10 @@
           guardarLocal();
           render();
 
-          const ptsGanados100 = ((notaObt / tarea.base) * 100).toFixed(1);
+          const ptsGanados100 = ((notaObt / tarea.base) * 100);
           const p3Info = calcularP3Materia(tarea.materia);
 
-          agregarMensajeChat("bot", `CALIFICACIÓN: "${tarea.actividad}" asignada con ${notaObt} / ${tarea.puntos} en BASE DEL PROFESOR (+${ptsGanados100}% en PORCENTAJE). Total en <span style="color:${getColorMateria(tarea.materia)}; font-weight:700;">${tarea.materia.toUpperCase()}</span>: <strong>${p3Info.puntosAcumulados}%</strong>.`);
+          agregarMensajeChat("bot", `CALIFICACIÓN: "${tarea.actividad}" asignada con ${notaObt} / ${tarea.puntos} en BASE DEL PROFESOR (+${formatearPorcentaje(ptsGanados100)} en PORCENTAJE). Total en <span style="color:${getColorMateria(tarea.materia)}; font-weight:700;">${tarea.materia.toUpperCase()}</span>: <strong>${formatearPorcentaje(p3Info.puntosAcumulados)}</strong>.`);
           return;
         }
       }
@@ -2217,9 +2197,9 @@
           render();
         }, 120);
       } else {
-        const pesoBase100 = ((nueva.puntos / nueva.base) * 100).toFixed(0);
+        const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${pesoBase100}%].`);
+          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}].`);
           render();
         }, 120);
       }
@@ -2238,7 +2218,7 @@
       const puntosX = Number(t.puntos) || 20;
       const baseX = Number(t.base) || 100;
       const porcBaseX = Math.min((puntosX / baseX) * 100, 100);
-      const valorEn100 = ((puntosX / baseX) * 100).toFixed(1);
+      const valorEn100 = ((puntosX / baseX) * 100);
 
       const esBase100 = (baseX === 100);
       const modoUnaBarra = esBase100 && !t.forzarDual;
@@ -2252,7 +2232,7 @@
                   <span>PORCENTAJE</span>
                   <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Hacer clic para editar puntos o base del profesor">⚙ AJUSTAR BASE</button>
                 </div>
-                <span style="color:#38bdf8; font-weight:700;">${valorEn100}%</span>
+                <span class="pct-destacado">${formatearPorcentaje(valorEn100)}</span>
               </div>
               <div class="bar-container">
                 <div class="bar-fill" style="width: ${Math.min(valorEn100, 100)}%;"></div>
@@ -2288,7 +2268,7 @@
             <div class="bar-row-block">
               <div class="bar-label-sub">
                 <span>PORCENTAJE</span>
-                <span style="color:#38bdf8;">${valorEn100}%</span>
+                <span class="pct-destacado">${formatearPorcentaje(valorEn100)}</span>
               </div>
               <div class="bar-container">
                 <div class="bar-fill" style="width: ${Math.min(valorEn100, 100)}%;"></div>
@@ -2376,7 +2356,7 @@
 
         const puntosPorc = Math.min(puntosTotales100, 100);
         const barraUniversalColor = puntosTotales100 >= 100 ? 'success' : (puntosTotales100 >= 70 ? '' : 'warning');
-        const estadoPonderacion = puntosTotales100 >= 100 ? '100%' : `${Math.round(puntosTotales100)}%`;
+        const estadoPonderacion = puntosTotales100 >= 100 ? '100%' : formatearPorcentaje(puntosTotales100);
 
         const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
         const pesos = pesosParciales[mat] || { p1: 33.33, p2: 33.33, p3: 33.33 };
@@ -2418,7 +2398,7 @@
               <div class="materia-universal-bar">
                 <div class="bar-label-sub">
                   <span>COBERTURA TOTAL DE EVALUACIÓN:</span>
-                  <span><strong>${puntosTotales100.toFixed(0)}%</strong></span>
+                  <span><strong class="pct-destacado" style="font-size:1.25rem;">${formatearPorcentaje(puntosTotales100)}</strong></span>
                 </div>
                 <div class="bar-container" style="height: 15px;">
                   <div class="bar-fill ${barraUniversalColor}" style="width: ${puntosPorc}%;"></div>
@@ -2483,16 +2463,16 @@
               <div class="eval-materia-topline">
                 <span class="materia-tag" style="font-size:1.15rem; color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
                 <div class="eval-grade-display">
-                  <span>${p3Info.puntosAcumulados}%</span>
-                  ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15);">+${p3Info.colchon}% COLCHÓN</span>` : ''}
+                  <span>${formatearPorcentaje(p3Info.puntosAcumulados)}</span>
+                  ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15);">+${formatearPorcentaje(p3Info.colchon)} COLCHÓN</span>` : ''}
                 </div>
               </div>
               <div class="bar-container" style="height:16px; margin-top:6px;">
                 <div class="bar-fill ${colorBarra}" style="width: ${p3Info.puntosAcumulados}%;"></div>
               </div>
               <div class="coverage-meta-row">
-                <span>TOTAL PROGRAMADO: ${p3Info.puntosProgramados}%</span>
-                <span style="color:#38bdf8;">TOTAL EVALUADO: ${p3Info.puntosAcumulados}%</span>
+                <span>TOTAL PROGRAMADO: <span class="pct-destacado" style="font-size:0.95rem;">${formatearPorcentaje(p3Info.puntosProgramados)}</span></span>
+                <span>TOTAL EVALUADO: <span class="pct-destacado" style="font-size:0.95rem;">${formatearPorcentaje(p3Info.puntosAcumulados)}</span></span>
               </div>
             </div>
 
@@ -2521,7 +2501,7 @@
                 const hasGrade = !isNaN(califNum);
                 
                 const porcRendimientoX = hasGrade ? Math.min((califNum / puntosX) * 100, 100) : 0;
-                const aporteBase100 = hasGrade ? ((califNum / baseX) * 100).toFixed(1) : "0.0";
+                const aporteBase100 = hasGrade ? ((califNum / baseX) * 100) : 0;
 
                 const esBase100 = (baseX === 100);
 
@@ -2538,7 +2518,7 @@
                             <span>PORCENTAJE</span>
                             <div style="display:flex; align-items:center; gap:6px;">
                               <input type="number" class="input-mini" step="0.1" min="0" max="${puntosX}" value="${califVal}" placeholder="--" onchange="actualizarCalifTarea(${t.id}, this.value)">
-                              <span style="color:#38bdf8; font-weight:700;">/ ${puntosX}%</span>
+                              <span class="pct-destacado" style="font-size:1.2rem;">/ ${formatearPorcentaje(puntosX)}</span>
                             </div>
                           </div>
                           <div class="bar-container">
@@ -2572,7 +2552,7 @@
                         <div class="bar-row-block">
                           <div class="bar-label-sub">
                             <span>PORCENTAJE</span>
-                            <span style="color:#38bdf8;">${aporteBase100}%</span>
+                            <span class="pct-destacado" style="font-size:1.2rem;">${formatearPorcentaje(aporteBase100)}</span>
                           </div>
                           <div class="bar-container">
                             <div class="bar-fill" style="width: ${Math.min(aporteBase100, 100)}%;"></div>
@@ -2636,11 +2616,11 @@
 
           saesHtml = `
             <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
-              <span style="font-family:'Chakra Petch', sans-serif; font-size:1.45rem; font-weight:700; color:#ffffff; line-height:1;">
+              <span style="font-size:1.55rem; font-weight:700; color:#ffffff; line-height:1;">
                 ${saesData.enteroSAES}
               </span>
-              <span style="font-size:0.72rem; color:#94a3b8; font-weight:600; letter-spacing:0.5px;">
-                REAL: ${saesData.prom10.toFixed(2)}
+              <span style="font-size:0.75rem; color:#94a3b8; font-weight:600; letter-spacing:0.5px;">
+                REAL: ${saesData.prom10.toFixed(1)}
               </span>
             </div>
           `;
@@ -2655,7 +2635,7 @@
                 <input type="number" class="input-cell" step="1" min="0" max="100" value="${p1Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p1', this.value)">
                 <div class="weight-box" title="Porcentaje del 1er Parcial">
                   <span class="weight-label">VALOR</span>
-                  <input type="number" class="input-weight" step="0.01" min="1" max="100" value="${formatearValorPorcentual(pesos.p1)}" onchange="actualizarPesoMateria('${mat}', 'p1', this.value)">
+                  <input type="number" class="input-weight" step="0.1" min="1" max="100" value="${formatearPorcentajeNum(pesos.p1)}" onchange="actualizarPesoMateria('${mat}', 'p1', this.value)">
                   <span class="weight-unit">%</span>
                 </div>
               </div>
@@ -2666,7 +2646,7 @@
                 <input type="number" class="input-cell" step="1" min="0" max="100" value="${p2Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p2', this.value)">
                 <div class="weight-box" title="Porcentaje del 2do Parcial">
                   <span class="weight-label">VALOR</span>
-                  <input type="number" class="input-weight" step="0.01" min="1" max="100" value="${formatearValorPorcentual(pesos.p2)}" onchange="actualizarPesoMateria('${mat}', 'p2', this.value)">
+                  <input type="number" class="input-weight" step="0.1" min="1" max="100" value="${formatearPorcentajeNum(pesos.p2)}" onchange="actualizarPesoMateria('${mat}', 'p2', this.value)">
                   <span class="weight-unit">%</span>
                 </div>
               </div>
@@ -2674,10 +2654,10 @@
 
             <td>
               <div class="partial-cell-content">
-                <div class="p3-grade-display">${p3Val.toFixed(1)}</div>
+                <div class="p3-grade-display">${formatearPorcentaje(p3Val)}</div>
                 <div class="weight-box" title="Porcentaje del 3er Parcial">
                   <span class="weight-label">VALOR</span>
-                  <input type="number" class="input-weight" step="0.01" min="1" max="100" value="${formatearValorPorcentual(pesos.p3)}" onchange="actualizarPesoMateria('${mat}', 'p3', this.value)">
+                  <input type="number" class="input-weight" step="0.1" min="1" max="100" value="${formatearPorcentajeNum(pesos.p3)}" onchange="actualizarPesoMateria('${mat}', 'p3', this.value)">
                   <span class="weight-unit">%</span>
                 </div>
               </div>
