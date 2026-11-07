@@ -284,27 +284,30 @@
       text-transform: uppercase;
     }
 
+    /* RECUADRO DE CUENTA REGRESIVA SIMPLIFICADA Y RESALTADA */
     .countdown-timer {
-      font-size: 0.88rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: #fbbf24;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(251, 191, 36, 0.4);
-      padding: 4px 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      padding: 6px 14px;
       display: inline-block;
-      letter-spacing: 1.5px;
-      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
+      letter-spacing: 1px;
+      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 10px rgba(251, 191, 36, 0.25);
     }
 
     .countdown-timer.urgente {
       color: #ef4444;
       border-color: #ef4444;
+      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 10px rgba(239, 68, 68, 0.4);
       text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
     }
 
     .countdown-timer.zero {
       color: #94a3b8;
       border-color: #475569;
+      box-shadow: none;
     }
 
     .ordinal-card-box {
@@ -1037,7 +1040,7 @@
       <button class="tab-btn active" onclick="cambiarVista('cronograma')">CRONOGRAMA</button>
       <button class="tab-btn" onclick="cambiarVista('materias')">MATERIAS</button>
       <button class="tab-btn" onclick="cambiarVista('evaluacion')">EVALUACIÓN</button>
-      <button class="tab-btn" onclick="cambiarVista('datos')">J.A.R.V.I.S</button>
+      <button class="tab-btn" onclick="cambiarVista('datos')">J.A.R.VI.S</button>
       <button class="tab-btn" onclick="cambiarVista('config')">CONFIG</button>
     </nav>
 
@@ -1117,7 +1120,7 @@
             J.A.R.V.I.S EN LÍNEA // CECyT 9 1IM9[cite: 1].<br>
             • <strong>Porcentual:</strong> <em>"problemario de historia para el 25 de noviembre vale 20/30"</em>.<br>
             • <strong>Ordinal:</strong> <em>"tarea ordinal de álgebra entrega de apuntes para el 22 de noviembre"</em>.<br>
-            • <strong>Agregar detalles:</strong> <em>"agrega detalles a la tarea de historia: llevar fotos impresas"</em>.<br>
+            • <strong>Desincronizar:</strong> <em>"desincronizar calendar"</em> para marcar todas como no agendadas.<br>
             • <strong>Calificar:</strong> <em>"en infografía de historia saqué 10 de 10"</em>.<br>
             • <strong>Puntos extra:</strong> <em>"en historia tengo 5 puntos extra"</em>.<br>
             • <strong>Reinicio:</strong> <em>"reinicio de semestre"</em> para purgar y arrancar nuevo término.
@@ -1185,6 +1188,12 @@
           <button type="button" class="btn-32 btn-32-primary" id="btn-auth-google" onclick="iniciarSesionGoogle()">AUTH GOOGLE</button>
         </div>
         <p id="auth-status" style="margin-top:12px; color:var(--accent); font-size:0.85rem; font-weight:600;"></p>
+      </div>
+
+      <div class="action-box">
+        <h3>RESTABLECER SINCRONIZACIÓN DE CALENDAR</h3>
+        <p>Si eliminaste eventos en Google Calendar para reprogramarlos a las 00:00:00 hrs:</p>
+        <button type="button" class="btn-32 btn-32-primary" onclick="resetearSincronizacionCalendar()">REINICIAR ESTADO CALENDAR (MARCAR COMO PENDIENTES)</button>
       </div>
 
       <div class="action-box">
@@ -1355,7 +1364,6 @@
       { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "00:00:00", puntos: 0, base: 0, forzarDual: false, califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
     ];
 
-    // MIGRACIÓN AUTOMÁTICA: HORA A 00:00:00 (INICIO DEL DÍA)
     tareas = tareas.map(t => ({
       ...t,
       tipo: t.tipo || 'porcentual',
@@ -1456,6 +1464,14 @@
       render();
     }
 
+    // FUNCIÓN PARA DESMARCAR TODAS LAS TAREAS DE GOOGLE CALENDAR
+    function resetearSincronizacionCalendar() {
+      tareas = tareas.map(t => ({ ...t, sincronizada: false }));
+      guardarLocal();
+      render();
+      alert("TODAS LAS TAREAS SE HAN MARCADO COMO NO AGENDADAS.\nAhora puedes pulsar 'TODO A CALENDAR' para sincronizarlas con la hora 00:00:00.");
+    }
+
     function abrirEditorManualDirecto(idPreseleccionado = null) {
       const modal = document.getElementById("modal-editor-tarea");
       const selectTarea = document.getElementById("edit-select-tarea");
@@ -1527,7 +1543,7 @@
       return fechaObj.toLocaleDateString("es-MX", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
     }
 
-    // CUENTA REGRESIVA CONFIGURADA AL INICIO EXACTO DEL DÍA (00:00:00)
+    // CUENTA REGRESIVA SIMPLIFICADA: "X dias y Y horas"
     function calcularCuentaRegresiva(fechaStr) {
       const target = new Date(`${fechaStr}T00:00:00`);
       const ahora = new Date();
@@ -1539,16 +1555,9 @@
 
       const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
       const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutos = Math.floor((diff / (1000 * 60)) % 60);
-      const segundos = Math.floor((diff / 1000) % 60);
-
-      const dStr = String(dias).padStart(2, '0');
-      const hStr = String(horas).padStart(2, '0');
-      const mStr = String(minutos).padStart(2, '0');
-      const sStr = String(segundos).padStart(2, '0');
 
       return {
-        texto: `${dStr}D ${hStr}H ${mStr}M ${sStr}S`,
+        texto: `${dias} dias y ${horas} horas`,
         urgente: dias < 1,
         zero: false
       };
@@ -1990,6 +1999,13 @@
       if (lower.includes("reinicio de semestre") || lower.includes("reiniciar semestre") || lower.includes("nuevo semestre")) {
         esperandoConfirmacionReset = true;
         agregarMensajeChat("bot", "ADVERTENCIA: ¿Confirmar purga completa del semestre? Escribe <strong>CONFIRMAR</strong> para reiniciar todas las materias a ceros.");
+        return;
+      }
+
+      // COMANDO JARVIS PARA DESINCronizar / RESETEAR CALENDAR
+      if (lower.includes("desincronizar") || lower.includes("no agendadas") || lower.includes("reset calendar") || lower.includes("reiniciar calendar")) {
+        resetearSincronizacionCalendar();
+        agregarMensajeChat("bot", "ESTADO REINICIADO: Todas las tareas se marcaron como pendientes. Puedes volver a pulsar <strong>TODO A CALENDAR</strong>.");
         return;
       }
 
