@@ -29,7 +29,6 @@
       --bevel-shadow: rgba(0, 0, 0, 0.6);
     }
 
-    /* TIPOGRAFÍA GLOBAL CON 0 LIMPIO Y SIN PUNTO CENTRAL */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -422,7 +421,6 @@
       box-shadow: 0 0 8px var(--accent-glow);
     }
 
-    /* ESTILO VISUAL DE PORCENTAJES DESTACADOS Y AMPLIADOS */
     .pct-destacado {
       font-size: 1.15rem;
       font-weight: 700;
@@ -1154,7 +1152,7 @@
             <input type="date" id="input-fecha" required>
           </label>
           <label>HORA:
-            <input type="text" id="input-hora" value="12:00:00" readonly style="color:#ffffff; background:#05080f;">
+            <input type="text" id="input-hora" value="00:00:00" readonly style="color:#ffffff; background:#05080f;">
           </label>
         </div>
         <div class="row" id="row-ponderacion-inputs">
@@ -1317,7 +1315,6 @@
       return n;
     }
 
-    // FORMATEADOR LIMPIO: ENTEROS SIN DECIMALES, DECIMALES LIMITADOS A 1 DÍGITO
     function formatearPorcentajeNum(val) {
       if (val === null || val === undefined || isNaN(val)) return "0";
       const n = parseFloat(val);
@@ -1352,16 +1349,18 @@
     }
 
     let tareas = JSON.parse(localStorage.getItem("tareas_batiz")) || [
-      { id: 1, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Infografia visita Museo de la Mujer", fecha: "2026-11-23", hora: "12:00:00", puntos: 10, base: 100, forzarDual: false, califX: null, detalles: "Visita al Museo de la Mujer. Entregar infografía en formato digital con fuentes bibliográficas y fotografías.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 2, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Debate construccion de la nacion", fecha: "2026-11-30", hora: "12:00:00", puntos: 20, base: 100, forzarDual: false, califX: null, detalles: "Debate sobre el proceso de construcción del Estado-Nación mexicano. Preparar argumentos por equipo.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 3, tipo: 'porcentual', materia: "Álgebra", actividad: "Problemario Productos Notables", fecha: "2026-11-28", hora: "12:00:00", puntos: 20, base: 30, forzarDual: false, califX: null, detalles: "Ejercicios de productos notables y factorización. Procedimiento completo a mano con hojas milimétricas.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "12:00:00", puntos: 0, base: 0, forzarDual: false, califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
+      { id: 1, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Infografia visita Museo de la Mujer", fecha: "2026-11-23", hora: "00:00:00", puntos: 10, base: 100, forzarDual: false, califX: null, detalles: "Visita al Museo de la Mujer. Entregar infografía en formato digital con fuentes bibliográficas y fotografías.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 2, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Debate construccion de la nacion", fecha: "2026-11-30", hora: "00:00:00", puntos: 20, base: 100, forzarDual: false, califX: null, detalles: "Debate sobre el proceso de construcción del Estado-Nación mexicano. Preparar argumentos por equipo.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 3, tipo: 'porcentual', materia: "Álgebra", actividad: "Problemario Productos Notables", fecha: "2026-11-28", hora: "00:00:00", puntos: 20, base: 30, forzarDual: false, califX: null, detalles: "Ejercicios de productos notables y factorización. Procedimiento completo a mano con hojas milimétricas.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "00:00:00", puntos: 0, base: 0, forzarDual: false, califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
     ];
 
+    // MIGRACIÓN AUTOMÁTICA: HORA A 00:00:00 (INICIO DEL DÍA)
     tareas = tareas.map(t => ({
       ...t,
       tipo: t.tipo || 'porcentual',
       materia: normalizarMateria(t.materia),
+      hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : t.hora,
       puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
       base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
       forzarDual: Boolean(t.forzarDual),
@@ -1509,6 +1508,7 @@
       t.actividad = document.getElementById("edit-actividad").value.trim() || t.actividad;
       t.tipo = tipo;
       t.fecha = document.getElementById("edit-fecha").value || t.fecha;
+      t.hora = "00:00:00";
       t.puntos = nuevoPuntos;
       t.base = nuevoBase;
       t.detalles = document.getElementById("edit-detalles").value.trim();
@@ -1527,8 +1527,9 @@
       return fechaObj.toLocaleDateString("es-MX", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
     }
 
+    // CUENTA REGRESIVA CONFIGURADA AL INICIO EXACTO DEL DÍA (00:00:00)
     function calcularCuentaRegresiva(fechaStr) {
-      const target = new Date(`${fechaStr}T12:00:00`);
+      const target = new Date(`${fechaStr}T00:00:00`);
       const ahora = new Date();
       const diff = target - ahora;
 
@@ -1750,7 +1751,7 @@
         return false;
       }
 
-      const inicioStr = `${t.fecha}T12:00:00`;
+      const inicioStr = `${t.fecha}T00:00:00`;
       const fechaInicio = new Date(inicioStr);
       const fechaFin = new Date(fechaInicio.getTime() + 30 * 60000);
 
@@ -1802,7 +1803,7 @@
       if (!t) return;
       const exito = await insertarEventoGoogle(t);
       if (exito) {
-        alert(`EVENTO AGENDADO: "${t.actividad}" A LAS 12:00:00 CON ALERTAS A 7D, 3D Y 24H.`);
+        alert(`EVENTO AGENDADO: "${t.actividad}" AL INICIO DEL DÍA (00:00:00 HRS) CON ALERTAS A 7D, 3D Y 24H.`);
       }
     }
 
@@ -1842,11 +1843,11 @@
         try {
           const importadas = JSON.parse(evt.target.result);
           if (importadas.tareas && importadas.calificacionesSemestre) {
-            tareas = importadas.tareas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
+            tareas = importadas.tareas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : t.hora, forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
             calificacionesSemestre = importadas.calificacionesSemestre;
             if (importadas.pesosParciales) pesosParciales = importadas.pesosParciales;
           } else if (Array.isArray(importadas)) {
-            tareas = importadas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
+            tareas = importadas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : t.hora, forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
           }
           guardarLocal();
           render();
@@ -1909,7 +1910,7 @@
         materia: normalizarMateria(document.getElementById("input-materia").value.trim()),
         actividad: document.getElementById("input-actividad").value.trim(),
         fecha: document.getElementById("input-fecha").value,
-        hora: "12:00:00",
+        hora: "00:00:00",
         puntos: puntos,
         base: base,
         forzarDual: false,
@@ -2155,7 +2156,7 @@
           materia,
           actividad,
           fecha: "",
-          hora: "12:00:00",
+          hora: "00:00:00",
           puntos,
           base,
           forzarDual: false,
@@ -2177,7 +2178,7 @@
         materia,
         actividad,
         fecha,
-        hora: "12:00:00",
+        hora: "00:00:00",
         puntos,
         base,
         forzarDual: false,
@@ -2193,13 +2194,13 @@
 
       if (esOrdinal) {
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [CLASIFICACIÓN: ORDINALES].`);
+          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 00:00:00 HRS [CLASIFICACIÓN: ORDINALES].`);
           render();
         }, 120);
       } else {
         const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 12:00:00 HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}].`);
+          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - 00:00:00 HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}].`);
           render();
         }, 120);
       }
@@ -2315,7 +2316,7 @@
 
             <div class="card-bottom">
               <div class="card-meta">
-                <span>HORA: 12:00:00 HRS</span>
+                <span>HORA: 00:00:00 HRS</span>
                 ${t.sincronizada ? '<span class="badge badge-sync-ok">AGENDADO</span>' : '<span class="badge badge-sync-pending">PENDIENTE POR AGENDAR</span>'}
                 ${t.completada ? '<span class="badge" style="border: 1px solid #334155; color:#64748b; background:transparent;">ARCHIVADO</span>' : ''}
               </div>
@@ -2426,7 +2427,7 @@
 
                   <div class="card-bottom">
                     <div class="card-meta">
-                      <span>HORA: 12:00:00 HRS</span>
+                      <span>HORA: 00:00:00 HRS</span>
                     </div>
                     <div class="card-actions">
                       <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
