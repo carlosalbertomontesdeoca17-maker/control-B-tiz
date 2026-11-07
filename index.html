@@ -210,7 +210,6 @@
       position: relative;
     }
 
-    /* CONTORNOS EXCLUSIVOS DE AGENDA GOOGLE CALENDAR */
     .card.sync-ok {
       border-color: var(--green) !important;
       animation: pulseGreenBorder 3.5s infinite alternate ease-in-out;
@@ -1065,7 +1064,7 @@
       <div id="lista-materias"></div>
     </section>
 
-    <!-- 3: EVALUACIÓN -->
+    <!-- 3: EVALUACIÓN (CON PROMEDIO SAES EN ENTERO) -->
     <section id="vista-evaluacion" class="view-panel">
       <div class="section-header">
         <h2>3ER PARCIAL // RENDIMIENTO</h2>
@@ -1076,7 +1075,7 @@
         <h2>MATRIZ SEMESTRAL DE CALIFICACIONES</h2>
       </div>
       <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:12px;">
-        * Ingresa tus calificaciones en la celda superior y el valor porcentual de cada parcial en el cuadro <strong>VALOR %</strong>. El promedio se calcula proporcionalmente sin alterar tus notas individuales.
+        * Ingresa tus calificaciones en la celda superior y el valor ponderado en <strong>VALOR %</strong>. El <strong>PROMEDIO SAES</strong> redondea a entero (.6 a .9 sube; .0 a .5 baja). El HUD general promedia estos enteros oficiales.
       </p>
 
       <div class="table-container">
@@ -1087,7 +1086,7 @@
               <th>1ER PARCIAL</th>
               <th>2DO PARCIAL</th>
               <th>3ER PARCIAL</th>
-              <th>PROMEDIO</th>
+              <th>PROMEDIO SAES</th>
             </tr>
           </thead>
           <tbody id="tabla-matriz-body"></tbody>
@@ -1095,9 +1094,9 @@
       </div>
 
       <div class="hud-promedio-box">
-        <div class="hud-title">PROMEDIO GENERAL SEMESTRAL PONDERADO</div>
-        <div class="hud-number" id="hud-promedio-general">0.0</div>
-        <div class="hud-meta" id="hud-estado-academico">ESCALA PONDERADA EN BASE 100 ACTIVA</div>
+        <div class="hud-title">PROMEDIO GENERAL SEMESTRAL SAES</div>
+        <div class="hud-number" id="hud-promedio-general">0.00</div>
+        <div class="hud-meta" id="hud-estado-academico">ESCALA PONDERADA OFICIAL // REDONDEO A ENTEROS POR ASIGNATURA</div>
       </div>
     </section>
 
@@ -1268,17 +1267,16 @@
       "Orientación Juvenil y Profesional I"
     ];
 
-    // MAPA OFICIAL DE COLORES DISTINTIVOS POR MATERIA
     const COLORES_MATERIAS = {
-      "Álgebra": "#f87171", // Rojizo
-      "Expresión Oral y Escrita I": "#3b82f6", // Azul
-      "Historia de México Contemporáneo I": "#f97316", // Naranja
-      "Inglés I": "#facc15", // Amarillo
-      "Filosofía I": "#c084fc", // Púrpura neón
-      "Computación Básica I": "#34d399", // Verde esmeralda
-      "DHP": "#f472b6", // Fucsia / Rosa
-      "Desarrollo Personal": "#a3e635", // Verde lima
-      "Orientación Juvenil y Profesional I": "#2dd4bf" // Turquesa / Cian
+      "Álgebra": "#f87171",
+      "Expresión Oral y Escrita I": "#3b82f6",
+      "Historia de México Contemporáneo I": "#f97316",
+      "Inglés I": "#facc15",
+      "Filosofía I": "#c084fc",
+      "Computación Básica I": "#34d399",
+      "DHP": "#f472b6",
+      "Desarrollo Personal": "#a3e635",
+      "Orientación Juvenil y Profesional I": "#2dd4bf"
     };
 
     function normalizarMateria(nombre) {
@@ -1299,6 +1297,27 @@
     function getColorMateria(nombre) {
       const norm = normalizarMateria(nombre);
       return COLORES_MATERIAS[norm] || "#38bdf8";
+    }
+
+    // --- REGLA PRAGMÁTICA Y REALISTA DE REDONDEO SAES ---
+    // Los profesores usan los decimales reales de Excel para el cálculo.
+    // Al redondear a entero para el SAES:
+    // Si la parte decimal es > 0.5 (.6 a .9) -> Sube al entero siguiente.
+    // Si la parte decimal es <= 0.5 (.0 a .5) -> Baja / se mantiene en el entero base.
+    function calcularRedondeoSAES(promedio100) {
+      if (promedio100 === null || isNaN(promedio100)) return null;
+      const prom10 = promedio100 / 10;
+      const enteroBase = Math.floor(prom10);
+      const decimal = Number((prom10 - enteroBase).toFixed(4));
+      
+      let enteroSAES = decimal > 0.5 ? (enteroBase + 1) : enteroBase;
+      enteroSAES = Math.min(Math.max(enteroSAES, 0), 10);
+
+      return {
+        prom10: Number(prom10.toFixed(2)),
+        enteroSAES: enteroSAES,
+        decimal: decimal
+      };
     }
 
     let tareas = JSON.parse(localStorage.getItem("tareas_batiz")) || [
@@ -2242,12 +2261,38 @@
         const barraUniversalColor = puntosTotales100 >= 100 ? 'success' : (puntosTotales100 >= 70 ? '' : 'warning');
         const estadoPonderacion = puntosTotales100 >= 100 ? '100%' : `${Math.round(puntosTotales100)}%`;
 
+        // Cálculo proyectado de materia para insignia en cabecera
+        const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
+        const pesos = pesosParciales[mat] || { p1: 33.3, p2: 33.3, p3: 33.4 };
+        const p1Val = califs.p1 !== null && califs.p1 !== undefined ? califs.p1 : "";
+        const p2Val = califs.p2 !== null && califs.p2 !== undefined ? califs.p2 : "";
+        const p3Info = calcularP3Materia(mat);
+        const p3Val = p3Info.puntosAcumulados;
+        const p1Num = parseFloat(p1Val);
+        const p2Num = parseFloat(p2Val);
+
+        let sumaPonderada = 0;
+        let pesoAcumulado = 0;
+        if (!isNaN(p1Num)) { sumaPonderada += p1Num * (pesos.p1 || 33.3); pesoAcumulado += (pesos.p1 || 33.3); }
+        if (!isNaN(p2Num)) { sumaPonderada += p2Num * (pesos.p2 || 33.3); pesoAcumulado += (pesos.p2 || 33.3); }
+        if (p3Val !== null && p3Val !== undefined) { sumaPonderada += p3Val * (pesos.p3 || 33.4); pesoAcumulado += (pesos.p3 || 33.4); }
+
+        let saesMateriaBadge = '';
+        if (pesoAcumulado > 0) {
+          const promMateria = sumaPonderada / pesoAcumulado;
+          const saesData = calcularRedondeoSAES(promMateria);
+          saesMateriaBadge = `<span class="badge" style="border:1px solid #ffffff; color:#ffffff; background:#1e293b;">SAES: ${saesData.enteroSAES}</span>`;
+        }
+
         return `
           <div class="materia-bloque">
             <div class="materia-header">
               <div class="materia-title-row">
                 <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
-                <span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${estadoPonderacion}</span>
+                <div style="display:flex; gap:8px;">
+                  ${saesMateriaBadge}
+                  <span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${estadoPonderacion}</span>
+                </div>
               </div>
               
               <div class="materia-universal-bar">
@@ -2435,8 +2480,8 @@
         `;
       }).join("");
 
-      // Nivel 2: Matriz Semestral
-      let sumaPromediosSemestre = 0;
+      // Nivel 2: Matriz Semestral con Redondeo SAES y Promedio General
+      let sumaEnterosSAES = 0;
       let materiasEvaluadasCount = 0;
 
       matrizBody.innerHTML = MATERIAS_OFICIALES.map(mat => {
@@ -2468,14 +2513,26 @@
           pesoAcumulado += (pesos.p3 || 33.4);
         }
 
-        let promedioMateria = null;
-        if (pesoAcumulado > 0) {
-          promedioMateria = sumaPonderada / pesoAcumulado;
-          sumaPromediosSemestre += promedioMateria;
-          materiasEvaluadasCount++;
-        }
+        let saesHtml = "--";
 
-        const promTxt = promedioMateria !== null ? promedioMateria.toFixed(1) : "--";
+        if (pesoAcumulado > 0) {
+          const promMateria = sumaPonderada / pesoAcumulado;
+          const saesData = calcularRedondeoSAES(promMateria);
+          
+          sumaEnterosSAES += saesData.enteroSAES;
+          materiasEvaluadasCount++;
+
+          saesHtml = `
+            <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+              <span style="font-family:'Chakra Petch', sans-serif; font-size:1.45rem; font-weight:700; color:#ffffff; line-height:1;">
+                ${saesData.enteroSAES}
+              </span>
+              <span style="font-size:0.72rem; color:#94a3b8; font-weight:600; letter-spacing:0.5px;">
+                REAL: ${saesData.prom10.toFixed(2)}
+              </span>
+            </div>
+          `;
+        }
 
         return `
           <tr>
@@ -2515,20 +2572,23 @@
             </td>
 
             <td style="text-align:center;">
-              <span style="font-family:'Chakra Petch', sans-serif; font-size:1.25rem; font-weight:700; color:#ffffff;">${promTxt}</span>
+              ${saesHtml}
             </td>
           </tr>
         `;
       }).join("");
 
-      // HUD Promedio General
+      // HUD Promedio General Semestral (Media de los enteros del SAES con 2 decimales)
       const hudNumero = document.getElementById("hud-promedio-general");
+      const hudEstado = document.getElementById("hud-estado-academico");
 
       if (materiasEvaluadasCount > 0) {
-        const promGeneral = (sumaPromediosSemestre / materiasEvaluadasCount).toFixed(1);
-        hudNumero.innerText = promGeneral;
+        const promGeneralSAES = (sumaEnterosSAES / materiasEvaluadasCount).toFixed(2);
+        hudNumero.innerText = promGeneralSAES;
+        hudEstado.innerText = `PROMEDIO OFICIAL SAES // SUMA DE ENTEROS: ${sumaEnterosSAES} PTS / ${materiasEvaluadasCount} ASIGNATURAS`;
       } else {
-        hudNumero.innerText = "0.0";
+        hudNumero.innerText = "0.00";
+        hudEstado.innerText = "ESCALA PONDERADA OFICIAL // REDONDEO A ENTEROS POR ASIGNATURA";
       }
     }
 
