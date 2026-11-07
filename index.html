@@ -413,7 +413,6 @@
       box-shadow: 0 0 6px var(--accent-glow);
     }
 
-    /* BOTÓN INTERACTIVO PARA REVERTIR / UNIFICAR BARRAS */
     .btn-mode-toggle {
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid rgba(56, 189, 248, 0.4);
@@ -783,7 +782,6 @@
       justify-content: center;
     }
 
-    /* RECUADRO AMPLIADO PARA MOSTRAR DECIMALES COMPLETOS */
     .weight-box {
       background: #080d18;
       border: 1px solid #1e2d48;
@@ -1337,7 +1335,6 @@
       };
     }
 
-    // FORMATEADOR VISUAL DE PORCENTAJES: MÁXIMO 2 DECIMALES, SIN CEROS EN ENTEROS
     function formatearValorPorcentual(val) {
       if (val === null || val === undefined || isNaN(val)) return "0";
       const n = parseFloat(val);
@@ -1436,7 +1433,6 @@
       el.style.display = (el.style.display === "none" || !el.style.display) ? "block" : "none";
     }
 
-    // ALTERNAR ENTRE 1 BARRA Y 2 BARRAS
     function toggleModoDual(id) {
       tareas = tareas.map(t => {
         if (t.id === id) {
@@ -1489,12 +1485,20 @@
       if (!t) return;
 
       const tipo = document.getElementById("edit-tipo").value;
+      const nuevoPuntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-puntos").value) || 20);
+      const nuevoBase = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-base").value) || 100);
+
+      // Si se altera el valor dentro de la base, se reinician los puntos obtenidos
+      if (t.puntos !== nuevoPuntos) {
+        t.califX = null;
+      }
+
       t.materia = normalizarMateria(document.getElementById("edit-materia").value);
       t.actividad = document.getElementById("edit-actividad").value.trim() || t.actividad;
       t.tipo = tipo;
       t.fecha = document.getElementById("edit-fecha").value || t.fecha;
-      t.puntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-puntos").value) || 20);
-      t.base = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-base").value) || 100);
+      t.puntos = nuevoPuntos;
+      t.base = nuevoBase;
       t.detalles = document.getElementById("edit-detalles").value.trim();
       t.sincronizada = false;
 
@@ -1554,12 +1558,24 @@
       });
     }, 1000);
 
+    // CONTROLADOR IMPLÍCITO DE MODIFICACIÓN DE BASE / PUNTOS DESDE CRONOGRAMA
     function actualizarBaseTarea(id, campo, valor) {
       const valNum = parseFloat(valor);
       if (isNaN(valNum) || valNum <= 0) return;
       tareas = tareas.map(t => {
         if (t.id === id) {
-          return { ...t, [campo]: valNum };
+          if (campo === 'puntos') {
+            // Si cambia el valor de la tarea, se reinicia la calificación en evaluación a null
+            if (t.puntos !== valNum) {
+              return { ...t, puntos: valNum, califX: null };
+            }
+          } else if (campo === 'base') {
+            // Si cambia la base pero no el valor absoluto, NO se reinicia califX
+            // La reactividad cambiará automáticamente el desglose de barras en Evaluación
+            if (t.base !== valNum) {
+              return { ...t, base: valNum };
+            }
+          }
         }
         return t;
       });
@@ -1938,7 +1954,6 @@
       input.value = "";
       const lower = texto.toLowerCase();
 
-      // 1. Confirmar reinicio
       if (esperandoConfirmacionReset) {
         if (lower.includes("confirmar") || lower.includes("si") || lower.includes("adelante")) {
           tareas = [];
@@ -1963,7 +1978,6 @@
         return;
       }
 
-      // 2. Sincronización
       if (lower.includes("agendalas") || lower.includes("sincronizar") || lower.includes("sincroniza")) {
         agregarMensajeChat("bot", "SINCRONIZANDO ACTIVIDADES ACTIVAS A GOOGLE CALENDAR...");
         await sincronizarTodasLasTareas();
@@ -1971,7 +1985,6 @@
         return;
       }
 
-      // 3. Puntos Extra
       if (lower.includes("extra") || lower.includes("bono") || lower.includes("colchon")) {
         const materia = normalizarMateria(lower);
         const puntosMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:punto|pts|puntos)/);
@@ -1987,7 +2000,6 @@
         }
       }
 
-      // 4. Agregar o actualizar detalles
       if (lower.includes("detalles") || lower.includes("nota") || lower.includes("notas")) {
         let tarea = null;
         let mejorScore = 0;
@@ -2016,7 +2028,6 @@
         }
       }
 
-      // 5. Calificaciones P1 y P2 en la tabla
       const p1p2Match = lower.match(/(?:en\s+)?p([12])\s+(?:de\s+)?([a-záéíóúñ\s]+).*?(\d+(?:\.\d+)?)/i) ||
                         lower.match(/([a-záéíóúñ\s]+)\s+p([12]).*?(\d+(?:\.\d+)?)/i) ||
                         lower.match(/p([12])\s*=?\s*(\d+(?:\.\d+)?)/i);
@@ -2048,7 +2059,6 @@
         }
       }
 
-      // 6. Calificar Actividad del 3er Parcial
       if (lower.includes("saqué") || lower.includes("saque") || lower.includes("obtuve") || lower.includes("califica")) {
         let tarea = null;
         let mejorScore = 0;
@@ -2088,7 +2098,6 @@
         }
       }
 
-      // 7. Registro de nueva entrega
       const esOrdinal = lower.includes("ordinal") || lower.includes("ordinales") || lower.includes("sin valor") || lower.includes("sin porcentaje") || lower.includes("sin ponderacion") || lower.includes("sin ponderación");
       const tipo = esOrdinal ? 'ordinal' : 'porcentual';
       const materia = normalizarMateria(lower);
@@ -2182,7 +2191,7 @@
       }
     }
 
-    // GENERADOR DINÁMICO DE BARRAS (1 BARRA SI ES BASE 100, O 2 BARRAS CON REVERSIÓN)
+    // GENERADOR DE BARRAS (CRONOGRAMA Y MATERIAS)
     function generarBloqueBarrasActividad(t, esVistaMaterias = false) {
       if (t.tipo === 'ordinal') {
         return `
@@ -2202,7 +2211,6 @@
       const modoUnaBarra = esBase100 && !t.forzarDual;
 
       if (modoUnaBarra) {
-        // MODO UNA SOLA BARRA (BASE 100 EQUIVALENTE AL PORCENTAJE)
         return `
           <div class="dual-bars-wrapper">
             <div class="bar-row-block">
@@ -2220,7 +2228,6 @@
           </div>
         `;
       } else {
-        // MODO DOS BARRAS (BASE DEL PROFESOR + PORCENTAJE CON BOTÓN DE UNIFICAR SI ES 100)
         return `
           <div class="dual-bars-wrapper">
             <div class="bar-row-block">
@@ -2423,7 +2430,7 @@
         `;
       }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
 
-      // 3. Vista EVALUACIÓN
+      // 3. Vista EVALUACIÓN (CON UNIFICACIÓN INTELIGENTE EN BASE 100)
       const evalP3El = document.getElementById("lista-evaluacion-p3");
       const matrizBody = document.getElementById("tabla-matriz-body");
 
@@ -2472,45 +2479,74 @@
                 const puntosX = Number(t.puntos) || 20;
                 const baseX = Number(t.base) || 100;
                 
-                const califVal = t.califX !== null && t.califX !== undefined ? t.califX : "";
+                const califVal = (t.califX !== null && t.califX !== undefined) ? t.califX : "";
                 const califNum = parseFloat(califVal);
                 const hasGrade = !isNaN(califNum);
                 
                 const porcRendimientoX = hasGrade ? Math.min((califNum / puntosX) * 100, 100) : 0;
                 const aporteBase100 = hasGrade ? ((califNum / baseX) * 100).toFixed(1) : "0.0";
 
-                return `
-                  <div class="eval-act-card">
-                    <div class="eval-act-header">
-                      <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
-                    </div>
+                const esBase100 = (baseX === 100);
 
-                    <div class="dual-bars-wrapper" style="background:#090d17;">
-                      <div class="bar-row-block">
-                        <div class="bar-label-sub">
-                          <span>BASE DEL PROFESOR</span>
-                          <div style="display:flex; align-items:center; gap:6px;">
-                            <input type="number" class="input-mini" step="0.1" min="0" max="${puntosX}" value="${califVal}" placeholder="--" onchange="actualizarCalifTarea(${t.id}, this.value)">
-                            <span>/ ${puntosX} PTS</span>
+                if (esBase100) {
+                  // MODO UNIFICADO EN EVALUACIÓN: 1 sola barra con [ input ] / [puntos] %
+                  return `
+                    <div class="eval-act-card">
+                      <div class="eval-act-header">
+                        <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                      </div>
+
+                      <div class="dual-bars-wrapper" style="background:#090d17;">
+                        <div class="bar-row-block">
+                          <div class="bar-label-sub">
+                            <span>PORCENTAJE</span>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                              <input type="number" class="input-mini" step="0.1" min="0" max="${puntosX}" value="${califVal}" placeholder="--" onchange="actualizarCalifTarea(${t.id}, this.value)">
+                              <span style="color:#38bdf8; font-weight:700;">/ ${puntosX}%</span>
+                            </div>
+                          </div>
+                          <div class="bar-container">
+                            <div class="bar-fill" style="width: ${porcRendimientoX}%;"></div>
                           </div>
                         </div>
-                        <div class="bar-container">
-                          <div class="bar-fill bar-gold" style="width: ${porcRendimientoX}%;"></div>
-                        </div>
+                      </div>
+                    </div>
+                  `;
+                } else {
+                  // MODO DESGLOSADO EN EVALUACIÓN: 2 barras (Base del Profesor + Porcentaje)
+                  return `
+                    <div class="eval-act-card">
+                      <div class="eval-act-header">
+                        <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
                       </div>
 
-                      <div class="bar-row-block">
-                        <div class="bar-label-sub">
-                          <span>PORCENTAJE</span>
-                          <span style="color:#38bdf8;">${aporteBase100}%</span>
+                      <div class="dual-bars-wrapper" style="background:#090d17;">
+                        <div class="bar-row-block">
+                          <div class="bar-label-sub">
+                            <span>BASE DEL PROFESOR</span>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                              <input type="number" class="input-mini" step="0.1" min="0" max="${puntosX}" value="${califVal}" placeholder="--" onchange="actualizarCalifTarea(${t.id}, this.value)">
+                              <span>/ ${puntosX} PTS</span>
+                            </div>
+                          </div>
+                          <div class="bar-container">
+                            <div class="bar-fill bar-gold" style="width: ${porcRendimientoX}%;"></div>
+                          </div>
                         </div>
-                        <div class="bar-container">
-                          <div class="bar-fill" style="width: ${Math.min(aporteBase100, 100)}%;"></div>
+
+                        <div class="bar-row-block">
+                          <div class="bar-label-sub">
+                            <span>PORCENTAJE</span>
+                            <span style="color:#38bdf8;">${aporteBase100}%</span>
+                          </div>
+                          <div class="bar-container">
+                            <div class="bar-fill" style="width: ${Math.min(aporteBase100, 100)}%;"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                `;
+                  `;
+                }
               }).join("") : "<p style='font-size:0.8rem; color:#64748b;'>Sin actividades registradas para el 3er parcial.</p>"}
             </div>
           </div>
