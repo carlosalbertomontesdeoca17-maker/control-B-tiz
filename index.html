@@ -478,6 +478,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .card-details-drawer {
@@ -747,7 +748,6 @@
       gap: 8px;
     }
 
-    /* ANCHO AMPLIADO A 80PX PARA PUNTUACIONES MAYORES A 100 */
     .input-cell {
       width: 80px;
       background: #060913;
@@ -1118,17 +1118,15 @@
         <div id="chat-history" class="chat-history">
           <div class="chat-msg bot">
             J.A.R.V.I.S EN LÍNEA // CECyT 9 1IM9[cite: 1].<br>
-            • <strong>Porcentual con hora:</strong> <em>"problemario de historia para el 25 de noviembre a las 23:59 vale 20/30"</em>.<br>
-            • <strong>Porcentual sin hora:</strong> <em>"proyecto de computación para el 30 de noviembre vale 15/100"</em> (se agenda a las 00:00).<br>
-            • <strong>Ordinal:</strong> <em>"tarea ordinal de álgebra entrega de apuntes para el 22 de noviembre a las 14:00"</em>.<br>
-            • <strong>Puntos extra en parciales:</strong> <em>"en P1 de Álgebra saqué 105"</em> (acepta notas > 100).<br>
+            • <strong>Porcentual con link:</strong> <em>"problemario de historia para el 25 de noviembre https://classroom.google.com/... vale 20/30"</em>.<br>
+            • <strong>Puntos extra en parciales:</strong> <em>"en P1 de Álgebra saqué 105"</em>.<br>
             • <strong>Desincronizar:</strong> <em>"desincronizar calendar"</em> para marcar todas como pendientes.<br>
             • <strong>Calificar:</strong> <em>"en infografía de historia saqué 10 de 10"</em>.
           </div>
         </div>
 
         <div class="chat-input-row">
-          <textarea id="chat-input" placeholder="Ingresa entrega (con o sin hora), calificación o comando a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
+          <textarea id="chat-input" placeholder="Ingresa entrega (con link opcional), calificación o comando a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
           <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
         </div>
       </div>
@@ -1149,6 +1147,9 @@
         </label>
         <label>ACTIVIDAD:
           <input type="text" id="input-actividad" placeholder="Ej. Problemario Productos Notables" required>
+        </label>
+        <label>ENLACE DE CLASSROOM (OPCIONAL):
+          <input type="url" id="input-url-classroom" placeholder="https://classroom.google.com/c/.../a/.../details">
         </label>
         <div class="row">
           <label>FECHA LÍMITE:
@@ -1232,6 +1233,11 @@
 
       <label>NOMBRE DE LA ACTIVIDAD:
         <input type="text" id="edit-actividad" required>
+      </label>
+
+      <!-- CAMPO PARA PEGAR LA URL DE CLASSROOM DIRECTAMENTE -->
+      <label>ENLACE DE CLASSROOM (OPCIONAL):
+        <input type="url" id="edit-url-classroom" placeholder="Pega aquí la URL de la tarea (https://classroom.google.com/...)">
       </label>
 
       <label>CLASIFICACIÓN:
@@ -1360,11 +1366,16 @@
       };
     }
 
+    function abrirClassroom(url) {
+      if (!url) return;
+      window.open(url, '_blank');
+    }
+
     let tareas = JSON.parse(localStorage.getItem("tareas_batiz")) || [
-      { id: 1, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Infografia visita Museo de la Mujer", fecha: "2026-11-23", hora: "00:00:00", puntos: 10, base: 100, forzarDual: false, califX: null, detalles: "Visita al Museo de la Mujer. Entregar infografía en formato digital con fuentes bibliográficas y fotografías.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 2, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Debate construccion de la nacion", fecha: "2026-11-30", hora: "00:00:00", puntos: 20, base: 100, forzarDual: false, califX: null, detalles: "Debate sobre el proceso de construcción del Estado-Nación mexicano. Preparar argumentos por equipo.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 3, tipo: 'porcentual', materia: "Álgebra", actividad: "Problemario Productos Notables", fecha: "2026-11-28", hora: "00:00:00", puntos: 20, base: 30, forzarDual: false, califX: null, detalles: "Ejercicios de productos notables y factorización. Procedimiento completo a mano con hojas milimétricas.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "00:00:00", puntos: 0, base: 0, forzarDual: false, califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
+      { id: 1, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Infografia visita Museo de la Mujer", fecha: "2026-11-23", hora: "00:00:00", puntos: 10, base: 100, forzarDual: false, urlClassroom: "", califX: null, detalles: "Visita al Museo de la Mujer. Entregar infografía en formato digital con fuentes bibliográficas y fotografías.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 2, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Debate construccion de la nacion", fecha: "2026-11-30", hora: "00:00:00", puntos: 20, base: 100, forzarDual: false, urlClassroom: "", califX: null, detalles: "Debate sobre el proceso de construcción del Estado-Nación mexicano. Preparar argumentos por equipo.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 3, tipo: 'porcentual', materia: "Álgebra", actividad: "Problemario Productos Notables", fecha: "2026-11-28", hora: "00:00:00", puntos: 20, base: 30, forzarDual: false, urlClassroom: "", califX: null, detalles: "Ejercicios de productos notables y factorización. Procedimiento completo a mano con hojas milimétricas.", completada: false, sincronizada: false, parcial: 3 },
+      { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "00:00:00", puntos: 0, base: 0, forzarDual: false, urlClassroom: "", califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
     ];
 
     tareas = tareas.map(t => ({
@@ -1375,6 +1386,7 @@
       puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
       base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
       forzarDual: Boolean(t.forzarDual),
+      urlClassroom: t.urlClassroom || "",
       detalles: t.detalles || "",
       califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
     }));
@@ -1501,6 +1513,7 @@
 
       document.getElementById("edit-materia").value = t.materia;
       document.getElementById("edit-actividad").value = t.actividad;
+      document.getElementById("edit-url-classroom").value = t.urlClassroom || "";
       document.getElementById("edit-tipo").value = t.tipo || 'porcentual';
       document.getElementById("edit-fecha").value = t.fecha;
       document.getElementById("edit-hora").value = (t.hora && t.hora.length >= 5) ? t.hora.substring(0, 5) : "00:00";
@@ -1529,6 +1542,7 @@
 
       t.materia = normalizarMateria(document.getElementById("edit-materia").value);
       t.actividad = document.getElementById("edit-actividad").value.trim() || t.actividad;
+      t.urlClassroom = document.getElementById("edit-url-classroom").value.trim();
       t.tipo = tipo;
       t.fecha = document.getElementById("edit-fecha").value || t.fecha;
       t.hora = horaEdit;
@@ -1652,7 +1666,6 @@
       };
     }
 
-    // MODIFICADO: PERMITE VALORES MAYORES A 100 (SIN TOPE Math.min 100) PARA PUNTOS EXTRA
     function actualizarNotaParcial(mat, parcialKey, valor) {
       const matNorm = normalizarMateria(mat);
       if (!calificacionesSemestre[matNorm]) {
@@ -1776,7 +1789,7 @@
 
       const evento = {
         summary: `[${t.materia}] ${t.actividad}`,
-        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nHora: ${horaEvento}\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica C.A.B. (CECyT 9 Bátiz - 1IM9).\nPonderación: ${t.puntos}/${t.base || 100} pts.\nHora: ${horaEvento}\nDetalles: ${t.detalles || 'Sin notas'}`,
+        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica C.A.B. (CECyT 9 Bátiz - 1IM9).\nPonderación: ${t.puntos}/${t.base || 100} pts.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}`,
         start: { dateTime: fechaInicio.toISOString() },
         end: { dateTime: fechaFin.toISOString() },
         reminders: {
@@ -1862,11 +1875,11 @@
         try {
           const importadas = JSON.parse(evt.target.result);
           if (importadas.tareas && importadas.calificacionesSemestre) {
-            tareas = importadas.tareas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
+            tareas = importadas.tareas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), urlClassroom: t.urlClassroom || "", detalles: t.detalles || "" }));
             calificacionesSemestre = importadas.calificacionesSemestre;
             if (importadas.pesosParciales) pesosParciales = importadas.pesosParciales;
           } else if (Array.isArray(importadas)) {
-            tareas = importadas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), detalles: t.detalles || "" }));
+            tareas = importadas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), urlClassroom: t.urlClassroom || "", detalles: t.detalles || "" }));
           }
           guardarLocal();
           render();
@@ -1922,6 +1935,7 @@
       const puntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("input-puntos").value) || 20);
       const base = tipo === 'ordinal' ? 0 : (Number(document.getElementById("input-base").value) || 100);
       const detalles = document.getElementById("input-detalles").value.trim();
+      const urlClassroom = document.getElementById("input-url-classroom").value.trim();
 
       let horaInput = document.getElementById("input-hora").value.trim();
       if (!horaInput) horaInput = "00:00:00";
@@ -1932,6 +1946,7 @@
         tipo: tipo,
         materia: normalizarMateria(document.getElementById("input-materia").value.trim()),
         actividad: document.getElementById("input-actividad").value.trim(),
+        urlClassroom: urlClassroom,
         fecha: document.getElementById("input-fecha").value,
         hora: horaInput,
         puntos: puntos,
@@ -2127,7 +2142,6 @@
         if (materia && nota !== null) {
           if (nota <= 10 && nota > 0) nota = nota * 10;
           if (!calificacionesSemestre[materia]) calificacionesSemestre[materia] = { p1: null, p2: null, extraP3: 0 };
-          // MODIFICADO: ADMITE MÁS DE 100 EN PARCIALES
           calificacionesSemestre[materia][numParcial] = Math.max(nota, 0);
           guardarLocal();
           render();
@@ -2181,6 +2195,10 @@
       const fecha = extraerFecha(lower);
       const hora = extraerHora(lower);
       
+      // EXTRACCIÓN AUTOMÁTICA DE ENLACE SI SE INCLUYE EN EL MENSAJE
+      const urlMatch = texto.match(/https?:\/\/[^\s]+/i);
+      const urlClassroom = urlMatch ? urlMatch[0] : "";
+
       let puntos = 20;
       let base = 100;
 
@@ -2199,6 +2217,7 @@
       }
 
       let actividad = texto
+        .replace(/https?:\/\/[^\s]+/gi, "")
         .replace(/para el.*?entregar/i, "")
         .replace(/entregar/i, "")
         .replace(/vale \d+.*$/i, "")
@@ -2220,6 +2239,7 @@
           tipo: tipo,
           materia,
           actividad,
+          urlClassroom: urlClassroom,
           fecha: "",
           hora: hora,
           puntos,
@@ -2242,6 +2262,7 @@
         tipo: tipo,
         materia,
         actividad,
+        urlClassroom: urlClassroom,
         fecha,
         hora: hora,
         puntos,
@@ -2259,13 +2280,13 @@
 
       if (esOrdinal) {
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS [CLASIFICACIÓN: ORDINALES].`);
+          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
           render();
         }, 120);
       } else {
         const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}].`);
+          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
           render();
         }, 120);
       }
@@ -2386,6 +2407,7 @@
                 ${t.completada ? '<span class="badge" style="border: 1px solid #334155; color:#64748b; background:transparent;">ARCHIVADO</span>' : ''}
               </div>
               <div class="card-actions">
+                ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
                 <button class="btn-32" onclick="toggleDesgloseDetalles(${t.id})">DETALLES ▾</button>
                 <button class="btn-32" onclick="agendarTareaDirecta(${t.id})">CALENDAR</button>
                 <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
@@ -2399,6 +2421,7 @@
                 <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
               </div>
               <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas. Haz clic en EDITAR para agregar especificaciones o rúbricas.</em>'}</div>
+              ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
             </div>
           </div>
         `;
@@ -2485,7 +2508,7 @@
 
                   <div class="card-timing">
                     <span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
-                    <span class="${doomClase}" data-fecha="${t.fecha}">${doom.texto}</span>
+                    <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
                   </div>
 
                   ${bloqueMateriaVisual}
@@ -2495,6 +2518,7 @@
                       <span>HORA: ${t.hora || '00:00:00'} HRS</span>
                     </div>
                     <div class="card-actions">
+                      ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
                       <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
                     </div>
                   </div>
@@ -2505,6 +2529,7 @@
                       <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
                     </div>
                     <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
+                    ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
                   </div>
                 </div>
               `;
@@ -2696,7 +2721,6 @@
           <tr>
             <td style="font-weight:700;"><span class="materia-tag" style="color:${colorMat}; text-shadow:0 0 6px ${colorMat}55;">${mat.toUpperCase()}</span></td>
             
-            <!-- P1 ADMITE VALORES MAYORES A 100 -->
             <td>
               <div class="partial-cell-content">
                 <input type="number" class="input-cell" step="1" min="0" value="${p1Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p1', this.value)">
@@ -2708,7 +2732,6 @@
               </div>
             </td>
 
-            <!-- P2 ADMITE VALORES MAYORES A 100 -->
             <td>
               <div class="partial-cell-content">
                 <input type="number" class="input-cell" step="1" min="0" value="${p2Val}" placeholder="--" onchange="actualizarNotaParcial('${mat}', 'p2', this.value)">
