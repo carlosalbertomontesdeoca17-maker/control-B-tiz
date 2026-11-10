@@ -5,11 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C.A.B. // WORKSTATION</title>
   
+  <!-- Modo App Nativa Pantalla Completa para Celular -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0b0f19">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
 
+  <!-- API de Google Calendar -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Firebase SDK para Sincronización en Tiempo Real -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
     :root {
@@ -63,6 +74,33 @@
         inset 1px 1px 0px var(--bevel-high),
         inset -1px -1px 0px var(--bevel-shadow),
         0 8px 24px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+
+    .cloud-status-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cloud-online {
+      color: var(--green);
+      border: 1px solid var(--green);
+      background: rgba(16, 185, 129, 0.15);
+      text-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+    }
+
+    .cloud-offline {
+      color: #94a3b8;
+      border: 1px solid #475569;
+      background: rgba(15, 23, 42, 0.6);
     }
 
     h1 {
@@ -1032,8 +1070,9 @@
 <body>
   <div class="app-container">
     <header>
+      <div id="cloud-badge" class="cloud-status-badge cloud-offline">NUBE: DESCONECTADA</div>
       <h1>C.A.B.</h1>
-      <p class="subtitle">B-STATION V3.0</p>
+      <p class="subtitle">B-STATION V3.0 // REAL-TIME</p>
     </header>
 
     <nav class="nav-tabs">
@@ -1180,6 +1219,26 @@
         <h2>PARÁMETROS DE SISTEMA</h2>
       </div>
 
+      <!-- PANEL DE CONTROL FIREBASE FIRESTORE EN TIEMPO REAL -->
+      <div class="action-box" style="border-left: 3px solid var(--green);">
+        <h3 style="color:var(--green);">FIREBASE FIRESTORE // NUBE EN TIEMPO REAL</h3>
+        <p>Pega aquí tu <code>firebaseConfig</code> copiado desde la consola de Firebase para activar la sincronización instantánea entre tu celular y tu PC:</p>
+        <textarea id="input-firebase-config" placeholder='Pega aquí tu configuración:
+{
+  "apiKey": "AIzaSy...",
+  "authDomain": "...",
+  "projectId": "...",
+  "storageBucket": "...",
+  "messagingSenderId": "...",
+  "appId": "..."
+}' style="width:100%; height:110px; font-size:0.78rem; margin-bottom:12px;"></textarea>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-32 btn-32-primary" onclick="guardarConfigFirebase()">GUARDAR Y CONECTAR NUBE</button>
+          <button type="button" class="btn-32 btn-32-danger" onclick="desconectarFirebase()">DESCONECTAR NUBE</button>
+        </div>
+        <p id="firebase-status-msg" style="margin-top:12px; font-size:0.85rem; font-weight:700; color:var(--accent);"></p>
+      </div>
+
       <div class="action-box">
         <h3>GOOGLE CALENDAR OAUTH 2.0</h3>
         <p>Configura tu Client ID para habilitar llamadas autorizadas sin intermediarios:</p>
@@ -1235,7 +1294,6 @@
         <input type="text" id="edit-actividad" required>
       </label>
 
-      <!-- CAMPO PARA PEGAR LA URL DE CLASSROOM DIRECTAMENTE -->
       <label>ENLACE DE CLASSROOM (OPCIONAL):
         <input type="url" id="edit-url-classroom" placeholder="Pega aquí la URL de la tarea (https://classroom.google.com/...)">
       </label>
@@ -1277,6 +1335,11 @@
   </div>
 
   <script>
+    const FIREBASE_CONFIG_DEFAULT = null; 
+
+    let db = null;
+    let unsubscribeFirestore = null;
+
     const MATERIAS_OFICIALES = [
       "Álgebra",
       "Filosofía I",
@@ -1324,25 +1387,17 @@
     function valorRealPonderado(val) {
       const n = parseFloat(val);
       if (isNaN(n)) return 0;
-      if (Math.abs(n - 100 / 3) < 0.15 || n === 33.3 || n === 33.33 || n === 33.34) {
-        return 100 / 3;
-      }
-      if (Math.abs(n - 200 / 3) < 0.15 || n === 66.6 || n === 66.66 || n === 66.67) {
-        return 200 / 3;
-      }
+      if (Math.abs(n - 100 / 3) < 0.15 || n === 33.3 || n === 33.33 || n === 33.34) return 100 / 3;
+      if (Math.abs(n - 200 / 3) < 0.15 || n === 66.6 || n === 66.66 || n === 66.67) return 200 / 3;
       return n;
     }
 
     function formatearPorcentajeNum(val) {
       if (val === null || val === undefined || isNaN(val)) return "0";
       const n = parseFloat(val);
-      if (Math.abs(n - Math.round(n)) < 0.001) {
-        return Math.round(n).toString();
-      }
+      if (Math.abs(n - Math.round(n)) < 0.001) return Math.round(n).toString();
       const fixed = n.toFixed(1);
-      if (fixed.endsWith(".0")) {
-        return Math.round(n).toString();
-      }
+      if (fixed.endsWith(".0")) return Math.round(n).toString();
       return parseFloat(fixed).toString();
     }
 
@@ -1434,10 +1489,137 @@
     let accessToken = localStorage.getItem("gcal_access_token") || null;
     let filtroActual = 'todas';
 
-    function guardarLocal() {
+    function guardarLocal(origenRemoto = false) {
       localStorage.setItem("tareas_batiz", JSON.stringify(tareas));
       localStorage.setItem("calif_semestre_batiz", JSON.stringify(calificacionesSemestre));
       localStorage.setItem("pesos_parciales_batiz", JSON.stringify(pesosParciales));
+
+      if (!origenRemoto && db) {
+        db.collection("workstation").doc("datos_academicos").set({
+          tareas: tareas,
+          calificacionesSemestre: calificacionesSemestre,
+          pesosParciales: pesosParciales,
+          ultimaActualizacion: Date.now()
+        }).catch(err => {
+          console.error("Error al emitir actualización a Firestore:", err);
+          actualizarEstadoNube(false, "ERROR DE ESCRITURA EN FIRESTORE");
+        });
+      }
+    }
+
+    function actualizarEstadoNube(conectado, mensaje = "") {
+      const badge = document.getElementById("cloud-badge");
+      const msgStatus = document.getElementById("firebase-status-msg");
+      if (badge) {
+        if (conectado) {
+          badge.className = "cloud-status-badge cloud-online";
+          badge.innerText = "NUBE: SINCRONIZADA 🟢";
+        } else {
+          badge.className = "cloud-status-badge cloud-offline";
+          badge.innerText = "NUBE: DESCONECTADA ⚪";
+        }
+      }
+      if (msgStatus && mensaje) {
+        msgStatus.innerText = mensaje;
+      }
+    }
+
+    function inicializarFirebase() {
+      let config = FIREBASE_CONFIG_DEFAULT;
+      const configGuardada = localStorage.getItem("firebase_config_custom");
+      
+      if (configGuardada) {
+        try {
+          config = JSON.parse(configGuardada);
+        } catch (e) {
+          console.error("Configuración de Firebase en localStorage corrupta.");
+        }
+      }
+
+      if (!config || !config.apiKey || !config.projectId) {
+        actualizarEstadoNube(false, "SIN CONFIGURACIÓN. Pega tu firebaseConfig abajo.");
+        return;
+      }
+
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(config);
+        }
+        db = firebase.firestore();
+
+        if (unsubscribeFirestore) unsubscribeFirestore();
+        
+        unsubscribeFirestore = db.collection("workstation").doc("datos_academicos").onSnapshot(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data.tareas) {
+              tareas = data.tareas.map(t => ({
+                ...t,
+                tipo: t.tipo || 'porcentual',
+                materia: normalizarMateria(t.materia),
+                hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora),
+                puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
+                base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
+                forzarDual: Boolean(t.forzarDual),
+                urlClassroom: t.urlClassroom || "",
+                detalles: t.detalles || "",
+                califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
+              }));
+            }
+            if (data.calificacionesSemestre) calificacionesSemestre = data.calificacionesSemestre;
+            if (data.pesosParciales) pesosParciales = data.pesosParciales;
+
+            guardarLocal(true);
+            render();
+            actualizarEstadoNube(true, "CONEXIÓN ACTIVA // SINCRONIZANDO EN TIEMPO REAL");
+          } else {
+            guardarLocal(false);
+            actualizarEstadoNube(true, "BASE DE DATOS INICIALIZADA EN FIRESTORE");
+          }
+        }, err => {
+          console.error("Fallo de conexión con Firestore:", err);
+          actualizarEstadoNube(false, "ERROR: Revisa las reglas de Firestore (Modo de prueba).");
+        });
+
+      } catch (err) {
+        console.error("Error al inicializar Firebase:", err);
+        actualizarEstadoNube(false, "ERROR AL INICIALIZAR SDK: " + err.message);
+      }
+    }
+
+    function guardarConfigFirebase() {
+      const txt = document.getElementById("input-firebase-config").value.trim();
+      if (!txt) return alert("Pega tu configuración de Firebase primero.");
+
+      try {
+        let limpio = txt;
+        if (limpio.includes("firebaseConfig =")) {
+          limpio = limpio.split("firebaseConfig =")[1].replace(";", "").trim();
+        }
+        if (!limpio.startsWith("{")) limpio = "{" + limpio + "}";
+        limpio = limpio.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":');
+        
+        const configObj = JSON.parse(limpio);
+        if (!configObj.apiKey || !configObj.projectId) {
+          throw new Error("El objeto debe contener al menos 'apiKey' y 'projectId'.");
+        }
+
+        localStorage.setItem("firebase_config_custom", JSON.stringify(configObj));
+        alert("CONFIGURACIÓN DE FIREBASE REGISTRADA. INICIANDO CONEXIÓN...");
+        inicializarFirebase();
+      } catch (e) {
+        alert("Error de formato en el texto pegado: " + e.message + "\nAsegúrate de copiar el objeto completo { ... }.");
+      }
+    }
+
+    function desconectarFirebase() {
+      if (confirm("¿Desconectar sincronización en la nube? El sistema volverá a funcionar exclusivamente en modo local.")) {
+        if (unsubscribeFirestore) unsubscribeFirestore();
+        localStorage.removeItem("firebase_config_custom");
+        db = null;
+        actualizarEstadoNube(false, "Nube desconectada. Modo local activo.");
+        alert("NUBE DESCONECTADA.");
+      }
     }
 
     function setFiltro(tipo) {
@@ -1450,16 +1632,12 @@
 
     function alternarCamposPonderacion(tipo) {
       const row = document.getElementById("row-ponderacion-inputs");
-      if (row) {
-        row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
-      }
+      if (row) row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
     }
 
     function alternarCamposEdicionPonderacion(tipo) {
       const row = document.getElementById("row-edit-ponderacion");
-      if (row) {
-        row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
-      }
+      if (row) row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
     }
 
     function toggleDesgloseDetalles(id) {
@@ -1469,12 +1647,7 @@
     }
 
     function toggleModoDual(id) {
-      tareas = tareas.map(t => {
-        if (t.id === id) {
-          return { ...t, forzarDual: !t.forzarDual };
-        }
-        return t;
-      });
+      tareas = tareas.map(t => t.id === id ? { ...t, forzarDual: !t.forzarDual } : t);
       guardarLocal();
       render();
     }
@@ -1494,9 +1667,7 @@
       selectMat.innerHTML = MATERIAS_OFICIALES.map(m => `<option value="${m}">${m.toUpperCase()}</option>`).join("");
       selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}</option>`).join("");
 
-      if (idPreseleccionado) {
-        selectTarea.value = idPreseleccionado;
-      }
+      if (idPreseleccionado) selectTarea.value = idPreseleccionado;
 
       cargarDatosEnFormularioEdicion(selectTarea.value);
       modal.style.display = "flex";
@@ -1532,9 +1703,7 @@
       const nuevoPuntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-puntos").value) || 20);
       const nuevoBase = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-base").value) || 100);
 
-      if (t.puntos !== nuevoPuntos) {
-        t.califX = null;
-      }
+      if (t.puntos !== nuevoPuntos) t.califX = null;
 
       let horaEdit = document.getElementById("edit-hora").value.trim();
       if (!horaEdit) horaEdit = "00:00:00";
@@ -1570,9 +1739,7 @@
       const ahora = new Date();
       const diff = target - ahora;
 
-      if (diff <= 0) {
-        return { texto: "PLAZO CUMPLIDO", urgente: false, zero: true };
-      }
+      if (diff <= 0) return { texto: "PLAZO CUMPLIDO", urgente: false, zero: true };
 
       const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
       const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -1607,15 +1774,8 @@
       if (isNaN(valNum) || valNum <= 0) return;
       tareas = tareas.map(t => {
         if (t.id === id) {
-          if (campo === 'puntos') {
-            if (t.puntos !== valNum) {
-              return { ...t, puntos: valNum, califX: null };
-            }
-          } else if (campo === 'base') {
-            if (t.base !== valNum) {
-              return { ...t, base: valNum };
-            }
-          }
+          if (campo === 'puntos' && t.puntos !== valNum) return { ...t, puntos: valNum, califX: null };
+          if (campo === 'base' && t.base !== valNum) return { ...t, base: valNum };
         }
         return t;
       });
@@ -1625,12 +1785,7 @@
 
     function actualizarCalifTarea(id, valor) {
       const valNum = parseFloat(valor);
-      tareas = tareas.map(t => {
-        if (t.id === id) {
-          return { ...t, califX: isNaN(valNum) ? null : Math.max(0, valNum) };
-        }
-        return t;
-      });
+      tareas = tareas.map(t => t.id === id ? { ...t, califX: isNaN(valNum) ? null : Math.max(0, valNum) } : t);
       guardarLocal();
       render();
     }
@@ -1774,6 +1929,14 @@
       if (accessToken) {
         document.getElementById("auth-status").innerText = "ESTADO: SESIÓN ACTIVA CON GOOGLE CALENDAR";
       }
+
+      const savedFb = localStorage.getItem("firebase_config_custom");
+      if (savedFb) {
+        const fbArea = document.getElementById("input-firebase-config");
+        if (fbArea) fbArea.value = savedFb;
+      }
+
+      inicializarFirebase();
     });
 
     async function insertarEventoGoogle(t) {
@@ -2195,7 +2358,6 @@
       const fecha = extraerFecha(lower);
       const hora = extraerHora(lower);
       
-      // EXTRACCIÓN AUTOMÁTICA DE ENLACE SI SE INCLUYE EN EL MENSAJE
       const urlMatch = texto.match(/https?:\/\/[^\s]+/i);
       const urlClassroom = urlMatch ? urlMatch[0] : "";
 
@@ -2366,9 +2528,7 @@
       }
     }
 
-    // --- RENDERIZADO VISUAL ---
     function render() {
-      // 1. Cronograma
       const cronogramaEl = document.getElementById("lista-cronograma");
       let ordenadas = [...tareas].sort((a, b) => new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`));
       
@@ -2427,7 +2587,6 @@
         `;
       }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS QUE COINCIDAN CON EL FILTRO</p>";
 
-      // 2. Materias
       const materiasEl = document.getElementById("lista-materias");
       const materiasConTareas = MATERIAS_OFICIALES.filter(mat =>
         tareas.some(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
@@ -2538,7 +2697,6 @@
         `;
       }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
 
-      // 3. Vista EVALUACIÓN
       const evalP3El = document.getElementById("lista-evaluacion-p3");
       const matrizBody = document.getElementById("tabla-matriz-body");
 
@@ -2659,7 +2817,6 @@
         `;
       }).join("");
 
-      // Nivel 2: Matriz Semestral
       let sumaEnterosSAES = 0;
       let materiasEvaluadasCount = 0;
 
@@ -2761,7 +2918,6 @@
         `;
       }).join("");
 
-      // HUD Promedio General Semestral
       const hudNumero = document.getElementById("hud-promedio-general");
       const hudEstado = document.getElementById("hud-estado-academico");
 
