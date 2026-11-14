@@ -380,15 +380,16 @@
     }
 
     .badge-extra {
-      background: linear-gradient(180deg, #7e22ce 0%, #581c87 100%);
-      border: 1px solid #c084fc;
+      background: linear-gradient(180deg, #7e22ce 0%, #4c1d95 100%);
+      border: 1px solid #d8b4fe;
       color: #ffffff;
-      padding: 3px 10px;
-      font-size: 0.74rem;
+      padding: 6px 14px;
+      font-size: 1.05rem;
       font-weight: 700;
-      letter-spacing: 1.2px;
-      text-shadow: 0 0 6px rgba(192, 132, 252, 0.7);
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+      display: inline-block;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 8px rgba(216, 180, 254, 0.85);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.55), inset 1px 1px 0px rgba(255, 255, 255, 0.25);
     }
 
     .badge-sin-fecha {
@@ -2674,7 +2675,6 @@
       const fillClass = esExtra ? "bar-fill extra-overflow" : "bar-fill";
       const pctClass = esExtra ? "pct-extra" : "pct-destacado";
       const labelTitle = esExtra ? "PORCENTAJE EXTRA" : "PORCENTAJE";
-      const extraTagHtml = esExtra ? `<span class="badge-extra">EXTRA</span>` : "";
 
       if (modoUnaBarra) {
         return `
@@ -2683,7 +2683,6 @@
               <div class="bar-label-sub">
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span>${labelTitle}</span>
-                  ${extraTagHtml}
                   <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Hacer clic para editar valor o base del profesor">⚙ AJUSTAR BASE</button>
                 </div>
                 <span class="${pctClass}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
@@ -2701,7 +2700,6 @@
               <div class="bar-label-sub">
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span>BASE DEL PROFESOR</span>
-                  ${extraTagHtml}
                   ${esBase100 ? `<button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Unificar en una sola barra de porcentaje">⇤ UNIFICAR (%)</button>` : ''}
                 </div>
                 ${!esVistaMaterias ? `
@@ -2751,6 +2749,7 @@
         const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
         const syncClase = t.sincronizada ? 'sync-ok' : 'sync-pending';
         const colorMat = getColorMateria(t.materia);
+        const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
         
         const bloqueVisual = generarBloqueBarrasActividad(t, false);
 
@@ -2764,6 +2763,7 @@
             <div class="card-timing">
               <span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
               <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
+              ${extraTimingBadge}
             </div>
 
             ${bloqueVisual}
@@ -2919,11 +2919,13 @@
               const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
               const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
               const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
+              const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
 
               const timingHtml = esSinFecha
-                ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>`
+                ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>${extraTimingBadge}`
                 : `<span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
-                   <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>`;
+                   <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
+                   ${extraTimingBadge}`;
 
               const horaHtml = esSinFecha
                 ? `<span>CONTINUO SIN FECHA</span>`
@@ -3057,7 +3059,7 @@
                 const wrapperExtraClass = esExtra ? "dual-bars-wrapper extra-wrapper" : "dual-bars-wrapper";
                 const fillExtraClass = esExtra ? "bar-fill extra-overflow" : "bar-fill";
                 const pctExtraClass = esExtra ? "pct-extra" : "pct-destacado";
-                const badgeExtraHtml = esExtra ? `<span class="badge-extra">EXTRA</span>` : "";
+                const badgeExtraHtml = esExtra ? `<span class="badge-extra" style="font-size:0.78rem; padding:3px 10px;">EXTRA</span>` : "";
 
                 if (esBase100) {
                   return `
