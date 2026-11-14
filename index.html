@@ -1167,7 +1167,7 @@
     <!-- 1: CRONOGRAMA -->
     <section id="vista-cronograma" class="view-panel active">
       <div class="section-header">
-        <h2>ENTREGAS ACTIVAS // PONDERACIONES</h2>
+        <h2>ENTREGAS</h2>
         <div style="display:flex; gap:8px;">
           <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
           <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
@@ -1183,10 +1183,10 @@
       <div id="lista-cronograma"></div>
     </section>
 
-    <!-- 2: MATERIAS (VISUALIZADOR + GESTIÓN) -->
+    <!-- 2: MATERIAS -->
     <section id="vista-materias" class="view-panel">
       <div class="section-header">
-        <h2>DISTRIBUCIÓN POR ASIGNATURA // VISUALIZADOR</h2>
+        <h2>POR MATERIA</h2>
         <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
       </div>
       <div id="lista-materias"></div>
@@ -1202,9 +1202,6 @@
       <div class="section-header" style="margin-top: 36px;">
         <h2>MATRIZ SEMESTRAL DE CALIFICACIONES</h2>
       </div>
-      <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:12px;">
-        * Ingresa tus calificaciones en la celda superior (admiten más de 100 para puntos extra) y el valor ponderado en <strong>VALOR %</strong>. El <strong>PROMEDIO SAES</strong> redondea a entero (.6 a .9 sube; .0 a .5 baja).
-      </p>
 
       <div class="table-container">
         <table class="matrix-table">
@@ -1259,9 +1256,9 @@
       <form id="form-tarea" onsubmit="agregarTareaManual(event)">
         <label>CLASIFICACIÓN DE LA ACTIVIDAD:
           <select id="input-tipo" onchange="alternarCamposPonderacion(this.value)">
-            <option value="porcentual">PORCENTUAL (CON IMPACTO EN CALIFICACIÓN BASE 100%)</option>
-            <option value="ordinal">ORDINAL (FORMATIVA // SIN IMPACTO PONDERADO)</option>
-            <option value="extra">EXTRA (PORCENTUAL EXTRA // BARRA MORADA SOBRE EL 100%)</option>
+            <option value="porcentual">PORCENTUAL</option>
+            <option value="ordinal">ORDINAL</option>
+            <option value="extra">EXTRA</option>
           </select>
         </label>
         <label>ASIGNATURA:
@@ -1283,19 +1280,19 @@
           <label>FECHA LÍMITE:
             <input type="date" id="input-fecha" required>
           </label>
-          <label>HORA DE ENTREGA (DEJAR 00:00 SI NO HAY HORA FIJA):
+          <label>HORA DE ENTREGA:
             <input type="time" id="input-hora" value="00:00">
           </label>
         </div>
         <div class="row" id="row-ponderacion-inputs">
-          <label>PUNTOS DE LA TAREA (BASE DEL PROFESOR):
+          <label>VALOR:
             <input type="number" id="input-puntos" value="20" min="1" max="100">
           </label>
-          <label>VALOR TOTAL (BASE DEL PROFESOR):
+          <label>BASE DEL PROFESOR:
             <input type="number" id="input-base" value="100" min="1" max="100" title="Si el profesor califica sobre 30, pon 30. Si es estándar, pon 100.">
           </label>
         </div>
-        <label>DETALLES / NOTAS DE LA ACTIVIDAD:
+        <label>NOTAS:
           <textarea id="input-detalles" placeholder="Ingresa especificaciones, rúbricas o apuntes importantes para esta entrega..." style="height:65px; resize:vertical;"></textarea>
         </label>
         <button type="submit" class="btn-32 btn-32-primary" style="margin-top:6px;">GUARDAR REGISTRO</button>
@@ -1389,9 +1386,9 @@
 
       <label>CLASIFICACIÓN:
         <select id="edit-tipo" onchange="alternarCamposEdicionPonderacion(this.value)">
-          <option value="porcentual">PORCENTUAL (CON IMPACTO EN CALIFICACIÓN BASE 100%)</option>
-          <option value="ordinal">ORDINAL (FORMATIVA // SIN IMPACTO PONDERADO)</option>
-          <option value="extra">EXTRA (PORCENTUAL EXTRA // BARRA MORADA SOBRE EL 100%)</option>
+          <option value="porcentual">PORCENTUAL</option>
+          <option value="ordinal">ORDINAL</option>
+          <option value="extra">EXTRA</option>
         </select>
       </label>
 
@@ -1410,15 +1407,15 @@
       </div>
 
       <div class="row" id="row-edit-ponderacion">
-        <label>PUNTOS (BASE DEL PROFESOR):
+        <label>VALOR:
           <input type="number" id="edit-puntos" min="1" max="100">
         </label>
-        <label>BASE TOTAL (BASE DEL PROFESOR):
+        <label>BASE DEL PROFESOR:
           <input type="number" id="edit-base" min="1" max="100">
         </label>
       </div>
 
-      <label>DETALLES / NOTAS EXPLICATIVAS:
+      <label>NOTAS:
         <textarea id="edit-detalles" style="height:90px; resize:vertical;"></textarea>
       </label>
 
@@ -2644,7 +2641,7 @@
       } else {
         const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
+          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} [VALOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
           render();
         }, 120);
       }
@@ -2683,7 +2680,7 @@
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span>${labelTitle}</span>
                   ${extraTagHtml}
-                  <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Hacer clic para editar puntos o base del profesor">⚙ AJUSTAR BASE</button>
+                  <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Hacer clic para editar valor o base del profesor">⚙ AJUSTAR BASE</button>
                 </div>
                 <span class="${pctClass}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
               </div>
@@ -2784,7 +2781,7 @@
 
             <div id="drawer-detalles-${t.id}" class="card-details-drawer" style="display:none;">
               <div class="details-top-bar">
-                <span class="details-title-tag">DETALLES & NOTAS DE LA ACTIVIDAD:</span>
+                <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
                 <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
               </div>
               <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas. Haz clic en EDITAR para agregar especificaciones o rúbricas.</em>'}</div>
@@ -2906,7 +2903,7 @@
               
               <div class="materia-universal-bar">
                 <div class="bar-label-sub">
-                  <span>COBERTURA TOTAL DE EVALUACIÓN (LÍMITE 100% + EXTRA):</span>
+                  <span>COBERTURA TOTAL:</span>
                   ${textoCoberturaHtml}
                 </div>
                 ${barraUniversalHtml}
@@ -2954,7 +2951,7 @@
 
                   <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
                     <div class="details-top-bar">
-                      <span class="details-title-tag">DETALLES & NOTAS DE LA ACTIVIDAD:</span>
+                      <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
                       <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
                     </div>
                     <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
