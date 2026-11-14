@@ -43,6 +43,7 @@
       --danger-glow: rgba(239, 68, 68, 0.35);
       --amber: #f59e0b;
       --amber-glow: rgba(245, 158, 11, 0.45);
+      --purple: #a855f7;
       --text-main: #ffffff;
       --bevel-high: rgba(255, 255, 255, 0.08);
       --bevel-shadow: rgba(0, 0, 0, 0.6);
@@ -377,6 +378,16 @@
       box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
     }
 
+    .badge-sin-fecha {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
     .dual-bars-wrapper {
       background: rgba(11, 16, 28, 0.7);
       border: 1px solid #1a253a;
@@ -410,6 +421,7 @@
       position: relative;
       overflow: hidden;
       box-shadow: inset 1px 1px 3px rgba(0,0,0,0.8);
+      display: flex;
     }
 
     .bar-fill {
@@ -432,6 +444,12 @@
     .bar-fill.success {
       background: linear-gradient(90deg, #059669 0%, #10b981 100%);
       box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+    }
+
+    .bar-fill.extra-overflow {
+      background: linear-gradient(90deg, #9333ea 0%, #c084fc 100%);
+      box-shadow: 0 0 8px rgba(192, 132, 252, 0.65);
+      border-left: 2px solid #ffffff;
     }
 
     .input-mini {
@@ -641,6 +659,22 @@
       box-shadow: 0 0 4px #ffffff;
     }
 
+    .checkbox-panel-row {
+      display: flex;
+      flex-direction: row !important;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: #090e1a;
+      padding: 11px 14px;
+      border: 1px solid #23314d;
+      transition: border-color 0.15s ease;
+    }
+
+    .checkbox-panel-row:hover {
+      border-color: var(--accent);
+    }
+
     .materia-bloque {
       margin-bottom: 28px;
       background: #0c1220;
@@ -743,6 +777,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .table-container {
@@ -1110,10 +1146,11 @@
       <div id="lista-cronograma"></div>
     </section>
 
-    <!-- 2: MATERIAS (SOLO VISUALIZADOR) -->
+    <!-- 2: MATERIAS (VISUALIZADOR + GESTIÓN) -->
     <section id="vista-materias" class="view-panel">
       <div class="section-header">
         <h2>DISTRIBUCIÓN POR ASIGNATURA // VISUALIZADOR</h2>
+        <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
       </div>
       <div id="lista-materias"></div>
     </section>
@@ -1165,15 +1202,15 @@
         <div id="chat-history" class="chat-history">
           <div class="chat-msg bot">
             J.A.R.V.I.S EN LÍNEA.<br>
-            • <strong>Porcentual con link:</strong> <em>"problemario de historia para el 25 de noviembre https://classroom.google.com/... vale 20/30"</em>.<br>
+            • <strong>Con fecha:</strong> <em>"problemario de historia para el 25 de noviembre https://classroom.google.com/... vale 20/30"</em>.<br>
+            • <strong>Sin fecha (solo Materias y Evaluación):</strong> <em>"cuaderno de álgebra vale 30 puntos sin fecha"</em>.<br>
             • <strong>Puntos extra en parciales:</strong> <em>"en P1 de Álgebra saqué 105"</em>.<br>
-            • <strong>Desincronizar:</strong> <em>"desincronizar calendar"</em> para marcar todas como pendientes.<br>
-            • <strong>Calificar:</strong> <em>"en infografía de historia saqué 10 de 10"</em>.
+            • <strong>Calificar:</strong> <em>"en cuaderno de álgebra saqué 28 de 30"</em>.
           </div>
         </div>
 
         <div class="chat-input-row">
-          <textarea id="chat-input" placeholder="Ingresa entrega (con link opcional), calificación o comando a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
+          <textarea id="chat-input" placeholder="Ingresa entrega (con fecha o 'sin fecha'), calificación o comando a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
           <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
         </div>
       </div>
@@ -1193,12 +1230,18 @@
           <select id="input-materia" required></select>
         </label>
         <label>ACTIVIDAD:
-          <input type="text" id="input-actividad" placeholder="Ej. Problemario Productos Notables" required>
+          <input type="text" id="input-actividad" placeholder="Ej. Cuaderno de ejercicios / Problemario" required>
         </label>
         <label>ENLACE DE CLASSROOM (OPCIONAL):
           <input type="url" id="input-url-classroom" placeholder="https://classroom.google.com/c/.../a/.../details">
         </label>
-        <div class="row">
+
+        <label class="checkbox-panel-row">
+          <input type="checkbox" id="input-sin-fecha" class="toggle-crt" onchange="alternarCamposFecha(this.checked)">
+          <span>NO FECHA / SIN FECHA LÍMITE (NO APARECE EN CRONOGRAMA, SOLO EN MATERIAS Y EVALUACIÓN)</span>
+        </label>
+
+        <div class="row" id="row-fecha-hora-inputs">
           <label>FECHA LÍMITE:
             <input type="date" id="input-fecha" required>
           </label>
@@ -1313,7 +1356,12 @@
         </select>
       </label>
 
-      <div class="row">
+      <label class="checkbox-panel-row">
+        <input type="checkbox" id="edit-sin-fecha" class="toggle-crt" onchange="alternarCamposEdicionFecha(this.checked)">
+        <span>NO FECHA / SIN FECHA LÍMITE (OMITIR DE CRONOGRAMA)</span>
+      </label>
+
+      <div class="row" id="row-edit-fecha-hora">
         <label>FECHA LÍMITE:
           <input type="date" id="edit-fecha" required>
         </label>
@@ -1434,20 +1482,25 @@
       window.open(url, '_blank');
     }
 
-    let tareas = JSON.parse(localStorage.getItem("tareas_workstation")) || [];
+    function normalizarObjetoTarea(t) {
+      const sinFecha = Boolean(t.sinFecha) || !t.fecha;
+      return {
+        ...t,
+        tipo: t.tipo || 'porcentual',
+        materia: normalizarMateria(t.materia),
+        sinFecha: sinFecha,
+        fecha: sinFecha ? "" : t.fecha,
+        hora: sinFecha ? "" : ((t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora)),
+        puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
+        base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
+        forzarDual: Boolean(t.forzarDual),
+        urlClassroom: t.urlClassroom || "",
+        detalles: t.detalles || "",
+        califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
+      };
+    }
 
-    tareas = tareas.map(t => ({
-      ...t,
-      tipo: t.tipo || 'porcentual',
-      materia: normalizarMateria(t.materia),
-      hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora),
-      puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
-      base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
-      forzarDual: Boolean(t.forzarDual),
-      urlClassroom: t.urlClassroom || "",
-      detalles: t.detalles || "",
-      califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
-    }));
+    let tareas = (JSON.parse(localStorage.getItem("tareas_workstation")) || []).map(normalizarObjetoTarea);
 
     let calificacionesSemestre = JSON.parse(localStorage.getItem("calif_semestre_workstation")) || {};
 
@@ -1568,18 +1621,7 @@
           if (doc.exists) {
             const data = doc.data();
             if (data.tareas) {
-              tareas = data.tareas.map(t => ({
-                ...t,
-                tipo: t.tipo || 'porcentual',
-                materia: normalizarMateria(t.materia),
-                hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora),
-                puntos: Number(t.puntos) || (t.tipo === 'ordinal' ? 0 : 20),
-                base: Number(t.base) || (t.tipo === 'ordinal' ? 0 : 100),
-                forzarDual: Boolean(t.forzarDual),
-                urlClassroom: t.urlClassroom || "",
-                detalles: t.detalles || "",
-                califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
-              }));
+              tareas = data.tareas.map(normalizarObjetoTarea);
             }
             if (data.calificacionesSemestre) calificacionesSemestre = data.calificacionesSemestre;
             if (data.pesosParciales) pesosParciales = data.pesosParciales;
@@ -1650,9 +1692,36 @@
       if (row) row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
     }
 
+    function alternarCamposFecha(sinFecha) {
+      const row = document.getElementById("row-fecha-hora-inputs");
+      const inputFecha = document.getElementById("input-fecha");
+      if (row) row.style.display = sinFecha ? 'none' : 'flex';
+      if (inputFecha) {
+        if (sinFecha) {
+          inputFecha.removeAttribute("required");
+          inputFecha.value = "";
+        } else {
+          inputFecha.setAttribute("required", "required");
+        }
+      }
+    }
+
     function alternarCamposEdicionPonderacion(tipo) {
       const row = document.getElementById("row-edit-ponderacion");
       if (row) row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
+    }
+
+    function alternarCamposEdicionFecha(sinFecha) {
+      const row = document.getElementById("row-edit-fecha-hora");
+      const editFecha = document.getElementById("edit-fecha");
+      if (row) row.style.display = sinFecha ? 'none' : 'flex';
+      if (editFecha) {
+        if (sinFecha) {
+          editFecha.removeAttribute("required");
+        } else {
+          editFecha.setAttribute("required", "required");
+        }
+      }
     }
 
     function toggleDesgloseDetalles(id) {
@@ -1681,7 +1750,7 @@
       const selectMat = document.getElementById("edit-materia");
 
       selectMat.innerHTML = MATERIAS_OFICIALES.map(m => `<option value="${m}">${m.toUpperCase()}</option>`).join("");
-      selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}</option>`).join("");
+      selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}${t.sinFecha ? ' (NO FECHA)' : ''}</option>`).join("");
 
       if (idPreseleccionado) selectTarea.value = idPreseleccionado;
 
@@ -1698,22 +1767,32 @@
       const t = tareas.find(x => x.id === id);
       if (!t) return;
 
+      const sinFecha = Boolean(t.sinFecha) || !t.fecha;
+
       document.getElementById("edit-materia").value = t.materia;
       document.getElementById("edit-actividad").value = t.actividad;
       document.getElementById("edit-url-classroom").value = t.urlClassroom || "";
       document.getElementById("edit-tipo").value = t.tipo || 'porcentual';
-      document.getElementById("edit-fecha").value = t.fecha;
-      document.getElementById("edit-hora").value = (t.hora && t.hora.length >= 5) ? t.hora.substring(0, 5) : "00:00";
+      document.getElementById("edit-sin-fecha").checked = sinFecha;
+      document.getElementById("edit-fecha").value = sinFecha ? "" : t.fecha;
+      document.getElementById("edit-hora").value = (!sinFecha && t.hora && t.hora.length >= 5) ? t.hora.substring(0, 5) : "00:00";
       document.getElementById("edit-puntos").value = t.puntos;
       document.getElementById("edit-base").value = t.base;
       document.getElementById("edit-detalles").value = t.detalles || "";
       alternarCamposEdicionPonderacion(t.tipo || 'porcentual');
+      alternarCamposEdicionFecha(sinFecha);
     }
 
     function guardarEdicionManualTarea() {
       const id = Number(document.getElementById("edit-select-tarea").value);
       const t = tareas.find(x => x.id === id);
       if (!t) return;
+
+      const sinFecha = document.getElementById("edit-sin-fecha").checked;
+      const fechaVal = document.getElementById("edit-fecha").value;
+      if (!sinFecha && !fechaVal) {
+        return alert("Selecciona una fecha límite o marca la casilla NO FECHA.");
+      }
 
       const tipo = document.getElementById("edit-tipo").value;
       const nuevoPuntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("edit-puntos").value) || 20);
@@ -1729,8 +1808,9 @@
       t.actividad = document.getElementById("edit-actividad").value.trim() || t.actividad;
       t.urlClassroom = document.getElementById("edit-url-classroom").value.trim();
       t.tipo = tipo;
-      t.fecha = document.getElementById("edit-fecha").value || t.fecha;
-      t.hora = horaEdit;
+      t.sinFecha = sinFecha;
+      t.fecha = sinFecha ? "" : fechaVal;
+      t.hora = sinFecha ? "" : horaEdit;
       t.puntos = nuevoPuntos;
       t.base = nuevoBase;
       t.detalles = document.getElementById("edit-detalles").value.trim();
@@ -1742,7 +1822,7 @@
     }
 
     function formatearFechaLarga(fechaStr) {
-      if (!fechaStr) return "";
+      if (!fechaStr) return "SIN FECHA LÍMITE";
       const partes = fechaStr.split("-");
       if (partes.length !== 3) return fechaStr;
       const fechaObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
@@ -1750,6 +1830,7 @@
     }
 
     function calcularCuentaRegresiva(fechaStr, horaStr = "00:00:00") {
+      if (!fechaStr) return { texto: "NO FECHA", urgente: false, zero: true };
       const horaFinal = horaStr && horaStr.length >= 5 ? (horaStr.length === 5 ? horaStr + ":00" : horaStr) : "00:00:00";
       const target = new Date(`${fechaStr}T${horaFinal}`);
       const ahora = new Date();
@@ -1833,7 +1914,7 @@
       return {
         puntosAcumulados: Number(califBase100.toFixed(2)),
         colchon: Number(colchon.toFixed(2)),
-        puntosProgramados: Number(puntosProgramadosBase100.toFixed(2))
+        puntosProgramados: Number((puntosProgramadosBase100 + extra).toFixed(2))
       };
     }
 
@@ -1956,6 +2037,7 @@
     });
 
     async function insertarEventoGoogle(t) {
+      if (t.sinFecha || !t.fecha) return false;
       if (!accessToken) {
         iniciarSesionGoogle();
         return false;
@@ -2011,7 +2093,7 @@
 
     async function agendarTareaDirecta(id) {
       const t = tareas.find(x => x.id === id);
-      if (!t) return;
+      if (!t || t.sinFecha || !t.fecha) return;
       const exito = await insertarEventoGoogle(t);
       if (exito) {
         alert(`EVENTO AGENDADO: "${t.actividad}" A LAS ${t.hora || '00:00:00'} HRS CON ALERTAS A 7D, 3D Y 24H.`);
@@ -2019,8 +2101,8 @@
     }
 
     async function sincronizarTodasLasTareas() {
-      const pendientes = tareas.filter(t => !t.sincronizada);
-      if (!pendientes.length) return alert("TODAS LAS ENTREGAS YA ESTÁN SINCRONIZADAS.");
+      const pendientes = tareas.filter(t => !t.sincronizada && !t.sinFecha && t.fecha);
+      if (!pendientes.length) return alert("TODAS LAS ENTREGAS CON FECHA YA ESTÁN SINCRONIZADAS.");
       if (!accessToken) {
         alert("INICIA SESIÓN CON GOOGLE EN CONFIGURACIÓN.");
         cambiarVista("config");
@@ -2054,11 +2136,11 @@
         try {
           const importadas = JSON.parse(evt.target.result);
           if (importadas.tareas && importadas.calificacionesSemestre) {
-            tareas = importadas.tareas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), urlClassroom: t.urlClassroom || "", detalles: t.detalles || "" }));
+            tareas = importadas.tareas.map(normalizarObjetoTarea);
             calificacionesSemestre = importadas.calificacionesSemestre;
             if (importadas.pesosParciales) pesosParciales = importadas.pesosParciales;
           } else if (Array.isArray(importadas)) {
-            tareas = importadas.map(t => ({ ...t, tipo: t.tipo || 'porcentual', materia: normalizarMateria(t.materia), hora: (t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora), forzarDual: Boolean(t.forzarDual), urlClassroom: t.urlClassroom || "", detalles: t.detalles || "" }));
+            tareas = importadas.map(normalizarObjetoTarea);
           }
           guardarLocal();
           render();
@@ -2110,6 +2192,12 @@
 
     function agregarTareaManual(e) {
       e.preventDefault();
+      const sinFecha = document.getElementById("input-sin-fecha").checked;
+      const fechaVal = document.getElementById("input-fecha").value;
+      if (!sinFecha && !fechaVal) {
+        return alert("Selecciona una fecha límite o marca la opción NO FECHA.");
+      }
+
       const tipo = document.getElementById("input-tipo").value;
       const puntos = tipo === 'ordinal' ? 0 : (Number(document.getElementById("input-puntos").value) || 20);
       const base = tipo === 'ordinal' ? 0 : (Number(document.getElementById("input-base").value) || 100);
@@ -2126,8 +2214,9 @@
         materia: normalizarMateria(document.getElementById("input-materia").value.trim()),
         actividad: document.getElementById("input-actividad").value.trim(),
         urlClassroom: urlClassroom,
-        fecha: document.getElementById("input-fecha").value,
-        hora: horaInput,
+        sinFecha: sinFecha,
+        fecha: sinFecha ? "" : fechaVal,
+        hora: sinFecha ? "" : horaInput,
         puntos: puntos,
         base: base,
         forzarDual: false,
@@ -2142,7 +2231,8 @@
       e.target.reset();
       document.getElementById("input-hora").value = "00:00";
       alternarCamposPonderacion('porcentual');
-      cambiarVista("cronograma");
+      alternarCamposFecha(false);
+      cambiarVista(sinFecha ? "materias" : "cronograma");
     }
 
     function extraerFecha(t) {
@@ -2218,6 +2308,27 @@
       input.value = "";
       const lower = texto.toLowerCase();
 
+      if (tareaEnEspera) {
+        const esSinFechaResp = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha");
+        const fechaResp = extraerFecha(lower);
+        const horaResp = extraerHora(lower);
+
+        if (esSinFechaResp || fechaResp) {
+          tareaEnEspera.sinFecha = esSinFechaResp;
+          tareaEnEspera.fecha = esSinFechaResp ? "" : fechaResp;
+          tareaEnEspera.hora = esSinFechaResp ? "" : horaResp;
+          tareas.push(tareaEnEspera);
+          guardarLocal();
+          const guardada = tareaEnEspera;
+          tareaEnEspera = null;
+          render();
+          agregarMensajeChat("bot", `REGISTRO COMPLETADO: <span style="color:${getColorMateria(guardada.materia)}; font-weight:700;">${guardada.materia.toUpperCase()}</span>: "${guardada.actividad}" (${esSinFechaResp ? 'NO FECHA // SOLO EN MATERIAS Y EVALUACIÓN' : formatearFechaLarga(guardada.fecha)}).`);
+          return;
+        } else {
+          tareaEnEspera = null;
+        }
+      }
+
       if (esperandoConfirmacionReset) {
         if (lower.includes("confirmar") || lower.includes("si") || lower.includes("adelante")) {
           tareas = [];
@@ -2249,7 +2360,7 @@
       }
 
       if (lower.includes("agendalas") || lower.includes("sincronizar") || lower.includes("sincroniza")) {
-        agregarMensajeChat("bot", "SINCRONIZANDO ACTIVIDADES ACTIVAS A GOOGLE CALENDAR...");
+        agregarMensajeChat("bot", "SINCRONIZANDO ACTIVIDADES CON FECHA A GOOGLE CALENDAR...");
         await sincronizarTodasLasTareas();
         agregarMensajeChat("bot", "SINCRONIZACIÓN CONCLUIDA.");
         return;
@@ -2369,10 +2480,11 @@
       }
 
       const esOrdinal = lower.includes("ordinal") || lower.includes("ordinales") || lower.includes("sin valor") || lower.includes("sin porcentaje") || lower.includes("sin ponderacion") || lower.includes("sin ponderación");
+      const esSinFecha = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha");
       const tipo = esOrdinal ? 'ordinal' : 'porcentual';
       const materia = normalizarMateria(lower);
-      const fecha = extraerFecha(lower);
-      const hora = extraerHora(lower);
+      const fecha = esSinFecha ? "" : extraerFecha(lower);
+      const hora = esSinFecha ? "" : extraerHora(lower);
       
       const urlMatch = texto.match(/https?:\/\/[^\s]+/i);
       const urlClassroom = urlMatch ? urlMatch[0] : "";
@@ -2401,6 +2513,9 @@
         .replace(/vale \d+.*$/i, "")
         .replace(/a las\s+\d{1,2}(?::\d{2})?\s*(?:am|pm|hrs)?/i, "")
         .replace(/\b\d{1,2}:\d{2}\s*(?:am|pm|hrs)?\b/i, "")
+        .replace(/sin fecha/i, "")
+        .replace(/no fecha/i, "")
+        .replace(/no tiene fecha/i, "")
         .replace(/tarea ordinal/i, "")
         .replace(/ordinal/i, "")
         .replace(/sin valor/i, "")
@@ -2411,13 +2526,14 @@
       if (!actividad || actividad.length < 3) actividad = "ENTREGA PROGRAMADA";
       actividad = actividad.charAt(0).toUpperCase() + actividad.slice(1);
 
-      if (!fecha) {
+      if (!fecha && !esSinFecha) {
         tareaEnEspera = {
           id: Date.now(),
           tipo: tipo,
           materia,
           actividad,
           urlClassroom: urlClassroom,
+          sinFecha: false,
           fecha: "",
           hora: hora,
           puntos,
@@ -2430,7 +2546,7 @@
           parcial: 3
         };
         setTimeout(() => {
-          agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: <span style="color:${getColorMateria(tareaEnEspera.materia)}; font-weight:700;">${tareaEnEspera.materia.toUpperCase()}</span>: "${tareaEnEspera.actividad}". INDICA LA FECHA DE ENTREGA.`);
+          agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: <span style="color:${getColorMateria(tareaEnEspera.materia)}; font-weight:700;">${tareaEnEspera.materia.toUpperCase()}</span>: "${tareaEnEspera.actividad}". INDICA LA FECHA DE ENTREGA (O ESCRIBE <strong>"SIN FECHA"</strong>).`);
         }, 120);
         return;
       }
@@ -2441,8 +2557,9 @@
         materia,
         actividad,
         urlClassroom: urlClassroom,
-        fecha,
-        hora: hora,
+        sinFecha: esSinFecha,
+        fecha: esSinFecha ? "" : fecha,
+        hora: esSinFecha ? "" : hora,
         puntos,
         base,
         forzarDual: false,
@@ -2456,15 +2573,17 @@
       tareas.push(nueva);
       guardarLocal();
 
+      const infoTiempo = esSinFecha ? "NO FECHA (OMITIDA DE CRONOGRAMA // VISIBLE EN MATERIAS Y EVALUACIÓN)" : `${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS`;
+
       if (esOrdinal) {
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
+          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
           render();
         }, 120);
       } else {
         const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
+          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} [BASE DEL PROFESOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
           render();
         }, 120);
       }
@@ -2546,7 +2665,9 @@
 
     function render() {
       const cronogramaEl = document.getElementById("lista-cronograma");
-      let ordenadas = [...tareas].sort((a, b) => new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`));
+      let ordenadas = tareas
+        .filter(t => !t.sinFecha && Boolean(t.fecha))
+        .sort((a, b) => new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`));
       
       if (filtroActual === 'activas') {
         ordenadas = ordenadas.filter(t => !t.completada);
@@ -2601,26 +2722,63 @@
             </div>
           </div>
         `;
-      }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS REGISTRADAS</p>";
+      }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS CON FECHA REGISTRADAS</p>";
 
       const materiasEl = document.getElementById("lista-materias");
       const materiasConTareas = MATERIAS_OFICIALES.filter(mat =>
-        tareas.some(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
+        tareas.some(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase()) ||
+        ((calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0) > 0
       );
 
       materiasEl.innerHTML = materiasConTareas.length ? materiasConTareas.map(mat => {
-        const tareasMat = tareas.filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase()).sort((a, b) => new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`));
+        const tareasMat = tareas
+          .filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
+          .sort((a, b) => {
+            const aSin = a.sinFecha || !a.fecha;
+            const bSin = b.sinFecha || !b.fecha;
+            if (aSin && bSin) return 0;
+            if (aSin) return 1;
+            if (bSin) return -1;
+            return new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`);
+          });
         const colorMat = getColorMateria(mat);
         
-        const puntosTotales100 = tareasMat.reduce((acc, curr) => {
+        const extraMat = (calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0;
+        const puntosActividades100 = tareasMat.reduce((acc, curr) => {
           if (curr.tipo === 'ordinal') return acc;
           const b = curr.base || 100;
           return acc + ((curr.puntos / b) * 100);
         }, 0);
+        const puntosTotales100 = puntosActividades100 + extraMat;
 
-        const puntosPorc = Math.min(puntosTotales100, 100);
+        const superaCien = puntosTotales100 > 100;
+        const extraOver100 = superaCien ? Number((puntosTotales100 - 100).toFixed(2)) : 0;
         const barraUniversalColor = puntosTotales100 >= 100 ? 'success' : (puntosTotales100 >= 70 ? '' : 'warning');
-        const estadoPonderacion = puntosTotales100 >= 100 ? '100%' : formatearPorcentaje(puntosTotales100);
+
+        let badgeCoberturaHtml = '';
+        let textoCoberturaHtml = '';
+        let barraUniversalHtml = '';
+
+        if (superaCien) {
+          const baseWidthPct = (100 / puntosTotales100) * 100;
+          const extraWidthPct = (extraOver100 / puntosTotales100) * 100;
+          badgeCoberturaHtml = `<span class="badge" style="border: 1px solid #c084fc; color:#e9d5ff; background: rgba(168,85,247,0.22); box-shadow: 0 0 10px rgba(168,85,247,0.4);">${formatearPorcentaje(puntosTotales100)} (+${formatearPorcentaje(extraOver100)} EXTRA)</span>`;
+          textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.25rem; color:#c084fc; text-shadow:0 0 10px rgba(192,132,252,0.6);">${formatearPorcentaje(puntosTotales100)}</strong></span>`;
+          barraUniversalHtml = `
+            <div class="bar-container" style="height: 15px;">
+              <div class="bar-fill success" style="width: ${baseWidthPct}%;" title="Base 100%"></div>
+              <div class="bar-fill extra-overflow" style="width: ${extraWidthPct}%;" title="Extra +${formatearPorcentaje(extraOver100)}"></div>
+            </div>
+          `;
+        } else {
+          badgeCoberturaHtml = `<span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${formatearPorcentaje(puntosTotales100)}</span>`;
+          textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.25rem;">${formatearPorcentaje(puntosTotales100)}</strong></span>`;
+          barraUniversalHtml = `
+            <div class="bar-container" style="height: 15px;">
+              <div class="bar-fill ${barraUniversalColor}" style="width: ${Math.max(puntosTotales100, 0)}%;"></div>
+            </div>
+          `;
+        }
 
         const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
         const pesos = pesosParciales[mat] || { p1: 33.33, p2: 33.33, p3: 33.33 };
@@ -2653,27 +2811,35 @@
             <div class="materia-header">
               <div class="materia-title-row">
                 <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
-                <div style="display:flex; gap:8px;">
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
                   ${saesMateriaBadge}
-                  <span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${estadoPonderacion}</span>
+                  ${badgeCoberturaHtml}
                 </div>
               </div>
               
               <div class="materia-universal-bar">
                 <div class="bar-label-sub">
                   <span>COBERTURA TOTAL DE EVALUACIÓN:</span>
-                  <span><strong class="pct-destacado" style="font-size:1.25rem;">${formatearPorcentaje(puntosTotales100)}</strong></span>
+                  ${textoCoberturaHtml}
                 </div>
-                <div class="bar-container" style="height: 15px;">
-                  <div class="bar-fill ${barraUniversalColor}" style="width: ${puntosPorc}%;"></div>
-                </div>
+                ${barraUniversalHtml}
               </div>
             </div>
 
             ${tareasMat.map(t => {
-              const doom = calcularCuentaRegresiva(t.fecha, t.hora);
-              const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
+              const esSinFecha = t.sinFecha || !t.fecha;
+              const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
+              const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
               const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
+
+              const timingHtml = esSinFecha
+                ? `<span class="badge-sin-fecha">NO FECHA // EVALUACIÓN CONTINUA</span>`
+                : `<span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
+                   <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>`;
+
+              const horaHtml = esSinFecha
+                ? `<span>SIN FECHA LÍMITE</span>`
+                : `<span>HORA: ${t.hora || '00:00:00'} HRS</span>`;
 
               return `
                 <div class="card ${t.completada ? 'completada' : ''}" style="margin-bottom:12px;">
@@ -2682,19 +2848,20 @@
                   </div>
 
                   <div class="card-timing">
-                    <span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
-                    <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
+                    ${timingHtml}
                   </div>
 
                   ${bloqueMateriaVisual}
 
                   <div class="card-bottom">
                     <div class="card-meta">
-                      <span>HORA: ${t.hora || '00:00:00'} HRS</span>
+                      ${horaHtml}
                     </div>
                     <div class="card-actions">
                       ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
                       <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
+                      <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
+                      <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
                     </div>
                   </div>
 
@@ -2722,6 +2889,25 @@
         const colorBarra = p3Info.puntosAcumulados >= 80 ? 'success' : (p3Info.puntosAcumulados >= 60 ? 'warning' : '');
         const colorMat = getColorMateria(mat);
 
+        const totalConColchon = p3Info.puntosAcumulados + p3Info.colchon;
+        let barraEvalHtml = '';
+        if (p3Info.colchon > 0) {
+          const baseEvalPct = (100 / totalConColchon) * 100;
+          const colchonEvalPct = (p3Info.colchon / totalConColchon) * 100;
+          barraEvalHtml = `
+            <div class="bar-container" style="height:16px; margin-top:6px;">
+              <div class="bar-fill success" style="width: ${baseEvalPct}%;"></div>
+              <div class="bar-fill extra-overflow" style="width: ${colchonEvalPct}%;"></div>
+            </div>
+          `;
+        } else {
+          barraEvalHtml = `
+            <div class="bar-container" style="height:16px; margin-top:6px;">
+              <div class="bar-fill ${colorBarra}" style="width: ${p3Info.puntosAcumulados}%;"></div>
+            </div>
+          `;
+        }
+
         return `
           <div class="eval-materia-card">
             <div class="eval-materia-header">
@@ -2732,22 +2918,25 @@
                   ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15);">+${formatearPorcentaje(p3Info.colchon)} COLCHÓN</span>` : ''}
                 </div>
               </div>
-              <div class="bar-container" style="height:16px; margin-top:6px;">
-                <div class="bar-fill ${colorBarra}" style="width: ${p3Info.puntosAcumulados}%;"></div>
-              </div>
+              ${barraEvalHtml}
               <div class="coverage-meta-row">
-                <span>TOTAL PROGRAMADO: <span class="pct-destacado" style="font-size:0.95rem;">${formatearPorcentaje(p3Info.puntosProgramados)}</span></span>
+                <span>TOTAL PROGRAMADO: <span class="pct-destacado" style="font-size:0.95rem; ${p3Info.puntosProgramados > 100 ? 'color:#c084fc;' : ''}">${formatearPorcentaje(p3Info.puntosProgramados)}</span></span>
                 <span>TOTAL EVALUADO: <span class="pct-destacado" style="font-size:0.95rem;">${formatearPorcentaje(p3Info.puntosAcumulados)}</span></span>
               </div>
             </div>
 
             <div class="eval-activities-list">
               ${tareasP3.length ? tareasP3.map(t => {
+                const badgeSinFechaHtml = (t.sinFecha || !t.fecha) ? `<span class="badge-sin-fecha" style="font-size:0.7rem; padding:2px 7px;">NO FECHA</span>` : '';
+
                 if (t.tipo === 'ordinal') {
                   return `
                     <div class="eval-act-card" style="border-left: 3px solid var(--amber);">
                       <div class="eval-act-header">
-                        <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                          <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                          ${badgeSinFechaHtml}
+                        </div>
                         <div style="display:flex; align-items:center; gap:10px;">
                           <span class="badge-ordinal">ORDINALES</span>
                           <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar entregada / pendiente">
@@ -2774,7 +2963,10 @@
                   return `
                     <div class="eval-act-card">
                       <div class="eval-act-header">
-                        <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                          <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                          ${badgeSinFechaHtml}
+                        </div>
                       </div>
 
                       <div class="dual-bars-wrapper" style="background:#090d17;">
@@ -2797,7 +2989,10 @@
                   return `
                     <div class="eval-act-card">
                       <div class="eval-act-header">
-                        <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                          <strong style="color:#ffffff; font-size:0.95rem;">${t.actividad}</strong>
+                          ${badgeSinFechaHtml}
+                        </div>
                       </div>
 
                       <div class="dual-bars-wrapper" style="background:#090d17;">
