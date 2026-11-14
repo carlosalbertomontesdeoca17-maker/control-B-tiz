@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C.A.B. // WORKSTATION</title>
+  <title>AMADEUS SYSTEM</title>
+  
   <!-- Manifiesto y Service Worker para App Nativa -->
   <link rel="manifest" href="manifest.json">
   <script>
@@ -11,6 +12,7 @@
       navigator.serviceWorker.register('sw.js');
     }
   </script>
+
   <!-- Modo App Nativa Pantalla Completa para Celular -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1077,8 +1079,8 @@
   <div class="app-container">
     <header>
       <div id="cloud-badge" class="cloud-status-badge cloud-offline">NUBE: DESCONECTADA</div>
-      <h1>C.A.B.</h1>
-      <p class="subtitle">B-STATION V3.0 // REAL-TIME</p>
+      <h1>AMADEUS SYSTEM</h1>
+      <p class="subtitle">V.3.8</p>
     </header>
 
     <nav class="nav-tabs">
@@ -1156,13 +1158,13 @@
     <section id="vista-datos" class="view-panel">
       <div class="chat-box">
         <div class="chat-header">
-          <span class="terminal-tag">SYS // C.A.B.</span>
+          <span class="terminal-tag">SYS // CORE</span>
           <span style="font-size: 0.85rem; color: #ffffff; font-weight:600;">PROCESADOR Y EDICIÓN REACTIVA</span>
         </div>
 
         <div id="chat-history" class="chat-history">
           <div class="chat-msg bot">
-            J.A.R.V.I.S EN LÍNEA // CECyT 9 1IM9[cite: 1].<br>
+            J.A.R.V.I.S EN LÍNEA.<br>
             • <strong>Porcentual con link:</strong> <em>"problemario de historia para el 25 de noviembre https://classroom.google.com/... vale 20/30"</em>.<br>
             • <strong>Puntos extra en parciales:</strong> <em>"en P1 de Álgebra saqué 105"</em>.<br>
             • <strong>Desincronizar:</strong> <em>"desincronizar calendar"</em> para marcar todas como pendientes.<br>
@@ -1228,7 +1230,7 @@
       <!-- PANEL DE CONTROL FIREBASE FIRESTORE EN TIEMPO REAL -->
       <div class="action-box" style="border-left: 3px solid var(--green);">
         <h3 style="color:var(--green);">FIREBASE FIRESTORE // NUBE EN TIEMPO REAL</h3>
-        <p>Pega aquí tu <code>firebaseConfig</code> copiado desde la consola de Firebase para activar la sincronización instantánea entre tu celular y tu PC:</p>
+        <p>Pega aquí tu <code>firebaseConfig</code> para sincronizar automáticamente tus datos entre tu celular y computadora:</p>
         <textarea id="input-firebase-config" placeholder='Pega aquí tu configuración:
 {
   "apiKey": "AIzaSy...",
@@ -1432,12 +1434,7 @@
       window.open(url, '_blank');
     }
 
-    let tareas = JSON.parse(localStorage.getItem("tareas_batiz")) || [
-      { id: 1, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Infografia visita Museo de la Mujer", fecha: "2026-11-23", hora: "00:00:00", puntos: 10, base: 100, forzarDual: false, urlClassroom: "", califX: null, detalles: "Visita al Museo de la Mujer. Entregar infografía en formato digital con fuentes bibliográficas y fotografías.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 2, tipo: 'porcentual', materia: "Historia de México Contemporáneo I", actividad: "Debate construccion de la nacion", fecha: "2026-11-30", hora: "00:00:00", puntos: 20, base: 100, forzarDual: false, urlClassroom: "", califX: null, detalles: "Debate sobre el proceso de construcción del Estado-Nación mexicano. Preparar argumentos por equipo.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 3, tipo: 'porcentual', materia: "Álgebra", actividad: "Problemario Productos Notables", fecha: "2026-11-28", hora: "00:00:00", puntos: 20, base: 30, forzarDual: false, urlClassroom: "", califX: null, detalles: "Ejercicios de productos notables y factorización. Procedimiento completo a mano con hojas milimétricas.", completada: false, sincronizada: false, parcial: 3 },
-      { id: 4, tipo: 'ordinal', materia: "DHP", actividad: "Firma de cuaderno y glosario", fecha: "2026-11-29", hora: "00:00:00", puntos: 0, base: 0, forzarDual: false, urlClassroom: "", califX: null, detalles: "Revisión de cuaderno completo con firmas y glosario de términos cognitivos del 3er parcial.", completada: false, sincronizada: false, parcial: 3 }
-    ];
+    let tareas = JSON.parse(localStorage.getItem("tareas_workstation")) || [];
 
     tareas = tareas.map(t => ({
       ...t,
@@ -1452,7 +1449,7 @@
       califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
     }));
 
-    let calificacionesSemestre = JSON.parse(localStorage.getItem("calif_semestre_batiz")) || {};
+    let calificacionesSemestre = JSON.parse(localStorage.getItem("calif_semestre_workstation")) || {};
 
     for (let k in calificacionesSemestre) {
       const norm = normalizarMateria(k);
@@ -1475,11 +1472,23 @@
       }
     });
 
-    let pesosParciales = JSON.parse(localStorage.getItem("pesos_parciales_batiz")) || {};
+    const PESOS_DEFAULT_GRUPO = {
+      "Orientación Juvenil y Profesional I": { p1: 33.33, p2: 33.33, p3: 33.33 },
+      "Historia de México Contemporáneo I": { p1: 33.33, p2: 33.33, p3: 33.33 },
+      "Desarrollo Personal": { p1: 30, p2: 40, p3: 30 },
+      "Álgebra": { p1: 30, p2: 30, p3: 40 },
+      "Filosofía I": { p1: 33.33, p2: 33.33, p3: 33.33 },
+      "Expresión Oral y Escrita I": { p1: 33.33, p2: 33.33, p3: 33.33 },
+      "Computación Básica I": { p1: 33.33, p2: 33.33, p3: 33.33 },
+      "Inglés I": { p1: 33.33, p2: 33.33, p3: 33.33 },
+      "DHP": { p1: 33.33, p2: 33.33, p3: 33.33 }
+    };
+
+    let pesosParciales = JSON.parse(localStorage.getItem("pesos_parciales_workstation")) || PESOS_DEFAULT_GRUPO;
 
     MATERIAS_OFICIALES.forEach(m => {
       if (!pesosParciales[m]) {
-        pesosParciales[m] = { p1: 33.33, p2: 33.33, p3: 33.33 };
+        pesosParciales[m] = PESOS_DEFAULT_GRUPO[m] || { p1: 33.33, p2: 33.33, p3: 33.33 };
       } else {
         ['p1', 'p2', 'p3'].forEach(pk => {
           if (Math.abs(pesosParciales[m][pk] - 33.34) < 0.1 || Math.abs(pesosParciales[m][pk] - 33.4) < 0.1 || Math.abs(pesosParciales[m][pk] - 33.3) < 0.1) {
@@ -1496,9 +1505,9 @@
     let filtroActual = 'todas';
 
     function guardarLocal(origenRemoto = false) {
-      localStorage.setItem("tareas_batiz", JSON.stringify(tareas));
-      localStorage.setItem("calif_semestre_batiz", JSON.stringify(calificacionesSemestre));
-      localStorage.setItem("pesos_parciales_batiz", JSON.stringify(pesosParciales));
+      localStorage.setItem("tareas_workstation", JSON.stringify(tareas));
+      localStorage.setItem("calif_semestre_workstation", JSON.stringify(calificacionesSemestre));
+      localStorage.setItem("pesos_parciales_workstation", JSON.stringify(pesosParciales));
 
       if (!origenRemoto && db) {
         db.collection("workstation").doc("datos_academicos").set({
@@ -1522,7 +1531,7 @@
           badge.innerText = "NUBE: SINCRONIZADA 🟢";
         } else {
           badge.className = "cloud-status-badge cloud-offline";
-          badge.innerText = "NUBE: DESCONECTADA ⚪";
+          badge.innerText = "NUBE: LOCAL ⚪";
         }
       }
       if (msgStatus && mensaje) {
@@ -1543,7 +1552,7 @@
       }
 
       if (!config || !config.apiKey || !config.projectId) {
-        actualizarEstadoNube(false, "SIN CONFIGURACIÓN. Pega tu firebaseConfig abajo.");
+        actualizarEstadoNube(false, "Modo local activo (sin conexión en la nube configurada).");
         return;
       }
 
@@ -1666,6 +1675,7 @@
     }
 
     function abrirEditorManualDirecto(idPreseleccionado = null) {
+      if (!tareas.length) return alert("Aún no tienes actividades registradas para editar.");
       const modal = document.getElementById("modal-editor-tarea");
       const selectTarea = document.getElementById("edit-select-tarea");
       const selectMat = document.getElementById("edit-materia");
@@ -1860,7 +1870,7 @@
     }
 
     function ejecutarReinicioSemestre() {
-      if (confirm("ADVERTENCIA DE SEGURIDAD // BATIZ CONTROL:\n¿Confirmar reinicio de semestre? Todas las tareas y notas de los 3 parciales serán eliminadas.")) {
+      if (confirm("ADVERTENCIA DE SEGURIDAD:\n¿Confirmar reinicio de semestre? Todas las tareas y notas de los 3 parciales serán eliminadas.")) {
         tareas = [];
         for (let k in calificacionesSemestre) {
           calificacionesSemestre[k] = { p1: null, p2: null, extraP3: 0 };
@@ -1958,7 +1968,7 @@
 
       const evento = {
         summary: `[${t.materia}] ${t.actividad}`,
-        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica C.A.B. (CECyT 9 Bátiz - 1IM9).\nPonderación: ${t.puntos}/${t.base || 100} pts.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}`,
+        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica Amadeus System.\nPonderación: ${t.puntos}/${t.base || 100} pts.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}`,
         start: { dateTime: fechaInicio.toISOString() },
         end: { dateTime: fechaFin.toISOString() },
         reminders: {
@@ -2591,7 +2601,7 @@
             </div>
           </div>
         `;
-      }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS QUE COINCIDAN CON EL FILTRO</p>";
+      }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS REGISTRADAS</p>";
 
       const materiasEl = document.getElementById("lista-materias");
       const materiasConTareas = MATERIAS_OFICIALES.filter(mat =>
