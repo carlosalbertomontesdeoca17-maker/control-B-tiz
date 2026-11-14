@@ -998,7 +998,7 @@
     }
 
     .chat-history {
-      max-height: 260px;
+      max-height: 290px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -1012,7 +1012,7 @@
       font-size: 0.85rem;
       line-height: 1.45;
       border: 1px solid #1e293b;
-      max-width: 90%;
+      max-width: 92%;
     }
 
     .chat-msg.bot {
@@ -1042,7 +1042,7 @@
       padding: 10px 12px;
       font-size: 0.85rem;
       resize: none;
-      height: 48px;
+      height: 52px;
       outline: none;
     }
 
@@ -1234,27 +1234,27 @@
       <div class="chat-box">
         <div class="chat-header">
           <span class="terminal-tag">SYS // CORE</span>
-          <span style="font-size: 0.85rem; color: #ffffff; font-weight:600;">PROCESADOR Y EDICIÓN REACTIVA</span>
+          <span style="font-size: 0.85rem; color: #ffffff; font-weight:600;">PROCESADOR Y CONTROL INTEGRAL</span>
         </div>
 
         <div id="chat-history" class="chat-history">
           <div class="chat-msg bot">
             J.A.R.V.I.S EN LÍNEA.<br>
-            • <strong>Porcentual:</strong> <em>"problemario de historia para el 25 de noviembre https://classroom.google.com/... vale 20/30"</em>.<br>
-            • <strong>Extra porcentual:</strong> <em>"actividad extra museo de filosofía vale 15 puntos para el 27 de noviembre"</em>.<br>
-            • <strong>Continuo sin fecha:</strong> <em>"cuaderno de álgebra vale 30 puntos sin fecha"</em>.<br>
-            • <strong>Calificar:</strong> <em>"en museo de filosofía saqué 15 de 15"</em>.
+            • <strong>REGISTRAR:</strong> <em>"problemario de álgebra para el 25 de noviembre a las 21:00 vale 20/30"</em><br>
+            • <strong>CLASIFICACIÓN Y TIEMPO:</strong> palabras clave <em>extra</em>, <em>ordinal</em>, <em>continuo sin fecha</em>, <em>link</em>, <em>notas:</em><br>
+            • <strong>MODIFICAR:</strong> <em>"edita problemario: fecha 28 de noviembre, hora 18:00, valor 25/30, tipo extra, continuo sin fecha"</em><br>
+            • <strong>GESTIONAR:</strong> <em>completa</em>, <em>reactiva</em>, <em>elimina</em>, <em>renombra</em>, <em>saqué</em>, <em>pesos</em>, <em>resumen</em>, <em>comandos</em>
           </div>
         </div>
 
         <div class="chat-input-row">
-          <textarea id="chat-input" placeholder="Ingresa entrega (porcentual, ordinal o extra), calificación o comando a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
+          <textarea id="chat-input" placeholder="Escribe comando, entrega, edición o consulta a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
           <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
         </div>
       </div>
 
       <div class="section-header">
-        <h2>REGISTRO MANUAL DIRECTO (3ER PARCIAL)</h2>
+        <h2>REGISTRO MANUAL DIRECTO</h2>
       </div>
 
       <form id="form-tarea" onsubmit="agregarTareaManual(event)">
@@ -1271,7 +1271,7 @@
         <label>ACTIVIDAD:
           <input type="text" id="input-actividad" placeholder="Ej. Visita Museo / Cuaderno / Problemario" required>
         </label>
-        <label>ENLACE DE CLASSROOM (OPCIONAL):
+        <label>ENLACE DE CLASSROOM:
           <input type="url" id="input-url-classroom" placeholder="https://classroom.google.com/c/.../a/.../details">
         </label>
 
@@ -1293,11 +1293,11 @@
             <input type="number" id="input-puntos" value="20" min="1" max="100">
           </label>
           <label>BASE DEL PROFESOR:
-            <input type="number" id="input-base" value="100" min="1" max="100" title="Si el profesor califica sobre 30, pon 30. Si es estándar, pon 100.">
+            <input type="number" id="input-base" value="100" min="1" max="100">
           </label>
         </div>
         <label>NOTAS:
-          <textarea id="input-detalles" placeholder="Ingresa especificaciones, rúbricas o apuntes importantes para esta entrega..." style="height:65px; resize:vertical;"></textarea>
+          <textarea id="input-detalles" placeholder="Especificaciones, rúbricas o apuntes de la actividad..." style="height:65px; resize:vertical;"></textarea>
         </label>
         <button type="submit" class="btn-32 btn-32-primary" style="margin-top:6px;">GUARDAR REGISTRO</button>
       </form>
@@ -1343,7 +1343,7 @@
       <div class="action-box">
         <h3>RESTABLECER SINCRONIZACIÓN DE CALENDAR</h3>
         <p>Si eliminaste eventos en Google Calendar para reprogramarlos con la nueva hora:</p>
-        <button type="button" class="btn-32 btn-32-primary" onclick="resetearSincronizacionCalendar()">REINICIAR ESTADO CALENDAR (MARCAR COMO PENDIENTES)</button>
+        <button type="button" class="btn-32 btn-32-primary" onclick="resetearSincronizacionCalendar()">REINICIAR ESTADO CALENDAR</button>
       </div>
 
       <div class="action-box">
@@ -1358,7 +1358,7 @@
 
       <div class="action-box">
         <h3>PURGA DE MEMORIA // NUEVO SEMESTRE</h3>
-        <p>Reiniciar semestre actual (borra todas las notas y tareas acumuladas de los 3 parciales):</p>
+        <p>Reiniciar semestre actual:</p>
         <button type="button" class="btn-32 btn-32-danger" onclick="ejecutarReinicioSemestre()">REINICIO TOTAL DE SEMESTRE</button>
       </div>
     </section>
@@ -1384,8 +1384,8 @@
         <input type="text" id="edit-actividad" required>
       </label>
 
-      <label>ENLACE DE CLASSROOM (OPCIONAL):
-        <input type="url" id="edit-url-classroom" placeholder="Pega aquí la URL de la tarea (https://classroom.google.com/...)">
+      <label>ENLACE DE CLASSROOM:
+        <input type="url" id="edit-url-classroom" placeholder="https://classroom.google.com/...">
       </label>
 
       <label>CLASIFICACIÓN:
@@ -1460,19 +1460,23 @@
       "Orientación Juvenil y Profesional I": "#2dd4bf"
     };
 
-    function normalizarMateria(nombre) {
-      if (!nombre) return "Álgebra";
-      const m = nombre.toLowerCase().trim();
+    function detectarMateria(texto) {
+      if (!texto) return null;
+      const m = texto.toLowerCase().trim();
       if (m.includes("álgebra") || m.includes("algebra")) return "Álgebra";
-      if (m.includes("filosofía") || m.includes("filosofia") || m.includes("filo")) return "Filosofía I";
-      if (m.includes("computación") || m.includes("computacion") || m.includes("compu")) return "Computación Básica I";
+      if (m.includes("filosofía") || m.includes("filosofia") || /\bfilo\b/.test(m)) return "Filosofía I";
+      if (m.includes("computación") || m.includes("computacion") || /\bcompu\b/.test(m)) return "Computación Básica I";
       if (m.includes("inglés") || m.includes("ingles") || m.includes("english")) return "Inglés I";
       if (m.includes("expresión") || m.includes("expresion") || m.includes("oral y escrita") || m.includes("redacción") || m.includes("redaccion")) return "Expresión Oral y Escrita I";
-      if (m.includes("dhp") || m.includes("habilidades del pensamiento") || m.includes("pensamiento")) return "DHP";
+      if (/\bdhp\b/.test(m) || m.includes("habilidades del pensamiento") || m.includes("pensamiento")) return "DHP";
       if (m.includes("historia")) return "Historia de México Contemporáneo I";
-      if (m.includes("desarrollo personal") || m.includes("personal") || m.includes("dp")) return "Desarrollo Personal";
-      if (m.includes("orientación") || m.includes("orientacion") || m.includes("juvenil") || m.includes("profesional") || m.includes("oyp") || m.includes("ojp")) return "Orientación Juvenil y Profesional I";
-      return nombre;
+      if (m.includes("desarrollo personal") || /\bdp\b/.test(m)) return "Desarrollo Personal";
+      if (m.includes("orientación") || m.includes("orientacion") || m.includes("juvenil") || m.includes("profesional") || /\boyp\b/.test(m) || /\bojp\b/.test(m)) return "Orientación Juvenil y Profesional I";
+      return null;
+    }
+
+    function normalizarMateria(nombre) {
+      return detectarMateria(nombre) || nombre || "Álgebra";
     }
 
     function getColorMateria(nombre) {
@@ -1593,6 +1597,7 @@
     });
 
     let tareaEnEspera = null;
+    let esperandoMateriaCreacion = false;
     let esperandoConfirmacionReset = false;
     let tokenClient = null;
     let accessToken = localStorage.getItem("gcal_access_token") || null;
@@ -1646,7 +1651,7 @@
       }
 
       if (!config || !config.apiKey || !config.projectId) {
-        actualizarEstadoNube(false, "Modo local activo (sin conexión en la nube configurada).");
+        actualizarEstadoNube(false, "Modo local activo.");
         return;
       }
 
@@ -1676,7 +1681,7 @@
           }
         }, err => {
           console.error("Fallo de conexión con Firestore:", err);
-          actualizarEstadoNube(false, "ERROR: Revisa las reglas de Firestore (Modo de prueba).");
+          actualizarEstadoNube(false, "ERROR: Revisa las reglas de Firestore.");
         });
 
       } catch (err) {
@@ -1706,12 +1711,12 @@
         alert("CONFIGURACIÓN DE FIREBASE REGISTRADA. INICIANDO CONEXIÓN...");
         inicializarFirebase();
       } catch (e) {
-        alert("Error de formato en el texto pegado: " + e.message + "\nAsegúrate de copiar el objeto completo { ... }.");
+        alert("Error de formato en el texto pegado: " + e.message);
       }
     }
 
     function desconectarFirebase() {
-      if (confirm("¿Desconectar sincronización en la nube? El sistema volverá a funcionar exclusivamente en modo local.")) {
+      if (confirm("¿Desconectar sincronización en la nube?")) {
         if (unsubscribeFirestore) unsubscribeFirestore();
         localStorage.removeItem("firebase_config_custom");
         db = null;
@@ -1781,7 +1786,7 @@
       tareas = tareas.map(t => ({ ...t, sincronizada: false }));
       guardarLocal();
       render();
-      alert("TODAS LAS TAREAS SE HAN MARCADO COMO NO AGENDADAS.\nAhora puedes pulsar 'TODO A CALENDAR' para sincronizarlas con sus horas correspondientes.");
+      alert("TODAS LAS TAREAS SE HAN MARCADO COMO NO AGENDADAS.");
     }
 
     function abrirEditorManualDirecto(idPreseleccionado = null) {
@@ -1791,7 +1796,7 @@
       const selectMat = document.getElementById("edit-materia");
 
       selectMat.innerHTML = MATERIAS_OFICIALES.map(m => `<option value="${m}">${m.toUpperCase()}</option>`).join("");
-      selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}${t.tipo === 'extra' ? ' [EXTRA]' : ''}${t.sinFecha ? ' (CONTINUO SIN FECHA)' : ''}</option>`).join("");
+      selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}${t.tipo === 'extra' ? ' [EXTRA]' : ''}${t.sinFecha ? ' - CONTINUO SIN FECHA' : ''}</option>`).join("");
 
       if (idPreseleccionado) selectTarea.value = idPreseleccionado;
 
@@ -1832,7 +1837,7 @@
       const sinFecha = document.getElementById("edit-sin-fecha").checked;
       const fechaVal = document.getElementById("edit-fecha").value;
       if (!sinFecha && !fechaVal) {
-        return alert("Selecciona una fecha límite o marca la casilla CONTINUO SIN FECHA.");
+        return alert("Selecciona una fecha límite o marca CONTINUO SIN FECHA.");
       }
 
       const tipo = document.getElementById("edit-tipo").value;
@@ -2102,7 +2107,7 @@
 
       const evento = {
         summary: `[${t.materia}]${t.tipo === 'extra' ? ' [EXTRA]' : ''} ${t.actividad}`,
-        description: t.tipo === 'ordinal' ? `Actividad ordinal formativa.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}` : `Entrega académica Amadeus System (${t.tipo === 'extra' ? 'EXTRA' : 'PORCENTUAL'}).\nPonderación: ${t.puntos}/${t.base || 100} pts.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nDetalles: ${t.detalles || 'Sin notas'}`,
+        description: t.tipo === 'ordinal' ? `Actividad ordinal.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nNotas: ${t.detalles || 'Sin notas'}` : `Entrega académica Amadeus System.\nTipo: ${t.tipo.toUpperCase()}\nValor: ${t.puntos}/${t.base || 100} pts.\nHora: ${horaEvento}\nClassroom: ${t.urlClassroom || 'N/A'}\nNotas: ${t.detalles || 'Sin notas'}`,
         start: { dateTime: fechaInicio.toISOString() },
         end: { dateTime: fechaFin.toISOString() },
         reminders: {
@@ -2247,7 +2252,7 @@
       const sinFecha = document.getElementById("input-sin-fecha").checked;
       const fechaVal = document.getElementById("input-fecha").value;
       if (!sinFecha && !fechaVal) {
-        return alert("Selecciona una fecha límite o marca la opción CONTINUO SIN FECHA.");
+        return alert("Selecciona una fecha límite o marca CONTINUO SIN FECHA.");
       }
 
       const tipo = document.getElementById("input-tipo").value;
@@ -2287,28 +2292,71 @@
       cambiarVista(sinFecha ? "materias" : "cronograma");
     }
 
-    function extraerFecha(t) {
+    /* =========================================================================
+       MOTOR INTELIGENTE J.A.R.V.I.S // PARIDAD TOTAL CON MODIFICADOR MANUAL
+       ========================================================================= */
+
+    function extraerFechaInteligente(t) {
+      const lower = t.toLowerCase();
+
+      if (/\bpasado\s+ma[ñn]ana\b/.test(lower)) {
+        const d = new Date();
+        d.setDate(d.getDate() + 2);
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+      if (/\bma[ñn]ana\b/.test(lower)) {
+        const d = new Date();
+        d.setDate(d.getDate() + 1);
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+      if (/\bhoy\b/.test(lower)) {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+
       const meses = {
-        "enero": "01", "febrero": "02", "marzo": "03", "abril": "04",
-        "mayo": "05", "junio": "06", "julio": "07", "agosto": "08",
-        "septiembre": "09", "octubre": "10", "noviembre": "11", "diciembre": "12"
+        "enero": "01", "ene": "01",
+        "febrero": "02", "feb": "02",
+        "marzo": "03", "mar": "03",
+        "abril": "04", "abr": "04",
+        "mayo": "05", "may": "05",
+        "junio": "06", "jun": "06",
+        "julio": "07", "jul": "07",
+        "agosto": "08", "ago": "08",
+        "septiembre": "09", "sep": "09", "sept": "09",
+        "octubre": "10", "oct": "10",
+        "noviembre": "11", "nov": "11",
+        "diciembre": "12", "dic": "12"
       };
-      const fechaMatch = t.match(/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/);
+
+      const fechaMatch = lower.match(/(\d{1,2})\s+(?:de\s+)?(enero|ene|febrero|feb|marzo|mar|abril|abr|mayo|may|junio|jun|julio|jul|agosto|ago|septiembre|sept|sep|octubre|oct|noviembre|nov|diciembre|dic)\b/);
       if (fechaMatch) {
-        let dia = fechaMatch[1].padStart(2, '0');
-        let mes = meses[fechaMatch[2]];
+        const dia = fechaMatch[1].padStart(2, '0');
+        const mes = meses[fechaMatch[2]];
         return `2026-${mes}-${dia}`;
       }
-      const isoMatch = t.match(/\b(202\d-\d{2}-\d{2})\b/);
+
+      const isoMatch = lower.match(/\b(202\d-\d{2}-\d{2})\b/);
       if (isoMatch) return isoMatch[1];
+
+      const slashMatch = lower.match(/\b(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](202\d|\d{2}))?\b/);
+      if (slashMatch) {
+        const dNum = parseInt(slashMatch[1], 10);
+        const mNum = parseInt(slashMatch[2], 10);
+        if (dNum >= 1 && dNum <= 31 && mNum >= 1 && mNum <= 12 && !lower.includes("vale " + slashMatch[0])) {
+          const anio = slashMatch[3] ? (slashMatch[3].length === 2 ? "20" + slashMatch[3] : slashMatch[3]) : "2026";
+          return `${anio}-${String(mNum).padStart(2, '0')}-${String(dNum).padStart(2, '0')}`;
+        }
+      }
+
       return null;
     }
 
-    function extraerHora(texto) {
-      if (!texto) return "00:00:00";
+    function extraerHoraInteligente(texto) {
+      if (!texto) return null;
       const t = texto.toLowerCase();
 
-      const matchALas = t.match(/a las\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm|hrs)?/i);
+      const matchALas = t.match(/(?:a las|hora)\s*:?\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm|hrs)?\b/i);
       if (matchALas) {
         let h = parseInt(matchALas[1], 10);
         let m = matchALas[2] ? parseInt(matchALas[2], 10) : 0;
@@ -2332,7 +2380,122 @@
         }
       }
 
-      return "00:00:00";
+      return null;
+    }
+
+    function extraerValorYBase(texto) {
+      const lower = texto.toLowerCase();
+
+      const matchExplicitBoth = lower.match(/(?:valor|vale|puntos)\s*:?\s*(\d+(?:\.\d+)?)\s*(?:\/|sobre|de|base)\s*(\d+(?:\.\d+)?)/);
+      if (matchExplicitBoth) {
+        return { puntos: parseFloat(matchExplicitBoth[1]), base: parseFloat(matchExplicitBoth[2]) };
+      }
+
+      const matchBaseSeparada = lower.match(/(?:valor|vale)\s*:?\s*(\d+(?:\.\d+)?).*?base\s*(?:del profesor)?\s*:?\s*(\d+(?:\.\d+)?)/);
+      if (matchBaseSeparada) {
+        return { puntos: parseFloat(matchBaseSeparada[1]), base: parseFloat(matchBaseSeparada[2]) };
+      }
+
+      const matchSoloBase = lower.match(/\bbase\s*(?:del profesor)?\s*:?\s*(\d+(?:\.\d+)?)/);
+      const matchSoloValor = lower.match(/(?:valor|vale)\s*:?\s*(\d+(?:\.\d+)?)/) || lower.match(/(\d+(?:\.\d+)?)\s*(?:puntos|pts|porciento|%)\b/);
+
+      if (matchSoloBase || matchSoloValor) {
+        return {
+          puntos: matchSoloValor ? parseFloat(matchSoloValor[1]) : null,
+          base: matchSoloBase ? parseFloat(matchSoloBase[1]) : null
+        };
+      }
+
+      return null;
+    }
+
+    function encontrarTareaPorTexto(texto, materiaFiltro = null) {
+      if (!tareas.length) return null;
+      const lower = texto.toLowerCase();
+      const stopWords = new Set([
+        "para", "del", "las", "los", "con", "sin", "por", "que", "una", "uno",
+        "cambia", "cambiar", "edita", "editar", "modifica", "modificar", "actualiza", "actualizar",
+        "mueve", "mover", "pasa", "pasar", "pon", "poner", "renombra", "renombrar",
+        "elimina", "eliminar", "borra", "borrar", "quita", "quitar",
+        "completa", "completar", "terminé", "termine", "reactiva", "reactivar",
+        "notas", "detalles", "link", "enlace", "classroom", "fecha", "hora",
+        "valor", "base", "profesor", "tipo", "extra", "ordinal", "porcentual",
+        "continuo", "saqué", "saque", "obtuve", "califica", "materia"
+      ]);
+
+      const palabrasQuery = lower
+        .replace(/https?:\/\/[^\s]+/gi, "")
+        .replace(/[^a-záéíóúñ0-9\s]/gi, " ")
+        .split(/\s+/)
+        .filter(w => w.length > 2 && !stopWords.has(w));
+
+      let mejorTarea = null;
+      let mejorScore = 0;
+
+      for (const t of tareas) {
+        let score = 0;
+        const actLower = t.actividad.toLowerCase();
+        const matLower = t.materia.toLowerCase();
+
+        if (materiaFiltro && matLower === materiaFiltro.toLowerCase()) {
+          score += 4;
+        } else if (lower.includes(matLower)) {
+          score += 3;
+        }
+
+        if (actLower.length >= 4 && lower.includes(actLower)) {
+          score += 12;
+        }
+
+        const palabrasAct = actLower
+          .replace(/[^a-záéíóúñ0-9\s]/gi, " ")
+          .split(/\s+/)
+          .filter(w => w.length > 2);
+
+        for (const wq of palabrasQuery) {
+          for (const wa of palabrasAct) {
+            if (wa === wq) score += 4;
+            else if (wa.length >= 5 && wq.length >= 5 && (wa.includes(wq) || wq.includes(wa))) score += 2.5;
+          }
+        }
+
+        if (score > mejorScore) {
+          mejorScore = score;
+          mejorTarea = t;
+        }
+      }
+
+      return mejorScore >= 3.5 ? mejorTarea : null;
+    }
+
+    function limpiarNombreActividad(textoBruto) {
+      let limpio = textoBruto
+        .split(/\b(?:notas?|detalles?)\s*:/i)[0]
+        .replace(/https?:\/\/[^\s]+/gi, "")
+        .replace(/\b(?:para\s+el|entrega\s+el|el\s+d[ií]a)\s+\d{1,2}\s+(?:de\s+)?[a-záéíóúñ]+/gi, "")
+        .replace(/\b\d{1,2}\s+de\s+(?:enero|ene|febrero|feb|marzo|mar|abril|abr|mayo|may|junio|jun|julio|jul|agosto|ago|septiembre|sept|sep|octubre|oct|noviembre|nov|diciembre|dic)\b/gi, "")
+        .replace(/\b202\d-\d{2}-\d{2}\b/g, "")
+        .replace(/\b(?:para\s+)?(?:pasado\s+ma[ñn]ana|ma[ñn]ana|hoy)\b/gi, "")
+        .replace(/\b(?:a\s+las|hora)\s*:?\s*\d{1,2}(?::\d{2})?\s*(?:am|pm|hrs)?\b/gi, "")
+        .replace(/\b\d{1,2}:\d{2}\s*(?:am|pm|hrs)?\b/gi, "")
+        .replace(/\b(?:valor|vale)\s*:?\s*\d+(?:\.\d+)?(?:\s*(?:\/|sobre|de|base)\s*\d+(?:\.\d+)?)?/gi, "")
+        .replace(/\bbase\s*(?:del\s+profesor)?\s*:?\s*\d+(?:\.\d+)?/gi, "")
+        .replace(/\b\d+(?:\.\d+)?\s*(?:puntos|pts|porciento|%)\b/gi, "")
+        .replace(/\bcontinuo\s+sin\s+fecha\b/gi, "")
+        .replace(/\bsin\s+fecha\b/gi, "")
+        .replace(/\bno\s+fecha\b/gi, "")
+        .replace(/\bno\s+tiene\s+fecha\b/gi, "")
+        .replace(/\b(?:actividad|tarea|tipo|clasificaci[oó]n)\s+(?:extra|ordinal|porcentual)\b/gi, "")
+        .replace(/\b(?:extra|extras|ordinal|ordinales|porcentual|porcentuales)\b/gi, "")
+        .replace(/\b(?:en|de)\s+(?:álgebra|algebra|filosofía|filosofia|filo|computación|computacion|compu|inglés|ingles|expresión|expresion|oral y escrita|dhp|historia de méxico contemporáneo i|historia de mexico|historia|desarrollo personal|orientación juvenil y profesional i|orientación|orientacion)\b/gi, "")
+        .replace(/\b(?:álgebra|algebra|filosofía|filosofia|computación|computacion|inglés|ingles|expresión oral y escrita i|dhp|historia de méxico contemporáneo i|desarrollo personal|orientación juvenil y profesional i)\b/gi, "")
+        .replace(/\b(?:registra|agrega|crea|nueva\s+tarea|nueva\s+actividad|entregar|entrega|link|enlace)\b/gi, "")
+        .replace(/^[\s,.:;-]+|[\s,.:;-]+$/g, "")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+
+      if (!limpio || limpio.length < 2) return "";
+      return limpio.charAt(0).toUpperCase() + limpio.slice(1);
     }
 
     function agregarMensajeChat(remitente, texto) {
@@ -2360,29 +2523,62 @@
       input.value = "";
       const lower = texto.toLowerCase();
 
-      if (tareaEnEspera) {
-        const esSinFechaResp = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha") || lower.includes("continuo");
-        const fechaResp = extraerFecha(lower);
-        const horaResp = extraerHora(lower);
+      // 0. COMANDO CANCELAR FLUJO EN ESPERA
+      if (lower === "cancelar" || lower === "salir") {
+        tareaEnEspera = null;
+        esperandoMateriaCreacion = false;
+        esperandoConfirmacionReset = false;
+        agregarMensajeChat("bot", "OPERACIÓN CANCELADA.");
+        return;
+      }
 
-        if (esSinFechaResp || fechaResp) {
-          tareaEnEspera.sinFecha = esSinFechaResp;
-          tareaEnEspera.fecha = esSinFechaResp ? "" : fechaResp;
-          tareaEnEspera.hora = esSinFechaResp ? "" : horaResp;
-          tareas.push(tareaEnEspera);
-          guardarLocal();
-          const guardada = tareaEnEspera;
-          tareaEnEspera = null;
-          render();
-          agregarMensajeChat("bot", `REGISTRO COMPLETADO [${guardada.tipo.toUpperCase()}]: <span style="color:${getColorMateria(guardada.materia)}; font-weight:700;">${guardada.materia.toUpperCase()}</span>: "${guardada.actividad}" (${esSinFechaResp ? 'CONTINUO SIN FECHA' : formatearFechaLarga(guardada.fecha)}).`);
-          return;
+      // 1. FLUJO PENDIENTE DE MATERIA O FECHA AL CREAR TAREA
+      if (tareaEnEspera) {
+        if (esperandoMateriaCreacion) {
+          const matDetectada = detectarMateria(lower);
+          if (matDetectada) {
+            tareaEnEspera.materia = matDetectada;
+            esperandoMateriaCreacion = false;
+            if (!tareaEnEspera.sinFecha && !tareaEnEspera.fecha) {
+              agregarMensajeChat("bot", `MATERIA ASIGNADA: <span style="color:${getColorMateria(matDetectada)}; font-weight:700;">${matDetectada.toUpperCase()}</span>. INDICA FECHA DE ENTREGA O ESCRIBE <strong>CONTINUO SIN FECHA</strong>.`);
+              return;
+            }
+            tareas.push(tareaEnEspera);
+            guardarLocal();
+            const g = tareaEnEspera;
+            tareaEnEspera = null;
+            render();
+            agregarMensajeChat("bot", `REGISTRO COMPLETADO [${g.tipo.toUpperCase()}]: <span style="color:${getColorMateria(g.materia)}; font-weight:700;">${g.materia.toUpperCase()}</span>: "${g.actividad}".`);
+            return;
+          } else {
+            esperandoMateriaCreacion = false;
+            tareaEnEspera = null;
+          }
         } else {
-          tareaEnEspera = null;
+          const esSinFechaResp = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha") || lower.includes("continuo");
+          const fechaResp = extraerFechaInteligente(lower);
+          const horaResp = extraerHoraInteligente(lower);
+
+          if (esSinFechaResp || fechaResp) {
+            tareaEnEspera.sinFecha = esSinFechaResp;
+            tareaEnEspera.fecha = esSinFechaResp ? "" : fechaResp;
+            tareaEnEspera.hora = esSinFechaResp ? "" : (horaResp || tareaEnEspera.hora || "00:00:00");
+            tareas.push(tareaEnEspera);
+            guardarLocal();
+            const guardada = tareaEnEspera;
+            tareaEnEspera = null;
+            render();
+            agregarMensajeChat("bot", `REGISTRO COMPLETADO [${guardada.tipo.toUpperCase()}]: <span style="color:${getColorMateria(guardada.materia)}; font-weight:700;">${guardada.materia.toUpperCase()}</span>: "${guardada.actividad}" // ${esSinFechaResp ? 'CONTINUO SIN FECHA' : formatearFechaLarga(guardada.fecha) + ' - ' + guardada.hora + ' HRS'}.`);
+            return;
+          } else {
+            tareaEnEspera = null;
+          }
         }
       }
 
+      // 2. CONFIRMACIÓN DE REINICIO DE SEMESTRE
       if (esperandoConfirmacionReset) {
-        if (lower.includes("confirmar") || lower.includes("si") || lower.includes("adelante")) {
+        if (lower.includes("confirmar") || lower === "si" || lower === "sí" || lower.includes("adelante")) {
           tareas = [];
           for (let k in calificacionesSemestre) {
             calificacionesSemestre[k] = { p1: null, p2: null, extraP3: 0 };
@@ -2390,15 +2586,29 @@
           guardarLocal();
           render();
           esperandoConfirmacionReset = false;
-          agregarMensajeChat("bot", "REINICIO TOTAL DE SEMESTRE EJECUTADO. Registros listos para el siguiente término.");
+          agregarMensajeChat("bot", "REINICIO TOTAL DE SEMESTRE EJECUTADO. BASE DE DATOS EN CEROS.");
           return;
         } else {
           esperandoConfirmacionReset = false;
-          agregarMensajeChat("bot", "Reinicio cancelado.");
+          agregarMensajeChat("bot", "REINICIO CANCELADO.");
           return;
         }
       }
 
+      // 3. GUÍA DE COMANDOS / PALABRAS CLAVE
+      if (lower === "comandos" || lower === "ayuda" || lower.includes("lista de comandos")) {
+        agregarMensajeChat("bot", `
+          <strong>PALABRAS CLAVE DE J.A.R.V.I.S:</strong><br>
+          • <strong>CREAR:</strong> <em>"[actividad] de [materia] para el [fecha] a las [hora] vale [valor/base] [extra / ordinal] [continuo sin fecha] [link] notas: [texto]"</em><br>
+          • <strong>MODIFICAR TODO:</strong> <em>"edita [actividad]: materia [x], renombra a [y], tipo [porcentual/ordinal/extra], fecha [z], hora [hh:mm], continuo sin fecha, valor [a/b], link [url], notas: [texto]"</em><br>
+          • <strong>ESTADO TAREA:</strong> <em>"completa [actividad]"</em>, <em>"reactiva [actividad]"</em>, <em>"elimina [actividad]"</em><br>
+          • <strong>CALIFICACIONES:</strong> <em>"en [actividad] saqué [nota]"</em>, <em>"en p1 de [materia] saqué [nota]"</em>, <em>"pesos de [materia] 30 30 40"</em>, <em>"bono [n] puntos en [materia]"</em><br>
+          • <strong>CONSULTA Y CALENDAR:</strong> <em>"resumen"</em>, <em>"estado de [materia]"</em>, <em>"sincronizar calendar"</em>, <em>"desincronizar calendar"</em>
+        `);
+        return;
+      }
+
+      // 4. COMANDOS GLOBALES DE SISTEMA Y CALENDAR
       if (lower.includes("reinicio de semestre") || lower.includes("reiniciar semestre") || lower.includes("nuevo semestre")) {
         esperandoConfirmacionReset = true;
         agregarMensajeChat("bot", "ADVERTENCIA: ¿Confirmar purga completa del semestre? Escribe <strong>CONFIRMAR</strong> para reiniciar todas las materias a ceros.");
@@ -2407,20 +2617,100 @@
 
       if (lower.includes("desincronizar") || lower.includes("no agendadas") || lower.includes("reset calendar") || lower.includes("reiniciar calendar")) {
         resetearSincronizacionCalendar();
-        agregarMensajeChat("bot", "ESTADO REINICIADO: Todas las tareas se marcaron como pendientes. Puedes volver a pulsar <strong>TODO A CALENDAR</strong>.");
+        agregarMensajeChat("bot", "ESTADO REINICIADO: Todas las entregas se marcaron como pendientes por agendar.");
         return;
       }
 
-      if (lower.includes("agendalas") || lower.includes("sincronizar") || lower.includes("sincroniza")) {
-        agregarMensajeChat("bot", "SINCRONIZANDO ACTIVIDADES CON FECHA A GOOGLE CALENDAR...");
+      if (lower.includes("agendalas") || lower.includes("sincronizar") || lower.includes("sincroniza") || lower.includes("todo a calendar")) {
+        agregarMensajeChat("bot", "SINCRONIZANDO ENTREGAS CON FECHA A GOOGLE CALENDAR...");
         await sincronizarTodasLasTareas();
         agregarMensajeChat("bot", "SINCRONIZACIÓN CONCLUIDA.");
         return;
       }
 
-      const esComandoBonoDirecto = (lower.includes("bono") || lower.includes("colchon") || /^(?:agrega|suma|pon)?\s*\d+(?:\.\d+)?\s*(?:punto|pts|puntos)\s*extra/i.test(lower));
+      // 5. CONSULTAS DE ESTADO / RESUMEN ACADÉMICO
+      if (/^(?:resumen|pendientes|estado|cu[aá]nto llevo|promedio|ver tareas|tareas)\b/.test(lower)) {
+        const matConsulta = detectarMateria(lower);
+        if (matConsulta) {
+          const p3Info = calcularP3Materia(matConsulta);
+          const califs = calificacionesSemestre[matConsulta] || { p1: null, p2: null };
+          const activasMat = tareas.filter(t => t.materia === matConsulta && !t.completada);
+          const listaAct = activasMat.length
+            ? activasMat.map(t => `• ${t.actividad} [${t.sinFecha ? 'CONTINUO SIN FECHA' : formatearFechaLarga(t.fecha)}]`).join("<br>")
+            : "• Sin entregas pendientes.";
+          agregarMensajeChat("bot", `
+            <span style="color:${getColorMateria(matConsulta)}; font-weight:700;">${matConsulta.toUpperCase()}</span><br>
+            P1: <strong>${califs.p1 ?? '--'}</strong> | P2: <strong>${califs.p2 ?? '--'}</strong> | P3 ACUMULADO: <strong>${formatearPorcentaje(p3Info.puntosAcumulados)}</strong>${p3Info.colchon > 0 ? ' + ' + formatearPorcentaje(p3Info.colchon) + ' COLCHÓN' : ''}<br>
+            <strong>ACTIVAS:</strong><br>${listaAct}
+          `);
+          return;
+        } else {
+          const activas = tareas.filter(t => !t.completada);
+          const conFecha = activas.filter(t => !t.sinFecha && t.fecha).length;
+          const sinFechaCount = activas.filter(t => t.sinFecha || !t.fecha).length;
+          const promHud = document.getElementById("hud-promedio-general")?.innerText || "0.00";
+          agregarMensajeChat("bot", `
+            <strong>ESTADO GENERAL AMADEUS SYSTEM:</strong><br>
+            • Entregas activas con fecha: <strong>${conFecha}</strong><br>
+            • Actividades continuo sin fecha: <strong>${sinFechaCount}</strong><br>
+            • Promedio general SAES actual: <strong>${promHud}</strong>
+          `);
+          return;
+        }
+      }
+
+      // 6. ELIMINAR TAREA
+      if (/^(?:elimina|eliminar|borra|borrar|quita|quitar)\b/.test(lower)) {
+        const matRef = detectarMateria(lower);
+        const tareaEliminar = encontrarTareaPorTexto(texto, matRef);
+        if (!tareaEliminar) {
+          agregarMensajeChat("bot", "NO SE ENCONTRÓ LA ACTIVIDAD A ELIMINAR. INDICA EL NOMBRE EXACTO O SU ASIGNATURA.");
+          return;
+        }
+        tareas = tareas.filter(t => t.id !== tareaEliminar.id);
+        guardarLocal();
+        render();
+        agregarMensajeChat("bot", `ACTIVIDAD ELIMINADA: <span style="color:${getColorMateria(tareaEliminar.materia)}; font-weight:700;">${tareaEliminar.materia.toUpperCase()}</span>: "${tareaEliminar.actividad}".`);
+        return;
+      }
+
+      // 7. COMPLETAR O REACTIVAR TAREA
+      const esCompletar = /^(?:completa|completar|termin[eé]|finalic[eé]|marca\s+como\s+(?:hecha|completada|entregada)|entregu[eé])\b/.test(lower);
+      const esReactivar = /^(?:reactiva|reactivar|desmarca|desmarcar|reabre|reabrir)\b/.test(lower);
+      if (esCompletar || esReactivar) {
+        const matRef = detectarMateria(lower);
+        const tareaEstado = encontrarTareaPorTexto(texto, matRef);
+        if (!tareaEstado) {
+          agregarMensajeChat("bot", "NO SE IDENTIFICÓ LA ACTIVIDAD. INDICA EL NOMBRE DE LA ENTREGA.");
+          return;
+        }
+        tareaEstado.completada = esCompletar;
+        guardarLocal();
+        render();
+        agregarMensajeChat("bot", `ESTADO ACTUALIZADO [${esCompletar ? 'COMPLETADA' : 'ACTIVA'}]: <span style="color:${getColorMateria(tareaEstado.materia)}; font-weight:700;">${tareaEstado.materia.toUpperCase()}</span>: "${tareaEstado.actividad}".`);
+        return;
+      }
+
+      // 8. ACTUALIZAR PESOS DE PARCIALES EN MATRIZ
+      if (lower.includes("pesos") || lower.includes("ponderacion parcial") || lower.includes("ponderación parcial")) {
+        const matPesos = detectarMateria(lower);
+        const nums = lower.match(/\b(\d+(?:\.\d+)?)\b/g);
+        if (matPesos && nums && nums.length >= 3) {
+          const p1 = parseFloat(nums[nums.length - 3]);
+          const p2 = parseFloat(nums[nums.length - 2]);
+          const p3 = parseFloat(nums[nums.length - 1]);
+          pesosParciales[matPesos] = { p1, p2, p3 };
+          guardarLocal();
+          render();
+          agregarMensajeChat("bot", `PONDERACIÓN SEMESTRAL ACTUALIZADA EN <span style="color:${getColorMateria(matPesos)}; font-weight:700;">${matPesos.toUpperCase()}</span>: P1 ${p1}% | P2 ${p2}% | P3 ${p3}%.`);
+          return;
+        }
+      }
+
+      // 9. BONO EXTRA DIRECTO EN EVALUACIÓN
+      const esComandoBonoDirecto = (lower.includes("bono") || lower.includes("colchon") || lower.includes("colchón") || /^(?:agrega|suma|pon)?\s*\d+(?:\.\d+)?\s*(?:punto|pts|puntos)\s*extra/i.test(lower));
       if (esComandoBonoDirecto) {
-        const materia = normalizarMateria(lower);
+        const materia = detectarMateria(lower);
         const puntosMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:punto|pts|puntos)/);
         if (materia && puntosMatch) {
           const extraPts = parseFloat(puntosMatch[1]);
@@ -2429,53 +2719,22 @@
           guardarLocal();
           render();
           const p3Info = calcularP3Materia(materia);
-          agregarMensajeChat("bot", `BONO ASIGNADO: +${formatearPorcentaje(extraPts)} en <span style="color:${getColorMateria(materia)}; font-weight:700;">${materia.toUpperCase()}</span>. Total en P3: <strong>${formatearPorcentaje(p3Info.puntosAcumulados)}</strong>${p3Info.colchon > 0 ? ' (Colchón: +' + formatearPorcentaje(p3Info.colchon) + ')' : ''}.`);
+          agregarMensajeChat("bot", `BONO ASIGNADO: +${formatearPorcentaje(extraPts)} en <span style="color:${getColorMateria(materia)}; font-weight:700;">${materia.toUpperCase()}</span>. Total en P3: <strong>${formatearPorcentaje(p3Info.puntosAcumulados)}</strong>${p3Info.colchon > 0 ? ' + ' + formatearPorcentaje(p3Info.colchon) + ' COLCHÓN' : ''}.`);
           return;
         }
       }
 
-      if (lower.includes("detalles") || lower.includes("nota") || lower.includes("notas")) {
-        let tarea = null;
-        let mejorScore = 0;
-        for (const t of tareas) {
-          let score = 0;
-          if (lower.includes(t.materia.toLowerCase())) score += 2;
-          const palabras = t.actividad.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-          for (const w of palabras) {
-            if (lower.includes(w)) score += 3;
-          }
-          if (score > mejorScore) {
-            mejorScore = score;
-            tarea = t;
-          }
-        }
-
-        if (tarea) {
-          const partes = texto.split(/detalles?:|notas?:/i);
-          if (partes.length > 1) {
-            tarea.detalles = partes[1].trim();
-            guardarLocal();
-            render();
-            agregarMensajeChat("bot", `DETALLES ACTUALIZADOS: <span style="color:${getColorMateria(tarea.materia)}; font-weight:700;">${tarea.materia.toUpperCase()}</span>: "${tarea.actividad}"<br>• <em>${tarea.detalles}</em>`);
-            return;
-          }
-        }
-      }
-
-      const p1p2Match = lower.match(/(?:en\s+)?p([12])\s+(?:de\s+)?([a-záéíóúñ\s]+).*?(\d+(?:\.\d+)?)/i) ||
-                        lower.match(/([a-záéíóúñ\s]+)\s+p([12]).*?(\d+(?:\.\d+)?)/i) ||
-                        lower.match(/p([12])\s*=?\s*(\d+(?:\.\d+)?)/i);
-
-      if (p1p2Match && (lower.includes("p1") || lower.includes("p2") || lower.includes("primer parcial") || lower.includes("segundo parcial"))) {
-        const numParcial = (lower.includes("primer") || lower.includes("1er") || lower.includes("p1")) ? "p1" : "p2";
-        const materia = normalizarMateria(lower);
+      // 10. CALIFICACIONES P1 / P2
+      if (/\bp[12]\b/.test(lower) || lower.includes("primer parcial") || lower.includes("segundo parcial")) {
+        const numParcial = (lower.includes("primer") || lower.includes("1er") || /\bp1\b/.test(lower)) ? "p1" : "p2";
+        const materia = detectarMateria(lower);
         const numeros = lower.match(/(\d+(?:\.\d+)?)/g);
         let nota = null;
 
         if (numeros) {
           for (let n of numeros) {
-            let val = parseFloat(n);
-            if (val > 2 && !lower.includes("p" + n)) {
+            const val = parseFloat(n);
+            if (!new RegExp(`p${n}\\b`).test(lower)) {
               nota = val;
             }
           }
@@ -2493,24 +2752,12 @@
         }
       }
 
+      // 11. CALIFICAR UNA ACTIVIDAD EXISTENTE
       if (lower.includes("saqué") || lower.includes("saque") || lower.includes("obtuve") || lower.includes("califica")) {
-        let tarea = null;
-        let mejorScore = 0;
-        for (const t of tareas) {
-          if (t.tipo === 'ordinal') continue;
-          let score = 0;
-          if (lower.includes(t.materia.toLowerCase())) score += 2;
-          const palabras = t.actividad.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-          for (const w of palabras) {
-            if (lower.includes(w)) score += 3;
-          }
-          if (score > mejorScore) {
-            mejorScore = score;
-            tarea = t;
-          }
-        }
+        const matRef = detectarMateria(lower);
+        const tarea = encontrarTareaPorTexto(texto, matRef);
 
-        if (tarea) {
+        if (tarea && tarea.tipo !== 'ordinal') {
           const fracMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:\/|de)\s*(\d+(?:\.\d+)?)/);
           let notaObt = tarea.puntos;
           if (fracMatch) {
@@ -2527,100 +2774,225 @@
           const ptsGanados100 = ((notaObt / tarea.base) * 100);
           const p3Info = calcularP3Materia(tarea.materia);
 
-          agregarMensajeChat("bot", `CALIFICACIÓN [${tarea.tipo.toUpperCase()}]: "${tarea.actividad}" asignada con ${notaObt} / ${tarea.puntos} (+${formatearPorcentaje(ptsGanados100)}). Total en <span style="color:${getColorMateria(tarea.materia)}; font-weight:700;">${tarea.materia.toUpperCase()}</span>: <strong>${formatearPorcentaje(p3Info.puntosAcumulados)}</strong>.`);
+          agregarMensajeChat("bot", `CALIFICACIÓN [${tarea.tipo.toUpperCase()}]: "${tarea.actividad}" asignada con ${notaObt} / ${tarea.puntos} // +${formatearPorcentaje(ptsGanados100)}. Total en <span style="color:${getColorMateria(tarea.materia)}; font-weight:700;">${tarea.materia.toUpperCase()}</span>: <strong>${formatearPorcentaje(p3Info.puntosAcumulados)}</strong>.`);
           return;
         }
       }
 
-      const esOrdinal = lower.includes("ordinal") || lower.includes("ordinales") || lower.includes("sin valor") || lower.includes("sin porcentaje") || lower.includes("sin ponderacion") || lower.includes("sin ponderación");
-      const esExtra = !esOrdinal && (lower.includes("extra") || lower.includes("extras"));
-      const esSinFecha = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha") || lower.includes("continuo");
+      // 12. MODIFICADOR MANUAL POR COMANDO (EDITA / MODIFICA / CAMBIA / MUEVE / RENOMBRA / LINK / NOTAS)
+      const esComandoEdicion = /^(?:edita|editar|modifica|modificar|cambia|cambiar|actualiza|actualizar|mueve|mover|pasa|pasar|renombra|renombrar|pon\s+link|agrega\s+link|pon\s+notas|notas\s+de|detalles\s+de)\b/i.test(lower);
+
+      if (esComandoEdicion) {
+        const partesNotas = texto.split(/\b(?:notas?|detalles?)\s*:/i);
+        const cuerpoComando = partesNotas[0];
+        const nuevasNotas = partesNotas.length > 1 ? partesNotas[1].trim() : null;
+
+        const targetPart = cuerpoComando.split(/[:,]/)[0];
+        const tareaEditar = encontrarTareaPorTexto(targetPart) || encontrarTareaPorTexto(cuerpoComando);
+
+        if (!tareaEditar) {
+          agregarMensajeChat("bot", "NO SE ENCONTRÓ LA ACTIVIDAD A MODIFICAR. ESPECIFICA EL NOMBRE DE LA ENTREGA.");
+          return;
+        }
+
+        const cambios = [];
+
+        // Renombrar actividad
+        const matchRenombra = cuerpoComando.match(/\b(?:renombra|renombrar|nombre|titulo|t[ií]tulo)\s+(?:a\s+|por\s+|:)?\s*([^,]+)$/i) ||
+                              cuerpoComando.match(/\brenombra\s+.*?\s+(?:a|por)\s+([^,]+)/i);
+        if (matchRenombra && matchRenombra[1]) {
+          const nuevoNombre = matchRenombra[1].trim();
+          if (nuevoNombre.length >= 2) {
+            tareaEditar.actividad = nuevoNombre.charAt(0).toUpperCase() + nuevoNombre.slice(1);
+            cambios.push(`ACTIVIDAD: "${tareaEditar.actividad}"`);
+          }
+        }
+
+        // Cambiar asignatura (si dice "materia X" o "mueve ... a X")
+        const matchMatCmd = cuerpoComando.match(/\b(?:materia|asignatura|a\s+la\s+materia)\s*:?\s*([a-záéíóúñ\s]+?)(?:,|$)/i) ||
+                            cuerpoComando.match(/\b(?:mueve|pasa)\s+.*?\s+a\s+([a-záéíóúñ\s]+?)(?:,|$)/i);
+        if (matchMatCmd) {
+          const nuevaMat = detectarMateria(matchMatCmd[1]);
+          if (nuevaMat && nuevaMat !== tareaEditar.materia) {
+            tareaEditar.materia = nuevaMat;
+            cambios.push(`MATERIA: ${nuevaMat.toUpperCase()}`);
+          }
+        }
+
+        // Cambiar clasificación (porcentual / ordinal / extra)
+        const lowerCmd = cuerpoComando.toLowerCase();
+        if (/\b(?:tipo|clasificaci[oó]n|a|en)\s*:?\s*extra\b/.test(lowerCmd) || /\bhaz\s+extra\b/.test(lowerCmd)) {
+          tareaEditar.tipo = 'extra';
+          if (tareaEditar.puntos === 0) { tareaEditar.puntos = 20; tareaEditar.base = 100; }
+          cambios.push("CLASIFICACIÓN: EXTRA");
+        } else if (/\b(?:tipo|clasificaci[oó]n|a|en)\s*:?\s*ordinal\b/.test(lowerCmd) || /\bhaz\s+ordinal\b/.test(lowerCmd)) {
+          tareaEditar.tipo = 'ordinal';
+          tareaEditar.puntos = 0;
+          tareaEditar.base = 0;
+          tareaEditar.califX = null;
+          cambios.push("CLASIFICACIÓN: ORDINAL");
+        } else if (/\b(?:tipo|clasificaci[oó]n|a|en)\s*:?\s*porcentual\b/.test(lowerCmd) || /\bhaz\s+porcentual\b/.test(lowerCmd)) {
+          tareaEditar.tipo = 'porcentual';
+          if (tareaEditar.puntos === 0) { tareaEditar.puntos = 20; tareaEditar.base = 100; }
+          cambios.push("CLASIFICACIÓN: PORCENTUAL");
+        }
+
+        // Cambiar a CONTINUO SIN FECHA o asignar nueva FECHA
+        if (lowerCmd.includes("continuo sin fecha") || lowerCmd.includes("sin fecha") || lowerCmd.includes("no fecha")) {
+          tareaEditar.sinFecha = true;
+          tareaEditar.fecha = "";
+          tareaEditar.hora = "";
+          cambios.push("TIEMPO: CONTINUO SIN FECHA");
+        } else {
+          const nuevaFecha = extraerFechaInteligente(cuerpoComando);
+          if (nuevaFecha) {
+            tareaEditar.sinFecha = false;
+            tareaEditar.fecha = nuevaFecha;
+            if (!tareaEditar.hora) tareaEditar.hora = "00:00:00";
+            cambios.push(`FECHA: ${formatearFechaLarga(nuevaFecha)}`);
+          }
+        }
+
+        // Cambiar HORA
+        const nuevaHora = extraerHoraInteligente(cuerpoComando);
+        if (nuevaHora && !tareaEditar.sinFecha) {
+          tareaEditar.hora = nuevaHora;
+          cambios.push(`HORA: ${nuevaHora} HRS`);
+        }
+
+        // Cambiar VALOR y BASE DEL PROFESOR
+        const valBase = extraerValorYBase(cuerpoComando);
+        if (valBase && tareaEditar.tipo !== 'ordinal') {
+          if (valBase.puntos !== null && valBase.puntos > 0) {
+            if (tareaEditar.puntos !== valBase.puntos) tareaEditar.califX = null;
+            tareaEditar.puntos = valBase.puntos;
+          }
+          if (valBase.base !== null && valBase.base > 0) {
+            tareaEditar.base = valBase.base;
+          }
+          cambios.push(`VALOR: ${tareaEditar.puntos}/${tareaEditar.base} PTS`);
+        }
+
+        // Cambiar LINK DE CLASSROOM
+        const urlEditMatch = cuerpoComando.match(/https?:\/\/[^\s,]+/i);
+        if (urlEditMatch) {
+          tareaEditar.urlClassroom = urlEditMatch[0];
+          cambios.push("LINK ACTUALIZADO");
+        } else if (/\b(?:quita|elimina|borra)\s+link\b/i.test(lowerCmd)) {
+          tareaEditar.urlClassroom = "";
+          cambios.push("LINK ELIMINADO");
+        }
+
+        // Cambiar NOTAS
+        if (nuevasNotas !== null) {
+          tareaEditar.detalles = nuevasNotas;
+          cambios.push("NOTAS ACTUALIZADAS");
+        }
+
+        if (!cambios.length) {
+          agregarMensajeChat("bot", `ACTIVIDAD LOCALIZADA: "${tareaEditar.actividad}". INDICA QUÉ DESEAS MODIFICAR: <em>fecha</em>, <em>hora</em>, <em>valor</em>, <em>tipo</em>, <em>materia</em>, <em>renombra a</em>, <em>continuo sin fecha</em>, <em>link</em> o <em>notas:</em>.`);
+          return;
+        }
+
+        tareaEditar.sincronizada = false;
+        guardarLocal();
+        render();
+        agregarMensajeChat("bot", `MODIFICACIÓN APLICADA EN <span style="color:${getColorMateria(tareaEditar.materia)}; font-weight:700;">${tareaEditar.materia.toUpperCase()}</span>: "${tareaEditar.actividad}"<br>• ${cambios.join(" | ")}`);
+        return;
+      }
+
+      // 13. CREACIÓN DE NUEVA ACTIVIDAD (PORCENTUAL, ORDINAL O EXTRA)
+      const partesNotasCreacion = texto.split(/\b(?:notas?|detalles?)\s*:/i);
+      const textoSinNotas = partesNotasCreacion[0];
+      const notasCreacion = partesNotasCreacion.length > 1 ? partesNotasCreacion[1].trim() : "";
+
+      const esOrdinal = /\b(?:ordinal|ordinales)\b/.test(lower) || lower.includes("sin valor") || lower.includes("sin porcentaje");
+      const esExtra = !esOrdinal && /\b(?:extra|extras)\b/.test(lower);
+      const esSinFecha = lower.includes("continuo sin fecha") || lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha");
       const tipo = esOrdinal ? 'ordinal' : (esExtra ? 'extra' : 'porcentual');
-      const materia = normalizarMateria(lower);
-      const fecha = esSinFecha ? "" : extraerFecha(lower);
-      const hora = esSinFecha ? "" : extraerHora(lower);
-      
-      const urlMatch = texto.match(/https?:\/\/[^\s]+/i);
+
+      const materiaDetectada = detectarMateria(textoSinNotas);
+      const fecha = esSinFecha ? "" : extraerFechaInteligente(textoSinNotas);
+      const hora = esSinFecha ? "" : (extraerHoraInteligente(textoSinNotas) || "00:00:00");
+      const urlMatch = textoSinNotas.match(/https?:\/\/[^\s]+/i);
       const urlClassroom = urlMatch ? urlMatch[0] : "";
 
       let puntos = 20;
       let base = 100;
-
       if (!esOrdinal) {
-        const escalaMatch = lower.match(/vale\s*(\d+(?:\.\d+)?)\s*(?:\/|sobre|de)\s*(\d+(?:\.\d+)?)/);
-        if (escalaMatch) {
-          puntos = parseFloat(escalaMatch[1]);
-          base = parseFloat(escalaMatch[2]);
-        } else {
-          const ptsMatch = lower.match(/(\d+)\s*(?:puntos|pts|ponderaci[oó]n)/);
-          if (ptsMatch) puntos = parseFloat(ptsMatch[1]);
+        const vb = extraerValorYBase(textoSinNotas);
+        if (vb) {
+          if (vb.puntos !== null) puntos = vb.puntos;
+          if (vb.base !== null) base = vb.base;
         }
       } else {
         puntos = 0;
         base = 0;
       }
 
-      let actividad = texto
-        .replace(/https?:\/\/[^\s]+/gi, "")
-        .replace(/para el.*?entregar/i, "")
-        .replace(/entregar/i, "")
-        .replace(/vale \d+.*$/i, "")
-        .replace(/a las\s+\d{1,2}(?::\d{2})?\s*(?:am|pm|hrs)?/i, "")
-        .replace(/\b\d{1,2}:\d{2}\s*(?:am|pm|hrs)?\b/i, "")
-        .replace(/continuo sin fecha/i, "")
-        .replace(/sin fecha/i, "")
-        .replace(/no fecha/i, "")
-        .replace(/no tiene fecha/i, "")
-        .replace(/actividad extra/i, "")
-        .replace(/tarea extra/i, "")
-        .replace(/tarea ordinal/i, "")
-        .replace(/ordinal/i, "")
-        .replace(/sin valor/i, "")
-        .replace(/sin porcentaje/i, "")
-        .replace(/en álgebra|en filosofía|en computación|en inglés|en dhp|en historia|en desarrollo personal|en orientación/i, "")
-        .trim();
+      const actividad = limpiarNombreActividad(textoSinNotas) || "ENTREGA PROGRAMADA";
 
-      if (!actividad || actividad.length < 3) actividad = "ENTREGA PROGRAMADA";
-      actividad = actividad.charAt(0).toUpperCase() + actividad.slice(1);
-
-      if (!fecha && !esSinFecha) {
+      if (!materiaDetectada) {
         tareaEnEspera = {
           id: Date.now(),
-          tipo: tipo,
-          materia,
+          tipo,
+          materia: "Álgebra",
           actividad,
-          urlClassroom: urlClassroom,
-          sinFecha: false,
-          fecha: "",
-          hora: hora,
+          urlClassroom,
+          sinFecha: esSinFecha,
+          fecha,
+          hora,
           puntos,
           base,
           forzarDual: false,
-          detalles: "",
+          detalles: notasCreacion,
           califX: null,
           completada: false,
           sincronizada: false,
           parcial: 3
         };
-        setTimeout(() => {
-          agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: <span style="color:${getColorMateria(tareaEnEspera.materia)}; font-weight:700;">${tareaEnEspera.materia.toUpperCase()}</span>: "${tareaEnEspera.actividad}". INDICA LA FECHA DE ENTREGA (O ESCRIBE <strong>"SIN FECHA"</strong>).`);
-        }, 120);
+        esperandoMateriaCreacion = true;
+        agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: "${actividad}". INDICA LA ASIGNATURA.`);
+        return;
+      }
+
+      if (!fecha && !esSinFecha) {
+        tareaEnEspera = {
+          id: Date.now(),
+          tipo,
+          materia: materiaDetectada,
+          actividad,
+          urlClassroom,
+          sinFecha: false,
+          fecha: "",
+          hora,
+          puntos,
+          base,
+          forzarDual: false,
+          detalles: notasCreacion,
+          califX: null,
+          completada: false,
+          sincronizada: false,
+          parcial: 3
+        };
+        esperandoMateriaCreacion = false;
+        agregarMensajeChat("bot", `DETECTADO [${tipo.toUpperCase()}]: <span style="color:${getColorMateria(materiaDetectada)}; font-weight:700;">${materiaDetectada.toUpperCase()}</span>: "${actividad}". INDICA LA FECHA DE ENTREGA O ESCRIBE <strong>CONTINUO SIN FECHA</strong>.`);
         return;
       }
 
       const nueva = {
         id: Date.now(),
-        tipo: tipo,
-        materia,
+        tipo,
+        materia: materiaDetectada,
         actividad,
-        urlClassroom: urlClassroom,
+        urlClassroom,
         sinFecha: esSinFecha,
         fecha: esSinFecha ? "" : fecha,
         hora: esSinFecha ? "" : hora,
         puntos,
         base,
         forzarDual: false,
-        detalles: "",
+        detalles: notasCreacion,
         califX: null,
         completada: false,
         sincronizada: false,
@@ -2629,27 +3001,12 @@
 
       tareas.push(nueva);
       guardarLocal();
+      render();
 
       const infoTiempo = esSinFecha ? "CONTINUO SIN FECHA" : `${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS`;
+      const infoValor = esOrdinal ? "ORDINAL" : `VALOR: ${nueva.puntos}/${nueva.base} PTS // ${esExtra ? '+' : ''}${formatearPorcentaje((nueva.puntos / nueva.base) * 100)}`;
 
-      if (esOrdinal) {
-        setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA ORDINAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
-          render();
-        }, 120);
-      } else if (esExtra) {
-        const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
-        setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA EXTRA REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} [+${formatearPorcentaje(pesoBase100)} EXTRA] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
-          render();
-        }, 120);
-      } else {
-        const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
-        setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA PORCENTUAL REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} [VALOR: ${nueva.puntos}/${nueva.base} PTS // PORCENTAJE: ${formatearPorcentaje(pesoBase100)}] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
-          render();
-        }, 120);
-      }
+      agregarMensajeChat("bot", `ENTREGA REGISTRADA [${tipo.toUpperCase()}]: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} // ${infoValor}${urlClassroom ? ' // LINK GUARDADO' : ''}.`);
     }
 
     function generarBloqueBarrasActividad(t, esVistaMaterias = false) {
@@ -2683,7 +3040,7 @@
               <div class="bar-label-sub">
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span>${labelTitle}</span>
-                  <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Hacer clic para editar valor o base del profesor">⚙ AJUSTAR BASE</button>
+                  <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Editar valor o base del profesor">⚙ AJUSTAR BASE</button>
                 </div>
                 <span class="${pctClass}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
               </div>
@@ -2700,7 +3057,7 @@
               <div class="bar-label-sub">
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span>BASE DEL PROFESOR</span>
-                  ${esBase100 ? `<button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Unificar en una sola barra de porcentaje">⇤ UNIFICAR (%)</button>` : ''}
+                  ${esBase100 ? `<button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Unificar en una sola barra de porcentaje">⇤ UNIFICAR</button>` : ''}
                 </div>
                 ${!esVistaMaterias ? `
                   <div style="display:flex; align-items:center; gap:6px;">
@@ -2852,10 +3209,10 @@
           `;
           barraUniversalHtml = `
             <div class="bar-container" style="height: 16px;">
-              <div class="bar-base-zone" style="width: ${baseZonePct}%;" title="Límite Base 100% (Cubierto: ${formatearPorcentaje(puntosBase100)})">
+              <div class="bar-base-zone" style="width: ${baseZonePct}%;">
                 <div class="bar-fill ${baseColorClass}" style="width: ${baseFillInsideZonePct}%;"></div>
               </div>
-              <div class="bar-fill extra-overflow" style="width: ${extraBarPct}%;" title="Porcentaje Extra: +${formatearPorcentaje(totalExtra100)}"></div>
+              <div class="bar-fill extra-overflow" style="width: ${extraBarPct}%;"></div>
             </div>
           `;
         } else {
