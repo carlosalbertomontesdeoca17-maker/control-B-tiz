@@ -44,6 +44,7 @@
       --amber: #f59e0b;
       --amber-glow: rgba(245, 158, 11, 0.45);
       --purple: #a855f7;
+      --pink: #f472b6;
       --text-main: #ffffff;
       --bevel-high: rgba(255, 255, 255, 0.08);
       --bevel-shadow: rgba(0, 0, 0, 0.6);
@@ -391,13 +392,15 @@
     }
 
     .badge-sin-fecha {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 4px 10px;
-      font-size: 0.78rem;
+      font-size: 1.05rem;
       font-weight: 700;
+      color: #f472b6;
+      background: rgba(244, 114, 182, 0.12);
+      border: 1px solid rgba(244, 114, 182, 0.55);
+      padding: 6px 14px;
+      display: inline-block;
       letter-spacing: 1px;
+      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 10px rgba(244, 114, 182, 0.25);
     }
 
     .dual-bars-wrapper {
@@ -1238,7 +1241,7 @@
             J.A.R.V.I.S EN LÍNEA.<br>
             • <strong>Porcentual:</strong> <em>"problemario de historia para el 25 de noviembre https://classroom.google.com/... vale 20/30"</em>.<br>
             • <strong>Extra porcentual:</strong> <em>"actividad extra museo de filosofía vale 15 puntos para el 27 de noviembre"</em>.<br>
-            • <strong>Sin fecha:</strong> <em>"cuaderno de álgebra vale 30 puntos sin fecha"</em>.<br>
+            • <strong>Continuo sin fecha:</strong> <em>"cuaderno de álgebra vale 30 puntos sin fecha"</em>.<br>
             • <strong>Calificar:</strong> <em>"en museo de filosofía saqué 15 de 15"</em>.
           </div>
         </div>
@@ -1273,7 +1276,7 @@
 
         <label class="checkbox-panel-row">
           <input type="checkbox" id="input-sin-fecha" class="toggle-crt" onchange="alternarCamposFecha(this.checked)">
-          <span>NO FECHA / SIN FECHA LÍMITE (NO APARECE EN CRONOGRAMA, SOLO EN MATERIAS Y EVALUACIÓN)</span>
+          <span>CONTINUO SIN FECHA</span>
         </label>
 
         <div class="row" id="row-fecha-hora-inputs">
@@ -1394,7 +1397,7 @@
 
       <label class="checkbox-panel-row">
         <input type="checkbox" id="edit-sin-fecha" class="toggle-crt" onchange="alternarCamposEdicionFecha(this.checked)">
-        <span>NO FECHA / SIN FECHA LÍMITE (OMITIR DE CRONOGRAMA)</span>
+        <span>CONTINUO SIN FECHA</span>
       </label>
 
       <div class="row" id="row-edit-fecha-hora">
@@ -1787,7 +1790,7 @@
       const selectMat = document.getElementById("edit-materia");
 
       selectMat.innerHTML = MATERIAS_OFICIALES.map(m => `<option value="${m}">${m.toUpperCase()}</option>`).join("");
-      selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}${t.tipo === 'extra' ? ' [EXTRA]' : ''}${t.sinFecha ? ' (NO FECHA)' : ''}</option>`).join("");
+      selectTarea.innerHTML = tareas.map(t => `<option value="${t.id}">[${t.materia.toUpperCase()}] ${t.actividad}${t.tipo === 'extra' ? ' [EXTRA]' : ''}${t.sinFecha ? ' (CONTINUO SIN FECHA)' : ''}</option>`).join("");
 
       if (idPreseleccionado) selectTarea.value = idPreseleccionado;
 
@@ -1828,7 +1831,7 @@
       const sinFecha = document.getElementById("edit-sin-fecha").checked;
       const fechaVal = document.getElementById("edit-fecha").value;
       if (!sinFecha && !fechaVal) {
-        return alert("Selecciona una fecha límite o marca la casilla NO FECHA.");
+        return alert("Selecciona una fecha límite o marca la casilla CONTINUO SIN FECHA.");
       }
 
       const tipo = document.getElementById("edit-tipo").value;
@@ -1859,7 +1862,7 @@
     }
 
     function formatearFechaLarga(fechaStr) {
-      if (!fechaStr) return "SIN FECHA LÍMITE";
+      if (!fechaStr) return "CONTINUO SIN FECHA";
       const partes = fechaStr.split("-");
       if (partes.length !== 3) return fechaStr;
       const fechaObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
@@ -1867,7 +1870,7 @@
     }
 
     function calcularCuentaRegresiva(fechaStr, horaStr = "00:00:00") {
-      if (!fechaStr) return { texto: "NO FECHA", urgente: false, zero: true };
+      if (!fechaStr) return { texto: "CONTINUO SIN FECHA", urgente: false, zero: true };
       const horaFinal = horaStr && horaStr.length >= 5 ? (horaStr.length === 5 ? horaStr + ":00" : horaStr) : "00:00:00";
       const target = new Date(`${fechaStr}T${horaFinal}`);
       const ahora = new Date();
@@ -2243,7 +2246,7 @@
       const sinFecha = document.getElementById("input-sin-fecha").checked;
       const fechaVal = document.getElementById("input-fecha").value;
       if (!sinFecha && !fechaVal) {
-        return alert("Selecciona una fecha límite o marca la opción NO FECHA.");
+        return alert("Selecciona una fecha límite o marca la opción CONTINUO SIN FECHA.");
       }
 
       const tipo = document.getElementById("input-tipo").value;
@@ -2357,7 +2360,7 @@
       const lower = texto.toLowerCase();
 
       if (tareaEnEspera) {
-        const esSinFechaResp = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha");
+        const esSinFechaResp = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha") || lower.includes("continuo");
         const fechaResp = extraerFecha(lower);
         const horaResp = extraerHora(lower);
 
@@ -2370,7 +2373,7 @@
           const guardada = tareaEnEspera;
           tareaEnEspera = null;
           render();
-          agregarMensajeChat("bot", `REGISTRO COMPLETADO [${guardada.tipo.toUpperCase()}]: <span style="color:${getColorMateria(guardada.materia)}; font-weight:700;">${guardada.materia.toUpperCase()}</span>: "${guardada.actividad}" (${esSinFechaResp ? 'NO FECHA // SOLO EN MATERIAS Y EVALUACIÓN' : formatearFechaLarga(guardada.fecha)}).`);
+          agregarMensajeChat("bot", `REGISTRO COMPLETADO [${guardada.tipo.toUpperCase()}]: <span style="color:${getColorMateria(guardada.materia)}; font-weight:700;">${guardada.materia.toUpperCase()}</span>: "${guardada.actividad}" (${esSinFechaResp ? 'CONTINUO SIN FECHA' : formatearFechaLarga(guardada.fecha)}).`);
           return;
         } else {
           tareaEnEspera = null;
@@ -2530,7 +2533,7 @@
 
       const esOrdinal = lower.includes("ordinal") || lower.includes("ordinales") || lower.includes("sin valor") || lower.includes("sin porcentaje") || lower.includes("sin ponderacion") || lower.includes("sin ponderación");
       const esExtra = !esOrdinal && (lower.includes("extra") || lower.includes("extras"));
-      const esSinFecha = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha");
+      const esSinFecha = lower.includes("sin fecha") || lower.includes("no fecha") || lower.includes("no tiene fecha") || lower.includes("continuo");
       const tipo = esOrdinal ? 'ordinal' : (esExtra ? 'extra' : 'porcentual');
       const materia = normalizarMateria(lower);
       const fecha = esSinFecha ? "" : extraerFecha(lower);
@@ -2563,6 +2566,7 @@
         .replace(/vale \d+.*$/i, "")
         .replace(/a las\s+\d{1,2}(?::\d{2})?\s*(?:am|pm|hrs)?/i, "")
         .replace(/\b\d{1,2}:\d{2}\s*(?:am|pm|hrs)?\b/i, "")
+        .replace(/continuo sin fecha/i, "")
         .replace(/sin fecha/i, "")
         .replace(/no fecha/i, "")
         .replace(/no tiene fecha/i, "")
@@ -2625,7 +2629,7 @@
       tareas.push(nueva);
       guardarLocal();
 
-      const infoTiempo = esSinFecha ? "NO FECHA (OMITIDA DE CRONOGRAMA // VISIBLE EN MATERIAS Y EVALUACIÓN)" : `${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS`;
+      const infoTiempo = esSinFecha ? "CONTINUO SIN FECHA" : `${formatearFechaLarga(nueva.fecha)} - ${nueva.hora} HRS`;
 
       if (esOrdinal) {
         setTimeout(() => {
@@ -2635,7 +2639,7 @@
       } else if (esExtra) {
         const pesoBase100 = ((nueva.puntos / nueva.base) * 100);
         setTimeout(() => {
-          agregarMensajeChat("bot", `ENTREGA EXTRA REGISTRADA (BARRA MORADA SOBRE EL 100%): <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} [+${formatearPorcentaje(pesoBase100)} EXTRA] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
+          agregarMensajeChat("bot", `ENTREGA EXTRA REGISTRADA: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} [+${formatearPorcentaje(pesoBase100)} EXTRA] ${urlClassroom ? '[LINK GUARDADO]' : ''}.`);
           render();
         }, 120);
       } else {
@@ -2917,12 +2921,12 @@
               const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
 
               const timingHtml = esSinFecha
-                ? `<span class="badge-sin-fecha">NO FECHA // EVALUACIÓN CONTINUA</span>`
+                ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>`
                 : `<span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
                    <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>`;
 
               const horaHtml = esSinFecha
-                ? `<span>SIN FECHA LÍMITE</span>`
+                ? `<span>CONTINUO SIN FECHA</span>`
                 : `<span>HORA: ${t.hora || '00:00:00'} HRS</span>`;
 
               return `
@@ -3017,7 +3021,7 @@
 
             <div class="eval-activities-list">
               ${tareasP3.length ? tareasP3.map(t => {
-                const badgeSinFechaHtml = (t.sinFecha || !t.fecha) ? `<span class="badge-sin-fecha" style="font-size:0.7rem; padding:2px 7px;">NO FECHA</span>` : '';
+                const badgeSinFechaHtml = (t.sinFecha || !t.fecha) ? `<span class="badge-sin-fecha" style="font-size:0.78rem; padding:3px 10px;">CONTINUO SIN FECHA</span>` : '';
 
                 if (t.tipo === 'ordinal') {
                   return `
