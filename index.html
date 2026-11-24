@@ -70,12 +70,19 @@
     }
 
     .app-container {
-      max-width: 920px;
+      width: 96%;
+      max-width: 1720px;
       margin: 0 auto;
+      transition: max-width 0.2s ease;
+    }
+
+    .app-container.force-vertical {
+      max-width: 920px;
     }
 
     header {
-      margin-bottom: 20px;
+      max-width: 1120px;
+      margin: 0 auto 20px auto;
       text-align: center;
       padding: 16px 20px;
       background: linear-gradient(180deg, #162035 0%, #0d1322 100%);
@@ -134,10 +141,11 @@
     }
 
     .nav-tabs {
+      max-width: 1120px;
+      margin: 0 auto 24px auto;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 6px;
-      margin-bottom: 24px;
       background: #090d16;
       padding: 6px;
       border: 1px solid #1a2333;
@@ -183,6 +191,13 @@
       display: block;
     }
 
+    #vista-evaluacion,
+    #vista-datos,
+    #vista-config {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
     @keyframes panelFade {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -209,7 +224,7 @@
     .filter-bar {
       display: flex;
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       flex-wrap: wrap;
     }
 
@@ -237,13 +252,82 @@
       box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
     }
 
+    /* BLOQUES SEMANALES EN CRONOGRAMA */
+    .semana-bloque {
+      margin-bottom: 30px;
+      background: rgba(10, 15, 29, 0.65);
+      border: 1px solid #1e2d48;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .semana-bloque.semana-actual {
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.14);
+    }
+
+    .semana-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #233554;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .semana-titulo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .badge-semana-actual {
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 4px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px var(--accent-glow);
+    }
+
+    /* CUADRÍCULA ADAPTABLE AL ZOOM Y MODOS DE DISPOSICIÓN */
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .tasks-grid.layout-mosaico {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .tasks-grid.layout-vertical {
+      grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 440px) {
+      .tasks-grid,
+      .tasks-grid.layout-mosaico {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .card {
       background: linear-gradient(180deg, #172138 0%, #111827 100%);
       border: 2px solid var(--card-border-default);
       padding: 18px;
-      margin-bottom: 16px;
+      margin-bottom: 0;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       gap: 12px;
       box-shadow: 
         inset 1px 1px 0px var(--bevel-high),
@@ -299,6 +383,12 @@
       to { opacity: 0; transform: scale(0.95); height: 0; margin: 0; padding: 0; }
     }
 
+    .card-body-main {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
     .card-top {
       font-size: 1.05rem;
       line-height: 1.4;
@@ -320,12 +410,12 @@
     .card-timing {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .fecha-destacada {
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 700;
       color: var(--accent);
       letter-spacing: 1px;
@@ -333,12 +423,12 @@
     }
 
     .countdown-timer {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 700;
       color: #fbbf24;
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(251, 191, 36, 0.5);
-      padding: 6px 14px;
+      padding: 6px 12px;
       display: inline-block;
       letter-spacing: 1px;
       box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 10px rgba(251, 191, 36, 0.25);
@@ -357,6 +447,7 @@
       box-shadow: none;
     }
 
+    /* RECUADROS UNIVERSALES INTACTOS */
     .ordinal-card-box {
       background: rgba(245, 158, 11, 0.08);
       border: 1px dashed var(--amber);
@@ -384,7 +475,7 @@
       border: 1px solid #d8b4fe;
       color: #ffffff;
       padding: 6px 14px;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 700;
       display: inline-block;
       letter-spacing: 1.5px;
@@ -393,7 +484,7 @@
     }
 
     .badge-sin-fecha {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 700;
       color: #f472b6;
       background: rgba(244, 114, 182, 0.12);
@@ -538,7 +629,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 4px;
+      margin-top: auto;
       padding-top: 10px;
       border-top: 1px solid #1a2333;
       flex-wrap: wrap;
@@ -656,6 +747,18 @@
     .btn-32-primary:hover {
       background: #0ea5e9;
       border-color: #7dd3fc;
+    }
+
+    .btn-32-layout {
+      background: linear-gradient(180deg, #16243d 0%, #0d1526 100%);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-32-layout:hover {
+      background: var(--accent);
+      color: #0b0f19;
+      box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .btn-32-danger {
@@ -1153,7 +1256,7 @@
   </style>
 </head>
 <body>
-  <div class="app-container">
+  <div id="main-app-container" class="app-container">
     <header>
       <div id="cloud-badge" class="cloud-status-badge cloud-offline">NUBE: DESCONECTADA</div>
       <h1>AMADEUS SYSTEM</h1>
@@ -1172,7 +1275,8 @@
     <section id="vista-cronograma" class="view-panel active">
       <div class="section-header">
         <h2>ENTREGAS</h2>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-left:auto;">
+          <button class="btn-32 btn-32-layout" id="btn-layout-crono" onclick="alternarDisposicion()">DISPOSICIÓN: AUTO ◈</button>
           <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
           <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
         </div>
@@ -1191,7 +1295,10 @@
     <section id="vista-materias" class="view-panel">
       <div class="section-header">
         <h2>POR MATERIA</h2>
-        <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-left:auto;">
+          <button class="btn-32 btn-32-layout" id="btn-layout-mat" onclick="alternarDisposicion()">DISPOSICIÓN: AUTO ◈</button>
+          <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
+        </div>
       </div>
       <div id="lista-materias"></div>
     </section>
@@ -1602,6 +1709,7 @@
     let tokenClient = null;
     let accessToken = localStorage.getItem("gcal_access_token") || null;
     let filtroActual = 'todas';
+    let disposicionActual = localStorage.getItem("disposicion_amadeus") || 'auto';
 
     function guardarLocal(origenRemoto = false) {
       localStorage.setItem("tareas_workstation", JSON.stringify(tareas));
@@ -1731,6 +1839,43 @@
       const activeBtn = document.getElementById('flt-' + tipo);
       if (activeBtn) activeBtn.classList.add('active');
       render();
+    }
+
+    function alternarDisposicion() {
+      const ordenModos = ['auto', 'mosaico', 'vertical'];
+      const siguiente = ordenModos[(ordenModos.indexOf(disposicionActual) + 1) % ordenModos.length];
+      disposicionActual = siguiente;
+      localStorage.setItem("disposicion_amadeus", disposicionActual);
+      actualizarUIControlDisposicion();
+      render();
+    }
+
+    function actualizarUIControlDisposicion() {
+      const etiquetas = {
+        'auto': 'DISPOSICIÓN: AUTO ◈',
+        'mosaico': 'DISPOSICIÓN: MOSAICO ⊞',
+        'vertical': 'DISPOSICIÓN: VERTICAL ☰'
+      };
+      const label = etiquetas[disposicionActual] || 'DISPOSICIÓN: AUTO ◈';
+      const btnCrono = document.getElementById("btn-layout-crono");
+      const btnMat = document.getElementById("btn-layout-mat");
+      const appCont = document.getElementById("main-app-container");
+
+      if (btnCrono) btnCrono.innerText = label;
+      if (btnMat) btnMat.innerText = label;
+      if (appCont) {
+        if (disposicionActual === 'vertical') {
+          appCont.classList.add("force-vertical");
+        } else {
+          appCont.classList.remove("force-vertical");
+        }
+      }
+    }
+
+    function getClaseGridDisposicion() {
+      if (disposicionActual === 'mosaico') return 'tasks-grid layout-mosaico';
+      if (disposicionActual === 'vertical') return 'tasks-grid layout-vertical';
+      return 'tasks-grid';
     }
 
     function alternarCamposPonderacion(tipo) {
@@ -1867,11 +2012,48 @@
       cerrarEditorManual();
     }
 
+    function obtenerInfoSemanaMes(fechaStr) {
+      const partes = fechaStr.split("-");
+      const anio = parseInt(partes[0], 10);
+      const mesIdx = parseInt(partes[1], 10) - 1;
+      const dia = parseInt(partes[2], 10);
+      const mesesNombres = [
+        "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+        "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+      ];
+      const primerDiaMes = new Date(anio, mesIdx, 1).getDay();
+      const numSemana = Math.ceil((dia + primerDiaMes) / 7);
+      const mesNombre = mesesNombres[mesIdx] || "";
+      return {
+        key: `${anio}-${String(mesIdx + 1).padStart(2, '0')}-W${numSemana}`,
+        titulo: `${numSemana} SEMANA DE ${mesNombre}`,
+        numSemana,
+        mesNombre,
+        anio
+      };
+    }
+
+    function obtenerKeySemanaActual() {
+      const hoy = new Date();
+      const fechaHoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+      return obtenerInfoSemanaMes(fechaHoyStr).key;
+    }
+
+    function formatearFechaSinMes(fechaStr) {
+      if (!fechaStr) return "";
+      const partes = fechaStr.split("-");
+      if (partes.length !== 3) return fechaStr;
+      const fechaObj = new Date(parseInt(partes[0], 10), parseInt(partes[1], 10) - 1, parseInt(partes[2], 10));
+      const diaSemana = fechaObj.toLocaleDateString("es-MX", { weekday: "short" }).replace(".", "").toUpperCase();
+      const diaNum = parseInt(partes[2], 10);
+      return `${diaSemana} ${diaNum}`;
+    }
+
     function formatearFechaLarga(fechaStr) {
       if (!fechaStr) return "CONTINUO SIN FECHA";
       const partes = fechaStr.split("-");
       if (partes.length !== 3) return fechaStr;
-      const fechaObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+      const fechaObj = new Date(parseInt(partes[0], 10), parseInt(partes[1], 10) - 1, parseInt(partes[2], 10));
       return fechaObj.toLocaleDateString("es-MX", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
     }
 
@@ -2090,6 +2272,7 @@
         if (fbArea) fbArea.value = savedFb;
       }
 
+      actualizarUIControlDisposicion();
       inicializarFirebase();
     });
 
@@ -2523,7 +2706,6 @@
       input.value = "";
       const lower = texto.toLowerCase();
 
-      // 0. COMANDO CANCELAR FLUJO EN ESPERA
       if (lower === "cancelar" || lower === "salir") {
         tareaEnEspera = null;
         esperandoMateriaCreacion = false;
@@ -2532,7 +2714,6 @@
         return;
       }
 
-      // 1. FLUJO PENDIENTE DE MATERIA O FECHA AL CREAR TAREA
       if (tareaEnEspera) {
         if (esperandoMateriaCreacion) {
           const matDetectada = detectarMateria(lower);
@@ -2576,7 +2757,6 @@
         }
       }
 
-      // 2. CONFIRMACIÓN DE REINICIO DE SEMESTRE
       if (esperandoConfirmacionReset) {
         if (lower.includes("confirmar") || lower === "si" || lower === "sí" || lower.includes("adelante")) {
           tareas = [];
@@ -2595,7 +2775,6 @@
         }
       }
 
-      // 3. GUÍA DE COMANDOS / PALABRAS CLAVE
       if (lower === "comandos" || lower === "ayuda" || lower.includes("lista de comandos")) {
         agregarMensajeChat("bot", `
           <strong>PALABRAS CLAVE DE J.A.R.V.I.S:</strong><br>
@@ -2608,7 +2787,6 @@
         return;
       }
 
-      // 4. COMANDOS GLOBALES DE SISTEMA Y CALENDAR
       if (lower.includes("reinicio de semestre") || lower.includes("reiniciar semestre") || lower.includes("nuevo semestre")) {
         esperandoConfirmacionReset = true;
         agregarMensajeChat("bot", "ADVERTENCIA: ¿Confirmar purga completa del semestre? Escribe <strong>CONFIRMAR</strong> para reiniciar todas las materias a ceros.");
@@ -2628,7 +2806,6 @@
         return;
       }
 
-      // 5. CONSULTAS DE ESTADO / RESUMEN ACADÉMICO
       if (/^(?:resumen|pendientes|estado|cu[aá]nto llevo|promedio|ver tareas|tareas)\b/.test(lower)) {
         const matConsulta = detectarMateria(lower);
         if (matConsulta) {
@@ -2659,7 +2836,6 @@
         }
       }
 
-      // 6. ELIMINAR TAREA
       if (/^(?:elimina|eliminar|borra|borrar|quita|quitar)\b/.test(lower)) {
         const matRef = detectarMateria(lower);
         const tareaEliminar = encontrarTareaPorTexto(texto, matRef);
@@ -2674,7 +2850,6 @@
         return;
       }
 
-      // 7. COMPLETAR O REACTIVAR TAREA
       const esCompletar = /^(?:completa|completar|termin[eé]|finalic[eé]|marca\s+como\s+(?:hecha|completada|entregada)|entregu[eé])\b/.test(lower);
       const esReactivar = /^(?:reactiva|reactivar|desmarca|desmarcar|reabre|reabrir)\b/.test(lower);
       if (esCompletar || esReactivar) {
@@ -2691,7 +2866,6 @@
         return;
       }
 
-      // 8. ACTUALIZAR PESOS DE PARCIALES EN MATRIZ
       if (lower.includes("pesos") || lower.includes("ponderacion parcial") || lower.includes("ponderación parcial")) {
         const matPesos = detectarMateria(lower);
         const nums = lower.match(/\b(\d+(?:\.\d+)?)\b/g);
@@ -2707,7 +2881,6 @@
         }
       }
 
-      // 9. BONO EXTRA DIRECTO EN EVALUACIÓN
       const esComandoBonoDirecto = (lower.includes("bono") || lower.includes("colchon") || lower.includes("colchón") || /^(?:agrega|suma|pon)?\s*\d+(?:\.\d+)?\s*(?:punto|pts|puntos)\s*extra/i.test(lower));
       if (esComandoBonoDirecto) {
         const materia = detectarMateria(lower);
@@ -2724,7 +2897,6 @@
         }
       }
 
-      // 10. CALIFICACIONES P1 / P2
       if (/\bp[12]\b/.test(lower) || lower.includes("primer parcial") || lower.includes("segundo parcial")) {
         const numParcial = (lower.includes("primer") || lower.includes("1er") || /\bp1\b/.test(lower)) ? "p1" : "p2";
         const materia = detectarMateria(lower);
@@ -2752,7 +2924,6 @@
         }
       }
 
-      // 11. CALIFICAR UNA ACTIVIDAD EXISTENTE
       if (lower.includes("saqué") || lower.includes("saque") || lower.includes("obtuve") || lower.includes("califica")) {
         const matRef = detectarMateria(lower);
         const tarea = encontrarTareaPorTexto(texto, matRef);
@@ -2779,7 +2950,6 @@
         }
       }
 
-      // 12. MODIFICADOR MANUAL POR COMANDO (EDITA / MODIFICA / CAMBIA / MUEVE / RENOMBRA / LINK / NOTAS)
       const esComandoEdicion = /^(?:edita|editar|modifica|modificar|cambia|cambiar|actualiza|actualizar|mueve|mover|pasa|pasar|renombra|renombrar|pon\s+link|agrega\s+link|pon\s+notas|notas\s+de|detalles\s+de)\b/i.test(lower);
 
       if (esComandoEdicion) {
@@ -2797,7 +2967,6 @@
 
         const cambios = [];
 
-        // Renombrar actividad
         const matchRenombra = cuerpoComando.match(/\b(?:renombra|renombrar|nombre|titulo|t[ií]tulo)\s+(?:a\s+|por\s+|:)?\s*([^,]+)$/i) ||
                               cuerpoComando.match(/\brenombra\s+.*?\s+(?:a|por)\s+([^,]+)/i);
         if (matchRenombra && matchRenombra[1]) {
@@ -2808,7 +2977,6 @@
           }
         }
 
-        // Cambiar asignatura (si dice "materia X" o "mueve ... a X")
         const matchMatCmd = cuerpoComando.match(/\b(?:materia|asignatura|a\s+la\s+materia)\s*:?\s*([a-záéíóúñ\s]+?)(?:,|$)/i) ||
                             cuerpoComando.match(/\b(?:mueve|pasa)\s+.*?\s+a\s+([a-záéíóúñ\s]+?)(?:,|$)/i);
         if (matchMatCmd) {
@@ -2819,7 +2987,6 @@
           }
         }
 
-        // Cambiar clasificación (porcentual / ordinal / extra)
         const lowerCmd = cuerpoComando.toLowerCase();
         if (/\b(?:tipo|clasificaci[oó]n|a|en)\s*:?\s*extra\b/.test(lowerCmd) || /\bhaz\s+extra\b/.test(lowerCmd)) {
           tareaEditar.tipo = 'extra';
@@ -2837,7 +3004,6 @@
           cambios.push("CLASIFICACIÓN: PORCENTUAL");
         }
 
-        // Cambiar a CONTINUO SIN FECHA o asignar nueva FECHA
         if (lowerCmd.includes("continuo sin fecha") || lowerCmd.includes("sin fecha") || lowerCmd.includes("no fecha")) {
           tareaEditar.sinFecha = true;
           tareaEditar.fecha = "";
@@ -2853,14 +3019,12 @@
           }
         }
 
-        // Cambiar HORA
         const nuevaHora = extraerHoraInteligente(cuerpoComando);
         if (nuevaHora && !tareaEditar.sinFecha) {
           tareaEditar.hora = nuevaHora;
           cambios.push(`HORA: ${nuevaHora} HRS`);
         }
 
-        // Cambiar VALOR y BASE DEL PROFESOR
         const valBase = extraerValorYBase(cuerpoComando);
         if (valBase && tareaEditar.tipo !== 'ordinal') {
           if (valBase.puntos !== null && valBase.puntos > 0) {
@@ -2873,7 +3037,6 @@
           cambios.push(`VALOR: ${tareaEditar.puntos}/${tareaEditar.base} PTS`);
         }
 
-        // Cambiar LINK DE CLASSROOM
         const urlEditMatch = cuerpoComando.match(/https?:\/\/[^\s,]+/i);
         if (urlEditMatch) {
           tareaEditar.urlClassroom = urlEditMatch[0];
@@ -2883,7 +3046,6 @@
           cambios.push("LINK ELIMINADO");
         }
 
-        // Cambiar NOTAS
         if (nuevasNotas !== null) {
           tareaEditar.detalles = nuevasNotas;
           cambios.push("NOTAS ACTUALIZADAS");
@@ -2901,7 +3063,6 @@
         return;
       }
 
-      // 13. CREACIÓN DE NUEVA ACTIVIDAD (PORCENTUAL, ORDINAL O EXTRA)
       const partesNotasCreacion = texto.split(/\b(?:notas?|detalles?)\s*:/i);
       const textoSinNotas = partesNotasCreacion[0];
       const notasCreacion = partesNotasCreacion.length > 1 ? partesNotasCreacion[1].trim() : "";
@@ -3009,6 +3170,10 @@
       agregarMensajeChat("bot", `ENTREGA REGISTRADA [${tipo.toUpperCase()}]: <span style="color:${getColorMateria(nueva.materia)}; font-weight:700;">${nueva.materia.toUpperCase()}</span>: "${nueva.actividad}" // ${infoTiempo} // ${infoValor}${urlClassroom ? ' // LINK GUARDADO' : ''}.`);
     }
 
+    /* =========================================================================
+       BARRAS CON COLOR NEÓN DE LA MATERIA (CONSERVANDO RECUADROS UNIVERSALES)
+       ========================================================================= */
+
     function generarBloqueBarrasActividad(t, esVistaMaterias = false) {
       if (t.tipo === 'ordinal') {
         return `
@@ -3020,6 +3185,7 @@
       }
 
       const esExtra = (t.tipo === 'extra');
+      const colorMat = getColorMateria(t.materia);
       const puntosX = Number(t.puntos) || 20;
       const baseX = Number(t.base) || 100;
       const porcBaseX = Math.min((puntosX / baseX) * 100, 100);
@@ -3029,30 +3195,38 @@
       const modoUnaBarra = esBase100 && !t.forzarDual;
 
       const wrapperClass = esExtra ? "dual-bars-wrapper extra-wrapper" : "dual-bars-wrapper";
+      const wrapperStyle = esExtra ? "" : `border-color: ${colorMat}44;`;
       const fillClass = esExtra ? "bar-fill extra-overflow" : "bar-fill";
+      const fillStyle = esExtra
+        ? `width: ${Math.min(valorEn100, 100)}%;`
+        : `width: ${Math.min(valorEn100, 100)}%; background: linear-gradient(90deg, ${colorMat}99 0%, ${colorMat} 100%); box-shadow: 0 0 8px ${colorMat}88;`;
+      const baseFillStyle = esExtra
+        ? `width: ${porcBaseX}%;`
+        : `width: ${porcBaseX}%; background: linear-gradient(90deg, ${colorMat}66 0%, ${colorMat}cc 100%); box-shadow: 0 0 6px ${colorMat}66;`;
       const pctClass = esExtra ? "pct-extra" : "pct-destacado";
+      const pctStyle = esExtra ? "" : `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
       const labelTitle = esExtra ? "PORCENTAJE EXTRA" : "PORCENTAJE";
 
       if (modoUnaBarra) {
         return `
-          <div class="${wrapperClass}">
+          <div class="${wrapperClass}" style="${wrapperStyle}">
             <div class="bar-row-block">
               <div class="bar-label-sub">
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span>${labelTitle}</span>
                   <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Editar valor o base del profesor">⚙ AJUSTAR BASE</button>
                 </div>
-                <span class="${pctClass}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
+                <span class="${pctClass}" style="${pctStyle}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
               </div>
               <div class="bar-container">
-                <div class="${fillClass}" style="width: ${Math.min(valorEn100, 100)}%;"></div>
+                <div class="${fillClass}" style="${fillStyle}"></div>
               </div>
             </div>
           </div>
         `;
       } else {
         return `
-          <div class="${wrapperClass}">
+          <div class="${wrapperClass}" style="${wrapperStyle}">
             <div class="bar-row-block">
               <div class="bar-label-sub">
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -3071,17 +3245,17 @@
                 `}
               </div>
               <div class="bar-container">
-                <div class="bar-fill bar-gold" style="width: ${porcBaseX}%;"></div>
+                <div class="bar-fill ${esExtra ? 'bar-gold' : ''}" style="${baseFillStyle}"></div>
               </div>
             </div>
 
             <div class="bar-row-block">
               <div class="bar-label-sub">
                 <span>${labelTitle}</span>
-                <span class="${pctClass}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
+                <span class="${pctClass}" style="${pctStyle}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
               </div>
               <div class="bar-container">
-                <div class="${fillClass}" style="width: ${Math.min(valorEn100, 100)}%;"></div>
+                <div class="${fillClass}" style="${fillStyle}"></div>
               </div>
             </div>
           </div>
@@ -3089,42 +3263,32 @@
       }
     }
 
-    function render() {
-      const cronogramaEl = document.getElementById("lista-cronograma");
-      let ordenadas = tareas
-        .filter(t => !t.sinFecha && Boolean(t.fecha))
-        .sort((a, b) => new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`));
-      
-      if (filtroActual === 'activas') {
-        ordenadas = ordenadas.filter(t => !t.completada);
-      } else if (filtroActual === 'completadas') {
-        ordenadas = ordenadas.filter(t => t.completada);
-      }
+    function renderizarTarjetaCronograma(t) {
+      const doom = calcularCuentaRegresiva(t.fecha, t.hora);
+      const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
+      const syncClase = t.sincronizada ? 'sync-ok' : 'sync-pending';
+      const colorMat = getColorMateria(t.materia);
+      const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
+      const bloqueVisual = generarBloqueBarrasActividad(t, false);
 
-      cronogramaEl.innerHTML = ordenadas.length ? ordenadas.map(t => {
-        const doom = calcularCuentaRegresiva(t.fecha, t.hora);
-        const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
-        const syncClase = t.sincronizada ? 'sync-ok' : 'sync-pending';
-        const colorMat = getColorMateria(t.materia);
-        const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
-        
-        const bloqueVisual = generarBloqueBarrasActividad(t, false);
-
-        return `
-          <div class="card ${syncClase} ${t.completada ? 'completada' : ''}">
+      return `
+        <div class="card ${syncClase} ${t.completada ? 'completada' : ''}">
+          <div class="card-body-main">
             <div class="card-top">
               <span class="materia-tag" style="color:${colorMat}; text-shadow:0 0 8px ${colorMat}66;">${normalizarMateria(t.materia).toUpperCase()}:</span>
               <span class="actividad-texto">${t.actividad}</span>
             </div>
 
             <div class="card-timing">
-              <span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
+              <span class="fecha-destacada" style="color:${colorMat}; text-shadow:0 0 6px ${colorMat}55;">${formatearFechaSinMes(t.fecha)}</span>
               <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
               ${extraTimingBadge}
             </div>
 
             ${bloqueVisual}
+          </div>
 
+          <div>
             <div class="card-bottom">
               <div class="card-meta">
                 <span>HORA: ${t.hora || '00:00:00'} HRS</span>
@@ -3149,9 +3313,59 @@
               ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
             </div>
           </div>
-        `;
-      }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS CON FECHA REGISTRADAS</p>";
+        </div>
+      `;
+    }
 
+    function render() {
+      const claseGrid = getClaseGridDisposicion();
+      const semanaActualKey = obtenerKeySemanaActual();
+
+      // 1. RENDER CRONOGRAMA AGRUPADO POR SEMANAS ("n SEMANA DE MES")
+      const cronogramaEl = document.getElementById("lista-cronograma");
+      let ordenadas = tareas
+        .filter(t => !t.sinFecha && Boolean(t.fecha))
+        .sort((a, b) => new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`));
+      
+      if (filtroActual === 'activas') {
+        ordenadas = ordenadas.filter(t => !t.completada);
+      } else if (filtroActual === 'completadas') {
+        ordenadas = ordenadas.filter(t => t.completada);
+      }
+
+      if (ordenadas.length) {
+        const gruposSemanales = [];
+        const mapaSemanas = {};
+
+        ordenadas.forEach(t => {
+          const infoSem = obtenerInfoSemanaMes(t.fecha);
+          if (!mapaSemanas[infoSem.key]) {
+            const grupo = { ...infoSem, tareas: [] };
+            mapaSemanas[infoSem.key] = grupo;
+            gruposSemanales.push(grupo);
+          }
+          mapaSemanas[infoSem.key].tareas.push(t);
+        });
+
+        cronogramaEl.innerHTML = gruposSemanales.map(grupo => {
+          const esActual = (grupo.key === semanaActualKey);
+          return `
+            <div class="semana-bloque ${esActual ? 'semana-actual' : ''}">
+              <div class="semana-header">
+                <span class="semana-titulo">${grupo.titulo}</span>
+                ${esActual ? '<span class="badge-semana-actual">SEMANA EN CURSO</span>' : ''}
+              </div>
+              <div class="${claseGrid}">
+                ${grupo.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
+              </div>
+            </div>
+          `;
+        }).join("");
+      } else {
+        cronogramaEl.innerHTML = "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS CON FECHA REGISTRADAS</p>";
+      }
+
+      // 2. RENDER MATERIAS (POR MATERIA CON GRAN BARRA NEÓN + MOSAICOS)
       const materiasEl = document.getElementById("lista-materias");
       const materiasConTareas = MATERIAS_OFICIALES.filter(mat =>
         tareas.some(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase()) ||
@@ -3187,7 +3401,8 @@
         });
 
         const totalExtra100 = Number((puntosExtraAct100 + extraManualMat).toFixed(2));
-        const baseColorClass = puntosBase100 >= 100 ? 'success' : (puntosBase100 >= 70 ? '' : 'warning');
+        const matBarStyle = `background: linear-gradient(90deg, ${colorMat}99 0%, ${colorMat} 100%); box-shadow: 0 0 10px ${colorMat}88;`;
+        const matPctStyle = `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
 
         let badgeCoberturaHtml = '';
         let textoCoberturaHtml = '';
@@ -3203,24 +3418,24 @@
           badgeCoberturaHtml = `<span class="badge" style="border: 1px solid #c084fc; color:#e9d5ff; background: rgba(168,85,247,0.22); box-shadow: 0 0 10px rgba(168,85,247,0.4);">${formatearPorcentaje(puntosBase100)} + ${formatearPorcentaje(totalExtra100)} EXTRA</span>`;
           textoCoberturaHtml = `
             <div style="display:flex; align-items:center; gap:8px;">
-              <strong class="pct-destacado" style="font-size:1.25rem;">${formatearPorcentaje(puntosBase100)}</strong>
+              <strong class="pct-destacado" style="font-size:1.25rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong>
               <strong class="pct-extra" style="font-size:1.25rem;">+ ${formatearPorcentaje(totalExtra100)} EXTRA</strong>
             </div>
           `;
           barraUniversalHtml = `
             <div class="bar-container" style="height: 16px;">
               <div class="bar-base-zone" style="width: ${baseZonePct}%;">
-                <div class="bar-fill ${baseColorClass}" style="width: ${baseFillInsideZonePct}%;"></div>
+                <div class="bar-fill" style="width: ${baseFillInsideZonePct}%; ${matBarStyle}"></div>
               </div>
               <div class="bar-fill extra-overflow" style="width: ${extraBarPct}%;"></div>
             </div>
           `;
         } else {
           badgeCoberturaHtml = `<span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${formatearPorcentaje(puntosBase100)}</span>`;
-          textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.25rem;">${formatearPorcentaje(puntosBase100)}</strong></span>`;
+          textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.25rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong></span>`;
           barraUniversalHtml = `
             <div class="bar-container" style="height: 16px;">
-              <div class="bar-fill ${baseColorClass}" style="width: ${Math.min(Math.max(puntosBase100, 0), 100)}%;"></div>
+              <div class="bar-fill" style="width: ${Math.min(Math.max(puntosBase100, 0), 100)}%; ${matBarStyle}"></div>
             </div>
           `;
         }
@@ -3252,7 +3467,7 @@
         }
 
         return `
-          <div class="materia-bloque">
+          <div class="materia-bloque" style="border-color: ${colorMat}44;">
             <div class="materia-header">
               <div class="materia-title-row">
                 <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
@@ -3271,70 +3486,78 @@
               </div>
             </div>
 
-            ${tareasMat.map(t => {
-              const esSinFecha = t.sinFecha || !t.fecha;
-              const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
-              const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
-              const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
-              const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
+            <div class="${claseGrid}">
+              ${tareasMat.map(t => {
+                const esSinFecha = t.sinFecha || !t.fecha;
+                const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
+                const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
+                const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
+                const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
 
-              const timingHtml = esSinFecha
-                ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>${extraTimingBadge}`
-                : `<span class="fecha-destacada">${formatearFechaLarga(t.fecha)}</span>
-                   <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
-                   ${extraTimingBadge}`;
+                const timingHtml = esSinFecha
+                  ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>${extraTimingBadge}`
+                  : `<span class="fecha-destacada" style="color:${colorMat};">${formatearFechaLarga(t.fecha)}</span>
+                     <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
+                     ${extraTimingBadge}`;
 
-              const horaHtml = esSinFecha
-                ? `<span>CONTINUO SIN FECHA</span>`
-                : `<span>HORA: ${t.hora || '00:00:00'} HRS</span>`;
+                const horaHtml = esSinFecha
+                  ? `<span>CONTINUO SIN FECHA</span>`
+                  : `<span>HORA: ${t.hora || '00:00:00'} HRS</span>`;
 
-              return `
-                <div class="card ${t.completada ? 'completada' : ''}" style="margin-bottom:12px;">
-                  <div class="card-top">
-                    <span class="actividad-texto" style="font-weight:700; color:#ffffff;">${t.actividad}</span>
-                  </div>
+                return `
+                  <div class="card ${t.completada ? 'completada' : ''}">
+                    <div class="card-body-main">
+                      <div class="card-top">
+                        <span class="actividad-texto" style="font-weight:700; color:#ffffff;">${t.actividad}</span>
+                      </div>
 
-                  <div class="card-timing">
-                    ${timingHtml}
-                  </div>
+                      <div class="card-timing">
+                        ${timingHtml}
+                      </div>
 
-                  ${bloqueMateriaVisual}
-
-                  <div class="card-bottom">
-                    <div class="card-meta">
-                      ${horaHtml}
+                      ${bloqueMateriaVisual}
                     </div>
-                    <div class="card-actions">
-                      ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
-                      <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
-                      <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
-                      <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
-                    </div>
-                  </div>
 
-                  <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
-                    <div class="details-top-bar">
-                      <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
-                      <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
+                    <div>
+                      <div class="card-bottom">
+                        <div class="card-meta">
+                          ${horaHtml}
+                        </div>
+                        <div class="card-actions">
+                          ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
+                          <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
+                          <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
+                          <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
+                        </div>
+                      </div>
+
+                      <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
+                        <div class="details-top-bar">
+                          <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
+                          <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
+                        </div>
+                        <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
+                        ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
+                      </div>
                     </div>
-                    <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
-                    ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
                   </div>
-                </div>
-              `;
-            }).join("")}
+                `;
+              }).join("")}
+            </div>
           </div>
         `;
       }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
 
+      // 3. RENDER EVALUACIÓN (BARRAS CON COLOR NEÓN DE LA MATERIA + COLCHÓN MORADO)
       const evalP3El = document.getElementById("lista-evaluacion-p3");
       const matrizBody = document.getElementById("tabla-matriz-body");
 
       evalP3El.innerHTML = MATERIAS_OFICIALES.map(mat => {
         const p3Info = calcularP3Materia(mat);
         const tareasP3 = tareas.filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase() && (t.parcial === 3 || !t.parcial));
-        const colorBarra = p3Info.puntosAcumulados >= 80 ? 'success' : (p3Info.puntosAcumulados >= 60 ? 'warning' : '');
         const colorMat = getColorMateria(mat);
+        const matBarStyle = `background: linear-gradient(90deg, ${colorMat}99 0%, ${colorMat} 100%); box-shadow: 0 0 10px ${colorMat}88;`;
+        const matPctStyle = `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
 
         const totalConColchon = p3Info.puntosAcumulados + p3Info.colchon;
         let barraEvalHtml = '';
@@ -3344,7 +3567,7 @@
           barraEvalHtml = `
             <div class="bar-container" style="height:16px; margin-top:6px;">
               <div class="bar-base-zone" style="width: ${baseEvalPct}%;">
-                <div class="bar-fill success" style="width: 100%;"></div>
+                <div class="bar-fill" style="width: 100%; ${matBarStyle}"></div>
               </div>
               <div class="bar-fill extra-overflow" style="width: ${colchonEvalPct}%;"></div>
             </div>
@@ -3352,7 +3575,7 @@
         } else {
           barraEvalHtml = `
             <div class="bar-container" style="height:16px; margin-top:6px;">
-              <div class="bar-fill ${colorBarra}" style="width: ${p3Info.puntosAcumulados}%;"></div>
+              <div class="bar-fill" style="width: ${p3Info.puntosAcumulados}%; ${matBarStyle}"></div>
             </div>
           `;
         }
@@ -3362,19 +3585,19 @@
           : '';
 
         return `
-          <div class="eval-materia-card">
+          <div class="eval-materia-card" style="border-color: ${colorMat}44;">
             <div class="eval-materia-header">
               <div class="eval-materia-topline">
                 <span class="materia-tag" style="font-size:1.15rem; color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
-                <div class="eval-grade-display">
+                <div class="eval-grade-display" style="${matPctStyle}">
                   <span>${formatearPorcentaje(p3Info.puntosAcumulados)}</span>
-                  ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15);">+${formatearPorcentaje(p3Info.colchon)} COLCHÓN</span>` : ''}
+                  ${p3Info.colchon > 0 ? `<span class="badge" style="border:1px solid #a855f7; color:#c084fc; background:rgba(168,85,247,0.15); text-shadow:none;">+${formatearPorcentaje(p3Info.colchon)} COLCHÓN</span>` : ''}
                 </div>
               </div>
               ${barraEvalHtml}
               <div class="coverage-meta-row">
-                <span>TOTAL PROGRAMADO: <span class="pct-destacado" style="font-size:0.95rem;">${formatearPorcentaje(p3Info.puntosProgramadosBase)}</span>${progExtraHtml}</span>
-                <span>TOTAL EVALUADO: <span class="pct-destacado" style="font-size:0.95rem;">${formatearPorcentaje(p3Info.puntosAcumulados)}</span></span>
+                <span>TOTAL PROGRAMADO: <span class="pct-destacado" style="font-size:0.95rem; ${matPctStyle}">${formatearPorcentaje(p3Info.puntosProgramadosBase)}</span>${progExtraHtml}</span>
+                <span>TOTAL EVALUADO: <span class="pct-destacado" style="font-size:0.95rem; ${matPctStyle}">${formatearPorcentaje(p3Info.puntosAcumulados)}</span></span>
               </div>
             </div>
 
@@ -3412,10 +3635,20 @@
                 const aporteBase100 = hasGrade ? ((califNum / baseX) * 100) : 0;
 
                 const esBase100 = (baseX === 100);
-                const cardExtraStyle = esExtra ? "border-left: 3px solid #a855f7;" : "";
+                const cardExtraStyle = esExtra ? "border-left: 3px solid #a855f7;" : `border-left: 3px solid ${colorMat};`;
                 const wrapperExtraClass = esExtra ? "dual-bars-wrapper extra-wrapper" : "dual-bars-wrapper";
                 const fillExtraClass = esExtra ? "bar-fill extra-overflow" : "bar-fill";
+                const fillEvalStyle = esExtra
+                  ? `width: ${porcRendimientoX}%;`
+                  : `width: ${porcRendimientoX}%; ${matBarStyle}`;
+                const fillEvalAporteStyle = esExtra
+                  ? `width: ${Math.min(aporteBase100, 100)}%;`
+                  : `width: ${Math.min(aporteBase100, 100)}%; ${matBarStyle}`;
+                const baseGoldStyle = esExtra
+                  ? `width: ${porcRendimientoX}%;`
+                  : `width: ${porcRendimientoX}%; background: linear-gradient(90deg, ${colorMat}66 0%, ${colorMat}cc 100%); box-shadow: 0 0 6px ${colorMat}66;`;
                 const pctExtraClass = esExtra ? "pct-extra" : "pct-destacado";
+                const pctEvalStyle = esExtra ? "font-size:1.2rem;" : `font-size:1.2rem; ${matPctStyle}`;
                 const badgeExtraHtml = esExtra ? `<span class="badge-extra" style="font-size:0.78rem; padding:3px 10px;">EXTRA</span>` : "";
 
                 if (esBase100) {
@@ -3435,11 +3668,11 @@
                             <span>${esExtra ? 'PORCENTAJE EXTRA' : 'PORCENTAJE'}</span>
                             <div style="display:flex; align-items:center; gap:6px;">
                               <input type="number" class="input-mini" step="0.1" min="0" max="${puntosX}" value="${califVal}" placeholder="--" onchange="actualizarCalifTarea(${t.id}, this.value)">
-                              <span class="${pctExtraClass}" style="font-size:1.2rem;">/ ${esExtra ? '+' : ''}${formatearPorcentaje(puntosX)}</span>
+                              <span class="${pctExtraClass}" style="${pctEvalStyle}">/ ${esExtra ? '+' : ''}${formatearPorcentaje(puntosX)}</span>
                             </div>
                           </div>
                           <div class="bar-container">
-                            <div class="${fillExtraClass}" style="width: ${porcRendimientoX}%;"></div>
+                            <div class="${fillExtraClass}" style="${fillEvalStyle}"></div>
                           </div>
                         </div>
                       </div>
@@ -3466,17 +3699,17 @@
                             </div>
                           </div>
                           <div class="bar-container">
-                            <div class="bar-fill bar-gold" style="width: ${porcRendimientoX}%;"></div>
+                            <div class="bar-fill ${esExtra ? 'bar-gold' : ''}" style="${baseGoldStyle}"></div>
                           </div>
                         </div>
 
                         <div class="bar-row-block">
                           <div class="bar-label-sub">
                             <span>${esExtra ? 'PORCENTAJE EXTRA' : 'PORCENTAJE'}</span>
-                            <span class="${pctExtraClass}" style="font-size:1.2rem;">${esExtra ? '+' : ''}${formatearPorcentaje(aporteBase100)}</span>
+                            <span class="${pctExtraClass}" style="${pctEvalStyle}">${esExtra ? '+' : ''}${formatearPorcentaje(aporteBase100)}</span>
                           </div>
                           <div class="bar-container">
-                            <div class="${fillExtraClass}" style="width: ${Math.min(aporteBase100, 100)}%;"></div>
+                            <div class="${fillExtraClass}" style="${fillEvalAporteStyle}"></div>
                           </div>
                         </div>
                       </div>
@@ -3574,7 +3807,7 @@
 
             <td>
               <div class="partial-cell-content">
-                <div class="p3-grade-display">${formatearPorcentaje(p3Val)}</div>
+                <div class="p3-grade-display" style="color:${colorMat}; text-shadow:0 0 8px ${colorMat}66;">${formatearPorcentaje(p3Val)}</div>
                 <div class="weight-box" title="Porcentaje del 3er Parcial">
                   <span class="weight-label">VALOR</span>
                   <input type="number" class="input-weight" step="0.1" min="1" max="100" value="${formatearPorcentajeNum(pesos.p3)}" onchange="actualizarPesoMateria('${mat}', 'p3', this.value)">
