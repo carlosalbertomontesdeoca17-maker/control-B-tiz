@@ -71,12 +71,12 @@
 
     .app-container {
       width: 96%;
-      max-width: 1720px;
+      max-width: 1800px;
       margin: 0 auto;
       transition: max-width 0.2s ease;
     }
 
-    .app-container.force-vertical {
+    .app-container.modo-vertical-estricto {
       max-width: 920px;
     }
 
@@ -252,9 +252,9 @@
       box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
     }
 
-    /* BLOQUES SEMANALES EN CRONOGRAMA */
+    /* BLOQUES SEMANALES Y TABLEROS DE ZOOM OUT */
     .semana-bloque {
-      margin-bottom: 30px;
+      margin-bottom: 28px;
       background: rgba(10, 15, 29, 0.65);
       border: 1px solid #1e2d48;
       padding: 18px;
@@ -264,6 +264,11 @@
     .semana-bloque.semana-actual {
       border-color: rgba(56, 189, 248, 0.55);
       box-shadow: 0 0 18px rgba(56, 189, 248, 0.14);
+    }
+
+    .semana-bloque.urgencia-critica {
+      border-color: rgba(239, 68, 68, 0.65);
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.18);
     }
 
     .semana-header {
@@ -297,25 +302,43 @@
       text-shadow: 0 0 6px var(--accent-glow);
     }
 
-    /* CUADRÍCULA ADAPTABLE AL ZOOM Y MODOS DE DISPOSICIÓN */
-    .tasks-grid {
+    .semanas-columnas-board {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .semanas-columnas-board .semana-bloque {
+      margin-bottom: 0;
+    }
+
+    .materias-mosaico-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 20px;
+      align-items: start;
+    }
+
+    .materias-mosaico-board .materia-bloque {
+      margin-bottom: 0;
+    }
+
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
       gap: 16px;
       align-items: stretch;
     }
 
-    .tasks-grid.layout-mosaico {
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    }
-
-    .tasks-grid.layout-vertical {
+    .tasks-grid.single-col {
       grid-template-columns: 1fr;
     }
 
-    @media (max-width: 440px) {
-      .tasks-grid,
-      .tasks-grid.layout-mosaico {
+    @media (max-width: 460px) {
+      .semanas-columnas-board,
+      .materias-mosaico-board,
+      .tasks-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -415,7 +438,7 @@
     }
 
     .fecha-destacada {
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 700;
       color: var(--accent);
       letter-spacing: 1px;
@@ -595,7 +618,7 @@
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid rgba(56, 189, 248, 0.4);
       color: var(--accent);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       padding: 3px 8px;
       cursor: pointer;
@@ -610,7 +633,7 @@
     }
 
     .pct-destacado {
-      font-size: 1.15rem;
+      font-size: 1.18rem;
       font-weight: 700;
       color: #38bdf8;
       text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
@@ -618,7 +641,7 @@
     }
 
     .pct-extra {
-      font-size: 1.15rem;
+      font-size: 1.18rem;
       font-weight: 700;
       color: #c084fc;
       text-shadow: 0 0 8px rgba(192, 132, 252, 0.55);
@@ -633,22 +656,22 @@
       padding-top: 10px;
       border-top: 1px solid #1a2333;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
     .card-meta {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       font-weight: 600;
     }
 
     .badge {
-      padding: 4px 10px;
-      font-size: 0.78rem;
+      padding: 4px 9px;
+      font-size: 0.75rem;
       font-weight: 700;
       letter-spacing: 0.5px;
       display: inline-block;
@@ -671,13 +694,13 @@
     .card-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .card-details-drawer {
       margin-top: 8px;
-      padding: 14px;
+      padding: 12px;
       background: #090e1a;
       border: 1px solid #1c2b46;
       border-left: 3px solid var(--accent);
@@ -713,10 +736,10 @@
       background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
       border: 1px solid #334155;
       color: #ffffff;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      padding: 8px 12px;
-      letter-spacing: 1px;
+      padding: 7px 11px;
+      letter-spacing: 0.8px;
       box-shadow: 
         inset 1px 1px 0px var(--bevel-high),
         inset -1px -1px 0px var(--bevel-shadow),
@@ -818,7 +841,7 @@
     }
 
     .materia-bloque {
-      margin-bottom: 28px;
+      margin-bottom: 26px;
       background: #0c1220;
       border: 1px solid #1a2438;
       padding: 18px;
@@ -1276,7 +1299,7 @@
       <div class="section-header">
         <h2>ENTREGAS</h2>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-left:auto;">
-          <button class="btn-32 btn-32-layout" id="btn-layout-crono" onclick="alternarDisposicion()">DISPOSICIÓN: AUTO ◈</button>
+          <button class="btn-32 btn-32-layout" id="btn-layout-crono" onclick="alternarDisposicionCrono()">VISTA: SEMANAS ◈</button>
           <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
           <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
         </div>
@@ -1296,7 +1319,7 @@
       <div class="section-header">
         <h2>POR MATERIA</h2>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-left:auto;">
-          <button class="btn-32 btn-32-layout" id="btn-layout-mat" onclick="alternarDisposicion()">DISPOSICIÓN: AUTO ◈</button>
+          <button class="btn-32 btn-32-layout" id="btn-layout-mat" onclick="alternarDisposicionMat()">VISTA: BLOQUES ◈</button>
           <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
         </div>
       </div>
@@ -1709,7 +1732,9 @@
     let tokenClient = null;
     let accessToken = localStorage.getItem("gcal_access_token") || null;
     let filtroActual = 'todas';
-    let disposicionActual = localStorage.getItem("disposicion_amadeus") || 'auto';
+
+    let modoCronograma = localStorage.getItem("modo_crono_amadeus") || 'semanas_auto';
+    let modoMaterias = localStorage.getItem("modo_mat_amadeus") || 'bloques_auto';
 
     function guardarLocal(origenRemoto = false) {
       localStorage.setItem("tareas_workstation", JSON.stringify(tareas));
@@ -1841,41 +1866,49 @@
       render();
     }
 
-    function alternarDisposicion() {
-      const ordenModos = ['auto', 'mosaico', 'vertical'];
-      const siguiente = ordenModos[(ordenModos.indexOf(disposicionActual) + 1) % ordenModos.length];
-      disposicionActual = siguiente;
-      localStorage.setItem("disposicion_amadeus", disposicionActual);
+    function alternarDisposicionCrono() {
+      const orden = ['semanas_auto', 'semanas_columnas', 'urgencia'];
+      modoCronograma = orden[(orden.indexOf(modoCronograma) + 1) % orden.length];
+      localStorage.setItem("modo_crono_amadeus", modoCronograma);
+      actualizarUIControlDisposicion();
+      render();
+    }
+
+    function alternarDisposicionMat() {
+      const orden = ['bloques_auto', 'mosaico_materias', 'vertical'];
+      modoMaterias = orden[(orden.indexOf(modoMaterias) + 1) % orden.length];
+      localStorage.setItem("modo_mat_amadeus", modoMaterias);
       actualizarUIControlDisposicion();
       render();
     }
 
     function actualizarUIControlDisposicion() {
-      const etiquetas = {
-        'auto': 'DISPOSICIÓN: AUTO ◈',
-        'mosaico': 'DISPOSICIÓN: MOSAICO ⊞',
-        'vertical': 'DISPOSICIÓN: VERTICAL ☰'
+      const labelsCrono = {
+        'semanas_auto': 'VISTA: SEMANAS ◈',
+        'semanas_columnas': 'VISTA: COLUMNAS ⊞',
+        'urgencia': 'VISTA: URGENCIA ⚡'
       };
-      const label = etiquetas[disposicionActual] || 'DISPOSICIÓN: AUTO ◈';
+      const labelsMat = {
+        'bloques_auto': 'VISTA: BLOQUES ◈',
+        'mosaico_materias': 'VISTA: MOSAICO ⊞',
+        'vertical': 'VISTA: VERTICAL ☰'
+      };
+
       const btnCrono = document.getElementById("btn-layout-crono");
       const btnMat = document.getElementById("btn-layout-mat");
       const appCont = document.getElementById("main-app-container");
 
-      if (btnCrono) btnCrono.innerText = label;
-      if (btnMat) btnMat.innerText = label;
+      if (btnCrono) btnCrono.innerText = labelsCrono[modoCronograma] || 'VISTA: SEMANAS ◈';
+      if (btnMat) btnMat.innerText = labelsMat[modoMaterias] || 'VISTA: BLOQUES ◈';
+
+      const vistaActiva = document.querySelector(".view-panel.active")?.id;
       if (appCont) {
-        if (disposicionActual === 'vertical') {
-          appCont.classList.add("force-vertical");
+        if (vistaActiva === "vista-materias" && modoMaterias === "vertical") {
+          appCont.classList.add("modo-vertical-estricto");
         } else {
-          appCont.classList.remove("force-vertical");
+          appCont.classList.remove("modo-vertical-estricto");
         }
       }
-    }
-
-    function getClaseGridDisposicion() {
-      if (disposicionActual === 'mosaico') return 'tasks-grid layout-mosaico';
-      if (disposicionActual === 'vertical') return 'tasks-grid layout-vertical';
-      return 'tasks-grid';
     }
 
     function alternarCamposPonderacion(tipo) {
@@ -2039,16 +2072,6 @@
       return obtenerInfoSemanaMes(fechaHoyStr).key;
     }
 
-    function formatearFechaSinMes(fechaStr) {
-      if (!fechaStr) return "";
-      const partes = fechaStr.split("-");
-      if (partes.length !== 3) return fechaStr;
-      const fechaObj = new Date(parseInt(partes[0], 10), parseInt(partes[1], 10) - 1, parseInt(partes[2], 10));
-      const diaSemana = fechaObj.toLocaleDateString("es-MX", { weekday: "short" }).replace(".", "").toUpperCase();
-      const diaNum = parseInt(partes[2], 10);
-      return `${diaSemana} ${diaNum}`;
-    }
-
     function formatearFechaLarga(fechaStr) {
       if (!fechaStr) return "CONTINUO SIN FECHA";
       const partes = fechaStr.split("-");
@@ -2058,13 +2081,13 @@
     }
 
     function calcularCuentaRegresiva(fechaStr, horaStr = "00:00:00") {
-      if (!fechaStr) return { texto: "CONTINUO SIN FECHA", urgente: false, zero: true };
+      if (!fechaStr) return { texto: "CONTINUO SIN FECHA", urgente: false, zero: true, diffMs: Infinity };
       const horaFinal = horaStr && horaStr.length >= 5 ? (horaStr.length === 5 ? horaStr + ":00" : horaStr) : "00:00:00";
       const target = new Date(`${fechaStr}T${horaFinal}`);
       const ahora = new Date();
       const diff = target - ahora;
 
-      if (diff <= 0) return { texto: "PLAZO CUMPLIDO", urgente: false, zero: true };
+      if (diff <= 0) return { texto: "PLAZO CUMPLIDO", urgente: false, zero: true, diffMs: diff };
 
       const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
       const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -2072,7 +2095,8 @@
       return {
         texto: `${dias} dias y ${horas} horas`,
         urgente: dias < 1,
-        zero: false
+        zero: false,
+        diffMs: diff
       };
     }
 
@@ -2405,6 +2429,7 @@
       const idx = nombres.indexOf(vista);
       if (idx !== -1 && botones[idx]) botones[idx].classList.add("active");
 
+      actualizarUIControlDisposicion();
       render();
     }
 
@@ -3280,7 +3305,7 @@
             </div>
 
             <div class="card-timing">
-              <span class="fecha-destacada" style="color:${colorMat}; text-shadow:0 0 6px ${colorMat}55;">${formatearFechaSinMes(t.fecha)}</span>
+              <span class="fecha-destacada" style="color:${colorMat}; text-shadow:0 0 6px ${colorMat}55;">${formatearFechaLarga(t.fecha)}</span>
               <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
               ${extraTimingBadge}
             </div>
@@ -3318,10 +3343,9 @@
     }
 
     function render() {
-      const claseGrid = getClaseGridDisposicion();
       const semanaActualKey = obtenerKeySemanaActual();
 
-      // 1. RENDER CRONOGRAMA AGRUPADO POR SEMANAS ("n SEMANA DE MES")
+      // 1. RENDER CRONOGRAMA (SIEMPRE GOBERNADO POR EL TIEMPO, CON FECHA + MES Y MOSAICOS AL ZOOM OUT)
       const cronogramaEl = document.getElementById("lista-cronograma");
       let ordenadas = tareas
         .filter(t => !t.sinFecha && Boolean(t.fecha))
@@ -3334,219 +3358,273 @@
       }
 
       if (ordenadas.length) {
-        const gruposSemanales = [];
-        const mapaSemanas = {};
+        if (modoCronograma === 'urgencia') {
+          const dosDiasMs = 48 * 60 * 60 * 1000;
+          const gruposUrgencia = [
+            { titulo: 'CRÍTICO // MENOS DE 48 HRS', claseExtra: 'urgencia-critica', tareas: [] },
+            { titulo: 'SEMANA EN CURSO', claseExtra: 'semana-actual', tareas: [] },
+            { titulo: 'PRÓXIMAS SEMANAS', claseExtra: '', tareas: [] }
+          ];
 
-        ordenadas.forEach(t => {
-          const infoSem = obtenerInfoSemanaMes(t.fecha);
-          if (!mapaSemanas[infoSem.key]) {
-            const grupo = { ...infoSem, tareas: [] };
-            mapaSemanas[infoSem.key] = grupo;
-            gruposSemanales.push(grupo);
-          }
-          mapaSemanas[infoSem.key].tareas.push(t);
-        });
+          ordenadas.forEach(t => {
+            const c = calcularCuentaRegresiva(t.fecha, t.hora);
+            const infoSem = obtenerInfoSemanaMes(t.fecha);
+            if (!c.zero && c.diffMs <= dosDiasMs) {
+              gruposUrgencia[0].tareas.push(t);
+            } else if (infoSem.key === semanaActualKey) {
+              gruposUrgencia[1].tareas.push(t);
+            } else {
+              gruposUrgencia[2].tareas.push(t);
+            }
+          });
 
-        cronogramaEl.innerHTML = gruposSemanales.map(grupo => {
-          const esActual = (grupo.key === semanaActualKey);
-          return `
-            <div class="semana-bloque ${esActual ? 'semana-actual' : ''}">
-              <div class="semana-header">
-                <span class="semana-titulo">${grupo.titulo}</span>
-                ${esActual ? '<span class="badge-semana-actual">SEMANA EN CURSO</span>' : ''}
+          cronogramaEl.innerHTML = gruposUrgencia
+            .filter(g => g.tareas.length > 0)
+            .map(g => `
+              <div class="semana-bloque ${g.claseExtra}">
+                <div class="semana-header">
+                  <span class="semana-titulo">${g.titulo}</span>
+                  <span class="badge-semana-actual">${g.tareas.length} ENTREGA${g.tareas.length > 1 ? 'S' : ''}</span>
+                </div>
+                <div class="tasks-grid">
+                  ${g.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
+                </div>
               </div>
-              <div class="${claseGrid}">
-                ${grupo.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
+            `).join("");
+        } else {
+          const gruposSemanales = [];
+          const mapaSemanas = {};
+
+          ordenadas.forEach(t => {
+            const infoSem = obtenerInfoSemanaMes(t.fecha);
+            if (!mapaSemanas[infoSem.key]) {
+              const grupo = { ...infoSem, tareas: [] };
+              mapaSemanas[infoSem.key] = grupo;
+              gruposSemanales.push(grupo);
+            }
+            mapaSemanas[infoSem.key].tareas.push(t);
+          });
+
+          const esBoardColumnas = (modoCronograma === 'semanas_columnas');
+          const gridTareasClass = esBoardColumnas ? 'tasks-grid single-col' : 'tasks-grid';
+
+          const bloquesHtml = gruposSemanales.map(grupo => {
+            const esActual = (grupo.key === semanaActualKey);
+            return `
+              <div class="semana-bloque ${esActual ? 'semana-actual' : ''}">
+                <div class="semana-header">
+                  <span class="semana-titulo">${grupo.titulo}</span>
+                  ${esActual ? '<span class="badge-semana-actual">SEMANA EN CURSO</span>' : ''}
+                </div>
+                <div class="${gridTareasClass}">
+                  ${grupo.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
+                </div>
               </div>
-            </div>
-          `;
-        }).join("");
+            `;
+          }).join("");
+
+          cronogramaEl.innerHTML = esBoardColumnas
+            ? `<div class="semanas-columnas-board">${bloquesHtml}</div>`
+            : bloquesHtml;
+        }
       } else {
         cronogramaEl.innerHTML = "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS CON FECHA REGISTRADAS</p>";
       }
 
-      // 2. RENDER MATERIAS (POR MATERIA CON GRAN BARRA NEÓN + MOSAICOS)
+      // 2. RENDER MATERIAS (POR MATERIA CON GRAN BARRA NEÓN + MOSAICOS AL ZOOM OUT)
       const materiasEl = document.getElementById("lista-materias");
       const materiasConTareas = MATERIAS_OFICIALES.filter(mat =>
         tareas.some(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase()) ||
         ((calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0) > 0
       );
 
-      materiasEl.innerHTML = materiasConTareas.length ? materiasConTareas.map(mat => {
-        const tareasMat = tareas
-          .filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
-          .sort((a, b) => {
-            const aSin = a.sinFecha || !a.fecha;
-            const bSin = b.sinFecha || !b.fecha;
-            if (aSin && bSin) return 0;
-            if (aSin) return 1;
-            if (bSin) return -1;
-            return new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`);
+      if (materiasConTareas.length) {
+        const esMosaicoMaterias = (modoMaterias === 'mosaico_materias');
+        const esVerticalMaterias = (modoMaterias === 'vertical');
+        const claseGridTareasMat = (esMosaicoMaterias || esVerticalMaterias) ? 'tasks-grid single-col' : 'tasks-grid';
+
+        const bloquesMateriasHtml = materiasConTareas.map(mat => {
+          const tareasMat = tareas
+            .filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
+            .sort((a, b) => {
+              const aSin = a.sinFecha || !a.fecha;
+              const bSin = b.sinFecha || !b.fecha;
+              if (aSin && bSin) return 0;
+              if (aSin) return 1;
+              if (bSin) return -1;
+              return new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`);
+            });
+          const colorMat = getColorMateria(mat);
+          
+          const extraManualMat = (calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0;
+          let puntosBase100 = 0;
+          let puntosExtraAct100 = 0;
+
+          tareasMat.forEach(curr => {
+            if (curr.tipo === 'ordinal') return;
+            const b = curr.base || 100;
+            const val = (curr.puntos / b) * 100;
+            if (curr.tipo === 'extra') {
+              puntosExtraAct100 += val;
+            } else {
+              puntosBase100 += val;
+            }
           });
-        const colorMat = getColorMateria(mat);
-        
-        const extraManualMat = (calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0;
-        let puntosBase100 = 0;
-        let puntosExtraAct100 = 0;
 
-        tareasMat.forEach(curr => {
-          if (curr.tipo === 'ordinal') return;
-          const b = curr.base || 100;
-          const val = (curr.puntos / b) * 100;
-          if (curr.tipo === 'extra') {
-            puntosExtraAct100 += val;
+          const totalExtra100 = Number((puntosExtraAct100 + extraManualMat).toFixed(2));
+          const matBarStyle = `background: linear-gradient(90deg, ${colorMat}99 0%, ${colorMat} 100%); box-shadow: 0 0 10px ${colorMat}88;`;
+          const matPctStyle = `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
+
+          let badgeCoberturaHtml = '';
+          let textoCoberturaHtml = '';
+          let barraUniversalHtml = '';
+
+          if (totalExtra100 > 0) {
+            const baseLimit = Math.max(100, puntosBase100);
+            const totalScale = baseLimit + totalExtra100;
+            const baseZonePct = (baseLimit / totalScale) * 100;
+            const baseFillInsideZonePct = Math.min((puntosBase100 / baseLimit) * 100, 100);
+            const extraBarPct = (totalExtra100 / totalScale) * 100;
+
+            badgeCoberturaHtml = `<span class="badge" style="border: 1px solid #c084fc; color:#e9d5ff; background: rgba(168,85,247,0.22); box-shadow: 0 0 10px rgba(168,85,247,0.4);">${formatearPorcentaje(puntosBase100)} + ${formatearPorcentaje(totalExtra100)} EXTRA</span>`;
+            textoCoberturaHtml = `
+              <div style="display:flex; align-items:center; gap:8px;">
+                <strong class="pct-destacado" style="font-size:1.25rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong>
+                <strong class="pct-extra" style="font-size:1.25rem;">+ ${formatearPorcentaje(totalExtra100)} EXTRA</strong>
+              </div>
+            `;
+            barraUniversalHtml = `
+              <div class="bar-container" style="height: 16px;">
+                <div class="bar-base-zone" style="width: ${baseZonePct}%;">
+                  <div class="bar-fill" style="width: ${baseFillInsideZonePct}%; ${matBarStyle}"></div>
+                </div>
+                <div class="bar-fill extra-overflow" style="width: ${extraBarPct}%;"></div>
+              </div>
+            `;
           } else {
-            puntosBase100 += val;
+            badgeCoberturaHtml = `<span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${formatearPorcentaje(puntosBase100)}</span>`;
+            textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.25rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong></span>`;
+            barraUniversalHtml = `
+              <div class="bar-container" style="height: 16px;">
+                <div class="bar-fill" style="width: ${Math.min(Math.max(puntosBase100, 0), 100)}%; ${matBarStyle}"></div>
+              </div>
+            `;
           }
-        });
 
-        const totalExtra100 = Number((puntosExtraAct100 + extraManualMat).toFixed(2));
-        const matBarStyle = `background: linear-gradient(90deg, ${colorMat}99 0%, ${colorMat} 100%); box-shadow: 0 0 10px ${colorMat}88;`;
-        const matPctStyle = `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
+          const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
+          const pesos = pesosParciales[mat] || { p1: 33.33, p2: 33.33, p3: 33.33 };
+          const p1Val = califs.p1 !== null && califs.p1 !== undefined ? califs.p1 : "";
+          const p2Val = califs.p2 !== null && califs.p2 !== undefined ? califs.p2 : "";
+          const p3Info = calcularP3Materia(mat);
+          const p3Val = p3Info.puntosAcumulados;
+          const p1Num = parseFloat(p1Val);
+          const p2Num = parseFloat(p2Val);
 
-        let badgeCoberturaHtml = '';
-        let textoCoberturaHtml = '';
-        let barraUniversalHtml = '';
+          const peso1 = valorRealPonderado(pesos.p1);
+          const peso2 = valorRealPonderado(pesos.p2);
+          const peso3 = valorRealPonderado(pesos.p3);
 
-        if (totalExtra100 > 0) {
-          const baseLimit = Math.max(100, puntosBase100);
-          const totalScale = baseLimit + totalExtra100;
-          const baseZonePct = (baseLimit / totalScale) * 100;
-          const baseFillInsideZonePct = Math.min((puntosBase100 / baseLimit) * 100, 100);
-          const extraBarPct = (totalExtra100 / totalScale) * 100;
+          let sumaPonderada = 0;
+          let pesoAcumulado = 0;
+          if (!isNaN(p1Num)) { sumaPonderada += p1Num * peso1; pesoAcumulado += peso1; }
+          if (!isNaN(p2Num)) { sumaPonderada += p2Num * peso2; pesoAcumulado += peso2; }
+          if (p3Val !== null && p3Val !== undefined) { sumaPonderada += p3Val * peso3; pesoAcumulado += peso3; }
 
-          badgeCoberturaHtml = `<span class="badge" style="border: 1px solid #c084fc; color:#e9d5ff; background: rgba(168,85,247,0.22); box-shadow: 0 0 10px rgba(168,85,247,0.4);">${formatearPorcentaje(puntosBase100)} + ${formatearPorcentaje(totalExtra100)} EXTRA</span>`;
-          textoCoberturaHtml = `
-            <div style="display:flex; align-items:center; gap:8px;">
-              <strong class="pct-destacado" style="font-size:1.25rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong>
-              <strong class="pct-extra" style="font-size:1.25rem;">+ ${formatearPorcentaje(totalExtra100)} EXTRA</strong>
-            </div>
-          `;
-          barraUniversalHtml = `
-            <div class="bar-container" style="height: 16px;">
-              <div class="bar-base-zone" style="width: ${baseZonePct}%;">
-                <div class="bar-fill" style="width: ${baseFillInsideZonePct}%; ${matBarStyle}"></div>
-              </div>
-              <div class="bar-fill extra-overflow" style="width: ${extraBarPct}%;"></div>
-            </div>
-          `;
-        } else {
-          badgeCoberturaHtml = `<span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${formatearPorcentaje(puntosBase100)}</span>`;
-          textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.25rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong></span>`;
-          barraUniversalHtml = `
-            <div class="bar-container" style="height: 16px;">
-              <div class="bar-fill" style="width: ${Math.min(Math.max(puntosBase100, 0), 100)}%; ${matBarStyle}"></div>
-            </div>
-          `;
-        }
+          let saesMateriaBadge = '';
+          if (pesoAcumulado > 0) {
+            const promMateria = sumaPonderada / pesoAcumulado;
+            const saesData = calcularRedondeoSAES(promMateria);
+            saesMateriaBadge = `<span class="badge" style="border:1px solid #ffffff; color:#ffffff; background:#1e293b;">SAES: ${saesData.enteroSAES}</span>`;
+          }
 
-        const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
-        const pesos = pesosParciales[mat] || { p1: 33.33, p2: 33.33, p3: 33.33 };
-        const p1Val = califs.p1 !== null && califs.p1 !== undefined ? califs.p1 : "";
-        const p2Val = califs.p2 !== null && califs.p2 !== undefined ? califs.p2 : "";
-        const p3Info = calcularP3Materia(mat);
-        const p3Val = p3Info.puntosAcumulados;
-        const p1Num = parseFloat(p1Val);
-        const p2Num = parseFloat(p2Val);
-
-        const peso1 = valorRealPonderado(pesos.p1);
-        const peso2 = valorRealPonderado(pesos.p2);
-        const peso3 = valorRealPonderado(pesos.p3);
-
-        let sumaPonderada = 0;
-        let pesoAcumulado = 0;
-        if (!isNaN(p1Num)) { sumaPonderada += p1Num * peso1; pesoAcumulado += peso1; }
-        if (!isNaN(p2Num)) { sumaPonderada += p2Num * peso2; pesoAcumulado += peso2; }
-        if (p3Val !== null && p3Val !== undefined) { sumaPonderada += p3Val * peso3; pesoAcumulado += peso3; }
-
-        let saesMateriaBadge = '';
-        if (pesoAcumulado > 0) {
-          const promMateria = sumaPonderada / pesoAcumulado;
-          const saesData = calcularRedondeoSAES(promMateria);
-          saesMateriaBadge = `<span class="badge" style="border:1px solid #ffffff; color:#ffffff; background:#1e293b;">SAES: ${saesData.enteroSAES}</span>`;
-        }
-
-        return `
-          <div class="materia-bloque" style="border-color: ${colorMat}44;">
-            <div class="materia-header">
-              <div class="materia-title-row">
-                <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
-                <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                  ${saesMateriaBadge}
-                  ${badgeCoberturaHtml}
-                </div>
-              </div>
-              
-              <div class="materia-universal-bar">
-                <div class="bar-label-sub">
-                  <span>COBERTURA TOTAL:</span>
-                  ${textoCoberturaHtml}
-                </div>
-                ${barraUniversalHtml}
-              </div>
-            </div>
-
-            <div class="${claseGrid}">
-              ${tareasMat.map(t => {
-                const esSinFecha = t.sinFecha || !t.fecha;
-                const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
-                const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
-                const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
-                const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
-
-                const timingHtml = esSinFecha
-                  ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>${extraTimingBadge}`
-                  : `<span class="fecha-destacada" style="color:${colorMat};">${formatearFechaLarga(t.fecha)}</span>
-                     <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
-                     ${extraTimingBadge}`;
-
-                const horaHtml = esSinFecha
-                  ? `<span>CONTINUO SIN FECHA</span>`
-                  : `<span>HORA: ${t.hora || '00:00:00'} HRS</span>`;
-
-                return `
-                  <div class="card ${t.completada ? 'completada' : ''}">
-                    <div class="card-body-main">
-                      <div class="card-top">
-                        <span class="actividad-texto" style="font-weight:700; color:#ffffff;">${t.actividad}</span>
-                      </div>
-
-                      <div class="card-timing">
-                        ${timingHtml}
-                      </div>
-
-                      ${bloqueMateriaVisual}
-                    </div>
-
-                    <div>
-                      <div class="card-bottom">
-                        <div class="card-meta">
-                          ${horaHtml}
-                        </div>
-                        <div class="card-actions">
-                          ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
-                          <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
-                          <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
-                          <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
-                        </div>
-                      </div>
-
-                      <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
-                        <div class="details-top-bar">
-                          <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
-                          <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
-                        </div>
-                        <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
-                        ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
-                      </div>
-                    </div>
+          return `
+            <div class="materia-bloque" style="border-color: ${colorMat}44;">
+              <div class="materia-header">
+                <div class="materia-title-row">
+                  <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
+                  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    ${saesMateriaBadge}
+                    ${badgeCoberturaHtml}
                   </div>
-                `;
-              }).join("")}
+                </div>
+                
+                <div class="materia-universal-bar">
+                  <div class="bar-label-sub">
+                    <span>COBERTURA TOTAL:</span>
+                    ${textoCoberturaHtml}
+                  </div>
+                  ${barraUniversalHtml}
+                </div>
+              </div>
+
+              <div class="${claseGridTareasMat}">
+                ${tareasMat.map(t => {
+                  const esSinFecha = t.sinFecha || !t.fecha;
+                  const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
+                  const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
+                  const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
+                  const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
+
+                  const timingHtml = esSinFecha
+                    ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>${extraTimingBadge}`
+                    : `<span class="fecha-destacada" style="color:${colorMat};">${formatearFechaLarga(t.fecha)}</span>
+                       <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
+                       ${extraTimingBadge}`;
+
+                  const horaHtml = esSinFecha
+                    ? `<span>CONTINUO SIN FECHA</span>`
+                    : `<span>HORA: ${t.hora || '00:00:00'} HRS</span>`;
+
+                  return `
+                    <div class="card ${t.completada ? 'completada' : ''}">
+                      <div class="card-body-main">
+                        <div class="card-top">
+                          <span class="actividad-texto" style="font-weight:700; color:#ffffff;">${t.actividad}</span>
+                        </div>
+
+                        <div class="card-timing">
+                          ${timingHtml}
+                        </div>
+
+                        ${bloqueMateriaVisual}
+                      </div>
+
+                      <div>
+                        <div class="card-bottom">
+                          <div class="card-meta">
+                            ${horaHtml}
+                          </div>
+                          <div class="card-actions">
+                            ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
+                            <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
+                            <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
+                            <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
+                          </div>
+                        </div>
+
+                        <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
+                          <div class="details-top-bar">
+                            <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
+                            <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
+                          </div>
+                          <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
+                          ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).join("")}
+              </div>
             </div>
-          </div>
-        `;
-      }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
+          `;
+        }).join("");
+
+        materiasEl.innerHTML = esMosaicoMaterias
+          ? `<div class="materias-mosaico-board">${bloquesMateriasHtml}</div>`
+          : bloquesMateriasHtml;
+      } else {
+        materiasEl.innerHTML = "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
+      }
 
       // 3. RENDER EVALUACIÓN (BARRAS CON COLOR NEÓN DE LA MATERIA + COLCHÓN MORADO)
       const evalP3El = document.getElementById("lista-evaluacion-p3");
