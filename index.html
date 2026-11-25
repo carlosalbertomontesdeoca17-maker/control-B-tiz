@@ -48,8 +48,6 @@
       --text-main: #ffffff;
       --bevel-high: rgba(255, 255, 255, 0.08);
       --bevel-shadow: rgba(0, 0, 0, 0.6);
-      --app-zoom: 1;
-      --readability-boost: 1;
     }
 
     * {
@@ -71,22 +69,119 @@
       min-height: 100vh;
     }
 
-    #zoom-stage {
-      zoom: var(--app-zoom, 1);
-      width: 100%;
-      min-height: 100vh;
-      transition: zoom 0.15s ease;
-    }
-
     .app-container {
       width: 96%;
-      max-width: 1840px;
+      max-width: 1760px;
       margin: 0 auto;
-      transition: max-width 0.2s ease;
+      transition: padding-right 0.2s ease;
     }
 
-    .app-container.modo-vertical-estricto {
-      max-width: 920px;
+    .app-container.has-zoom-dock {
+      padding-right: 64px;
+    }
+
+    @media (max-width: 600px) {
+      .app-container.has-zoom-dock {
+        padding-right: 52px;
+      }
+    }
+
+    /* BARRA FLOTANTE VERTICAL DE ZOOM SEMÁNTICO */
+    .floating-zoom-dock {
+      position: fixed;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9000;
+      background: linear-gradient(180deg, #16223a 0%, #0a101e 100%);
+      border: 1px solid var(--accent);
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.75),
+        0 0 14px rgba(56, 189, 248, 0.25),
+        inset 1px 1px 0px var(--bevel-high);
+    }
+
+    .zoom-dock-tag {
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .btn-dock-step {
+      width: 28px;
+      height: 26px;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #334155;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+      display: grid;
+      place-content: center;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+
+    .btn-dock-step:hover {
+      background: var(--accent);
+      color: #0b0f19;
+      border-color: #ffffff;
+    }
+
+    .vertical-slider-track-box {
+      width: 28px;
+      height: 112px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .vertical-zoom-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 104px;
+      height: 6px;
+      background: #060a14;
+      border: 1px solid #2a3a5a;
+      outline: none;
+      transform: rotate(-90deg);
+      cursor: pointer;
+    }
+
+    .vertical-zoom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 10px var(--accent-glow);
+      cursor: pointer;
+    }
+
+    .vertical-zoom-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      border: 2px solid #ffffff;
+      border-radius: 0;
+      box-shadow: 0 0 10px var(--accent-glow);
+      cursor: pointer;
+    }
+
+    .zoom-dock-readout {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #fbbf24;
+      letter-spacing: 0.5px;
+      text-align: center;
+      min-width: 34px;
     }
 
     header {
@@ -238,62 +333,6 @@
       margin-left: auto;
     }
 
-    .zoom-hud-group {
-      display: inline-flex;
-      align-items: center;
-      background: #080d1a;
-      border: 1px solid #2a3a5a;
-      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.7);
-    }
-
-    .btn-zoom-step {
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-      border: none;
-      color: #ffffff;
-      font-size: 0.95rem;
-      font-weight: 700;
-      padding: 6px 10px;
-      cursor: pointer;
-      transition: all 0.12s ease;
-    }
-
-    .btn-zoom-step:hover {
-      background: var(--accent);
-      color: #0b0f19;
-    }
-
-    .zoom-readout-btn {
-      background: transparent;
-      border: none;
-      border-left: 1px solid #1e293b;
-      border-right: 1px solid #1e293b;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 6px 9px;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      min-width: 52px;
-      text-align: center;
-    }
-
-    .zoom-readout-btn:hover {
-      background: rgba(56, 189, 248, 0.12);
-    }
-
-    .stage-pill {
-      margin-left: auto;
-      font-size: 0.74rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      padding: 6px 12px;
-      letter-spacing: 1px;
-      display: inline-flex;
-      align-items: center;
-    }
-
     .filter-bar {
       display: flex;
       gap: 8px;
@@ -326,7 +365,18 @@
       box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
     }
 
-    /* BLOQUES SEMANALES Y TABLEROS DE ZOOM OUT */
+    .stage-pill {
+      margin-left: auto;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 6px 12px;
+      letter-spacing: 1px;
+    }
+
+    /* BLOQUES SEMANALES Y DE URGENCIA */
     .semana-bloque {
       margin-bottom: 26px;
       background: rgba(10, 15, 29, 0.65);
@@ -357,7 +407,7 @@
     }
 
     .semana-titulo {
-      font-size: calc(1.15rem * var(--readability-boost));
+      font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: 2px;
       color: #ffffff;
@@ -376,49 +426,33 @@
       text-shadow: 0 0 6px var(--accent-glow);
     }
 
-    .semanas-columnas-board {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-      gap: 16px;
-      align-items: start;
-    }
-
-    .semanas-columnas-board .semana-bloque {
-      margin-bottom: 0;
-    }
-
-    .materias-mosaico-board {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 18px;
-      align-items: start;
-    }
-
-    .materias-mosaico-board .materia-bloque {
-      margin-bottom: 0;
-    }
-
+    /* CUADRÍCULA LINEAL POR NIVEL DE ZOOM SEMÁNTICO (1 -> 2 -> 3 COLUMNAS LEGIBLES) */
     .tasks-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: 1fr;
       gap: 15px;
       align-items: stretch;
     }
 
-    .tasks-grid.grid-tactico {
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+    .tasks-grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .tasks-grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
     }
 
-    .tasks-grid.single-col {
-      grid-template-columns: 1fr;
+    @media (max-width: 960px) {
+      .tasks-grid.cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    @media (max-width: 460px) {
-      .semanas-columnas-board,
-      .materias-mosaico-board,
-      .tasks-grid,
-      .tasks-grid.grid-tactico {
+    @media (max-width: 600px) {
+      .tasks-grid.cols-2,
+      .tasks-grid.cols-3 {
         grid-template-columns: 1fr;
       }
     }
@@ -436,32 +470,19 @@
         inset 1px 1px 0px var(--bevel-high),
         inset -1px -1px 0px var(--bevel-shadow),
         0 6px 16px rgba(0, 0, 0, 0.35);
-      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease, opacity 0.3s ease, filter 0.3s ease;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.3s ease, filter 0.3s ease;
       position: relative;
     }
 
-    .card.card-compact {
-      padding: 13px 14px;
+    /* MODO LECTURA PURA AL HACER ZOOM OUT (OCULTA BOTONES, HORA, CHECKBOX Y NOTAS) */
+    .zoom-read-only .card {
+      padding: 14px 15px;
       gap: 9px;
     }
 
-    .card.card-compact .dual-bars-wrapper {
-      padding: 9px 11px;
-      gap: 7px;
-    }
-
-    .card.card-compact .bar-container {
-      height: 13px;
-    }
-
-    .card.card-compact .card-bottom {
-      padding-top: 8px;
-      gap: 6px;
-    }
-
-    .card.card-compact .btn-32 {
-      padding: 5px 8px;
-      font-size: 0.74rem;
+    .zoom-read-only .card-bottom,
+    .zoom-read-only .card-details-drawer {
+      display: none !important;
     }
 
     .card.sync-ok {
@@ -513,11 +534,11 @@
     .card-body-main {
       display: flex;
       flex-direction: column;
-      gap: 11px;
+      gap: 10px;
     }
 
     .card-top {
-      font-size: calc(1.04rem * var(--readability-boost));
+      font-size: 1.05rem;
       line-height: 1.38;
       font-weight: 600;
       color: #ffffff;
@@ -542,7 +563,7 @@
     }
 
     .fecha-destacada {
-      font-size: calc(0.95rem * var(--readability-boost));
+      font-size: 0.96rem;
       font-weight: 700;
       color: var(--accent);
       letter-spacing: 1px;
@@ -550,12 +571,12 @@
     }
 
     .countdown-timer {
-      font-size: calc(1.0rem * var(--readability-boost));
+      font-size: 1.02rem;
       font-weight: 700;
       color: #fbbf24;
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(251, 191, 36, 0.5);
-      padding: 5px 11px;
+      padding: 5px 12px;
       display: inline-block;
       letter-spacing: 0.8px;
       box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 10px rgba(251, 191, 36, 0.25);
@@ -602,7 +623,7 @@
       border: 1px solid #d8b4fe;
       color: #ffffff;
       padding: 5px 13px;
-      font-size: calc(1.0rem * var(--readability-boost));
+      font-size: 1.02rem;
       font-weight: 700;
       display: inline-block;
       letter-spacing: 1.5px;
@@ -611,7 +632,7 @@
     }
 
     .badge-sin-fecha {
-      font-size: calc(1.0rem * var(--readability-boost));
+      font-size: 1.02rem;
       font-weight: 700;
       color: #f472b6;
       background: rgba(244, 114, 182, 0.12);
@@ -686,16 +707,6 @@
       box-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
     }
 
-    .bar-fill.warning {
-      background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
-      box-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
-    }
-
-    .bar-fill.success {
-      background: linear-gradient(90deg, #059669 0%, #10b981 100%);
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
-    }
-
     .bar-fill.extra-overflow {
       background: linear-gradient(90deg, #7e22ce 0%, #c084fc 100%);
       box-shadow: 0 0 10px rgba(192, 132, 252, 0.75);
@@ -718,26 +729,8 @@
       box-shadow: 0 0 6px var(--accent-glow);
     }
 
-    .btn-mode-toggle {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      color: var(--accent);
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: all 0.15s ease;
-    }
-
-    .btn-mode-toggle:hover {
-      background: var(--accent);
-      color: #0b0f19;
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
-
     .pct-destacado {
-      font-size: calc(1.16rem * var(--readability-boost));
+      font-size: 1.18rem;
       font-weight: 700;
       color: #38bdf8;
       text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
@@ -745,7 +738,7 @@
     }
 
     .pct-extra {
-      font-size: calc(1.16rem * var(--readability-boost));
+      font-size: 1.18rem;
       font-weight: 700;
       color: #c084fc;
       text-shadow: 0 0 8px rgba(192, 132, 252, 0.55);
@@ -842,7 +835,7 @@
       color: #ffffff;
       font-size: 0.78rem;
       font-weight: 700;
-      padding: 6px 10px;
+      padding: 7px 11px;
       letter-spacing: 0.7px;
       box-shadow: 
         inset 1px 1px 0px var(--bevel-high),
@@ -970,7 +963,7 @@
     }
 
     .materia-titulo {
-      font-size: calc(1.12rem * var(--readability-boost));
+      font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: 1.5px;
     }
@@ -1383,183 +1376,183 @@
   </style>
 </head>
 <body>
-  <div id="zoom-stage">
-    <div id="main-app-container" class="app-container">
-      <header>
-        <div id="cloud-badge" class="cloud-status-badge cloud-offline">NUBE: DESCONECTADA</div>
-        <h1>AMADEUS SYSTEM</h1>
-        <p class="subtitle">V.3.8</p>
-      </header>
+  <!-- BARRA VERTICAL FLOTANTE DE ZOOM SEMÁNTICO -->
+  <aside id="floating-zoom-dock" class="floating-zoom-dock" title="Zoom de Lectura (1, 2 o 3 columnas legibles)">
+    <span class="zoom-dock-tag">ZOOM</span>
+    <button class="btn-dock-step" onclick="ajustarZoomNivel(1)" title="Acercar / Detalle Operativo">+</button>
+    <div class="vertical-slider-track-box">
+      <input type="range" id="zoom-vertical-slider" class="vertical-zoom-slider" min="1" max="3" step="1" value="3" oninput="setZoomNivel(this.value)">
+    </div>
+    <button class="btn-dock-step" onclick="ajustarZoomNivel(-1)" title="Alejar / Visión Panorámica">−</button>
+    <span class="zoom-dock-readout" id="zoom-dock-readout">100%</span>
+  </aside>
 
-      <nav class="nav-tabs">
-        <button class="tab-btn active" onclick="cambiarVista('cronograma')">CRONOGRAMA</button>
-        <button class="tab-btn" onclick="cambiarVista('materias')">MATERIAS</button>
-        <button class="tab-btn" onclick="cambiarVista('evaluacion')">EVALUACIÓN</button>
-        <button class="tab-btn" onclick="cambiarVista('datos')">J.A.R.V.I.S</button>
-        <button class="tab-btn" onclick="cambiarVista('config')">CONFIG</button>
-      </nav>
+  <div id="main-app-container" class="app-container has-zoom-dock">
+    <header>
+      <div id="cloud-badge" class="cloud-status-badge cloud-offline">NUBE: DESCONECTADA</div>
+      <h1>AMADEUS SYSTEM</h1>
+      <p class="subtitle">V.3.8</p>
+    </header>
 
-      <!-- 1: CRONOGRAMA -->
-      <section id="vista-cronograma" class="view-panel active">
-        <div class="section-header">
-          <h2>ENTREGAS</h2>
-          <div class="controls-cluster">
-            <div class="zoom-hud-group" title="Zoom Estratégico (reacciona también a Ctrl - / Ctrl +)">
-              <button class="btn-zoom-step" onclick="ajustarZoomApp(-0.12)" title="Alejar Zoom Out">−</button>
-              <button class="zoom-readout-btn" id="zoom-readout-crono" onclick="resetearZoomApp()" title="Restaurar Zoom 100%">100%</button>
-              <button class="btn-zoom-step" onclick="ajustarZoomApp(0.12)" title="Acercar Zoom In">+</button>
-            </div>
-            <button class="btn-32 btn-32-layout" id="btn-layout-crono" onclick="alternarDisposicionCrono()">VISTA: AUTO ◈</button>
-            <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
-            <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="cambiarVista('cronograma')">CRONOGRAMA</button>
+      <button class="tab-btn" onclick="cambiarVista('materias')">MATERIAS</button>
+      <button class="tab-btn" onclick="cambiarVista('evaluacion')">EVALUACIÓN</button>
+      <button class="tab-btn" onclick="cambiarVista('datos')">J.A.R.V.I.S</button>
+      <button class="tab-btn" onclick="cambiarVista('config')">CONFIG</button>
+    </nav>
+
+    <!-- 1: CRONOGRAMA -->
+    <section id="vista-cronograma" class="view-panel active">
+      <div class="section-header">
+        <h2>ENTREGAS</h2>
+        <div class="controls-cluster">
+          <button class="btn-32 btn-32-layout" id="btn-modo-crono" onclick="alternarModoCrono()">MODO: CRONOLÓGICO ☰</button>
+          <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
+          <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" id="flt-todas" onclick="setFiltro('todas')">VER TODAS</button>
+        <button class="filter-btn" id="flt-activas" onclick="setFiltro('activas')">ACTIVAS</button>
+        <button class="filter-btn" id="flt-completadas" onclick="setFiltro('completadas')">COMPLETADAS</button>
+        <span class="stage-pill" id="stage-indicator-crono">1 COLUMNA // OPERATIVO</span>
+      </div>
+
+      <div id="lista-cronograma"></div>
+    </section>
+
+    <!-- 2: MATERIAS -->
+    <section id="vista-materias" class="view-panel">
+      <div class="section-header">
+        <h2>POR MATERIA</h2>
+        <div class="controls-cluster">
+          <span class="stage-pill" id="stage-indicator-mat">1 COLUMNA // OPERATIVO</span>
+          <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
+        </div>
+      </div>
+      <div id="lista-materias"></div>
+    </section>
+
+    <!-- 3: EVALUACIÓN -->
+    <section id="vista-evaluacion" class="view-panel">
+      <div class="section-header">
+        <h2>3ER PARCIAL // RENDIMIENTO</h2>
+      </div>
+      <div id="lista-evaluacion-p3"></div>
+
+      <div class="section-header" style="margin-top: 36px;">
+        <h2>MATRIZ SEMESTRAL DE CALIFICACIONES</h2>
+      </div>
+
+      <div class="table-container">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>ASIGNATURA</th>
+              <th>1ER PARCIAL</th>
+              <th>2DO PARCIAL</th>
+              <th>3ER PARCIAL</th>
+              <th>PROMEDIO SAES</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-matriz-body"></tbody>
+        </table>
+      </div>
+
+      <div class="hud-promedio-box">
+        <div class="hud-title">PROMEDIO GENERAL SEMESTRAL SAES</div>
+        <div class="hud-number" id="hud-promedio-general">0.00</div>
+        <div class="hud-meta" id="hud-estado-academico">ESCALA PONDERADA OFICIAL // REDONDEO A ENTEROS POR ASIGNATURA</div>
+      </div>
+    </section>
+
+    <!-- 4: CONSOLA & REGISTRO (J.A.R.V.I.S) -->
+    <section id="vista-datos" class="view-panel">
+      <div class="chat-box">
+        <div class="chat-header">
+          <span class="terminal-tag">SYS // CORE</span>
+          <span style="font-size: 0.85rem; color: #ffffff; font-weight:600;">PROCESADOR Y CONTROL INTEGRAL</span>
+        </div>
+
+        <div id="chat-history" class="chat-history">
+          <div class="chat-msg bot">
+            J.A.R.V.I.S EN LÍNEA.<br>
+            • <strong>REGISTRAR:</strong> <em>"problemario de álgebra para el 25 de noviembre a las 21:00 vale 20/30"</em><br>
+            • <strong>CLASIFICACIÓN Y TIEMPO:</strong> palabras clave <em>extra</em>, <em>ordinal</em>, <em>continuo sin fecha</em>, <em>link</em>, <em>notas:</em><br>
+            • <strong>MODIFICAR:</strong> <em>"edita problemario: fecha 28 de noviembre, hora 18:00, valor 25/30, tipo extra, continuo sin fecha"</em><br>
+            • <strong>GESTIONAR:</strong> <em>completa</em>, <em>reactiva</em>, <em>elimina</em>, <em>renombra</em>, <em>saqué</em>, <em>pesos</em>, <em>resumen</em>, <em>comandos</em>
           </div>
         </div>
 
-        <div class="filter-bar">
-          <button class="filter-btn active" id="flt-todas" onclick="setFiltro('todas')">VER TODAS</button>
-          <button class="filter-btn" id="flt-activas" onclick="setFiltro('activas')">ACTIVAS</button>
-          <button class="filter-btn" id="flt-completadas" onclick="setFiltro('completadas')">COMPLETADAS</button>
-          <span class="stage-pill" id="stage-indicator-crono">ESCALA: NORMAL</span>
+        <div class="chat-input-row">
+          <textarea id="chat-input" placeholder="Escribe comando, entrega, edición o consulta a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
+          <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
         </div>
+      </div>
 
-        <div id="lista-cronograma"></div>
-      </section>
+      <div class="section-header">
+        <h2>REGISTRO MANUAL DIRECTO</h2>
+      </div>
 
-      <!-- 2: MATERIAS -->
-      <section id="vista-materias" class="view-panel">
-        <div class="section-header">
-          <h2>POR MATERIA</h2>
-          <div class="controls-cluster">
-            <div class="zoom-hud-group" title="Zoom Estratégico (reacciona también a Ctrl - / Ctrl +)">
-              <button class="btn-zoom-step" onclick="ajustarZoomApp(-0.12)" title="Alejar Zoom Out">−</button>
-              <button class="zoom-readout-btn" id="zoom-readout-mat" onclick="resetearZoomApp()" title="Restaurar Zoom 100%">100%</button>
-              <button class="btn-zoom-step" onclick="ajustarZoomApp(0.12)" title="Acercar Zoom In">+</button>
-            </div>
-            <button class="btn-32 btn-32-layout" id="btn-layout-mat" onclick="alternarDisposicionMat()">VISTA: AUTO ◈</button>
-            <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
-          </div>
-        </div>
-        <div id="lista-materias"></div>
-      </section>
+      <form id="form-tarea" onsubmit="agregarTareaManual(event)">
+        <label>CLASIFICACIÓN DE LA ACTIVIDAD:
+          <select id="input-tipo" onchange="alternarCamposPonderacion(this.value)">
+            <option value="porcentual">PORCENTUAL</option>
+            <option value="ordinal">ORDINAL</option>
+            <option value="extra">EXTRA</option>
+          </select>
+        </label>
+        <label>ASIGNATURA:
+          <select id="input-materia" required></select>
+        </label>
+        <label>ACTIVIDAD:
+          <input type="text" id="input-actividad" placeholder="Ej. Visita Museo / Cuaderno / Problemario" required>
+        </label>
+        <label>ENLACE DE CLASSROOM:
+          <input type="url" id="input-url-classroom" placeholder="https://classroom.google.com/c/.../a/.../details">
+        </label>
 
-      <!-- 3: EVALUACIÓN -->
-      <section id="vista-evaluacion" class="view-panel">
-        <div class="section-header">
-          <h2>3ER PARCIAL // RENDIMIENTO</h2>
-        </div>
-        <div id="lista-evaluacion-p3"></div>
+        <label class="checkbox-panel-row">
+          <input type="checkbox" id="input-sin-fecha" class="toggle-crt" onchange="alternarCamposFecha(this.checked)">
+          <span>CONTINUO SIN FECHA</span>
+        </label>
 
-        <div class="section-header" style="margin-top: 36px;">
-          <h2>MATRIZ SEMESTRAL DE CALIFICACIONES</h2>
-        </div>
-
-        <div class="table-container">
-          <table class="matrix-table">
-            <thead>
-              <tr>
-                <th>ASIGNATURA</th>
-                <th>1ER PARCIAL</th>
-                <th>2DO PARCIAL</th>
-                <th>3ER PARCIAL</th>
-                <th>PROMEDIO SAES</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-matriz-body"></tbody>
-          </table>
-        </div>
-
-        <div class="hud-promedio-box">
-          <div class="hud-title">PROMEDIO GENERAL SEMESTRAL SAES</div>
-          <div class="hud-number" id="hud-promedio-general">0.00</div>
-          <div class="hud-meta" id="hud-estado-academico">ESCALA PONDERADA OFICIAL // REDONDEO A ENTEROS POR ASIGNATURA</div>
-        </div>
-      </section>
-
-      <!-- 4: CONSOLA & REGISTRO (J.A.R.V.I.S) -->
-      <section id="vista-datos" class="view-panel">
-        <div class="chat-box">
-          <div class="chat-header">
-            <span class="terminal-tag">SYS // CORE</span>
-            <span style="font-size: 0.85rem; color: #ffffff; font-weight:600;">PROCESADOR Y CONTROL INTEGRAL</span>
-          </div>
-
-          <div id="chat-history" class="chat-history">
-            <div class="chat-msg bot">
-              J.A.R.V.I.S EN LÍNEA.<br>
-              • <strong>REGISTRAR:</strong> <em>"problemario de álgebra para el 25 de noviembre a las 21:00 vale 20/30"</em><br>
-              • <strong>CLASIFICACIÓN Y TIEMPO:</strong> palabras clave <em>extra</em>, <em>ordinal</em>, <em>continuo sin fecha</em>, <em>link</em>, <em>notas:</em><br>
-              • <strong>MODIFICAR:</strong> <em>"edita problemario: fecha 28 de noviembre, hora 18:00, valor 25/30, tipo extra, continuo sin fecha"</em><br>
-              • <strong>GESTIONAR:</strong> <em>completa</em>, <em>reactiva</em>, <em>elimina</em>, <em>renombra</em>, <em>saqué</em>, <em>pesos</em>, <em>resumen</em>, <em>comandos</em>
-            </div>
-          </div>
-
-          <div class="chat-input-row">
-            <textarea id="chat-input" placeholder="Escribe comando, entrega, edición o consulta a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
-            <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
-          </div>
-        </div>
-
-        <div class="section-header">
-          <h2>REGISTRO MANUAL DIRECTO</h2>
-        </div>
-
-        <form id="form-tarea" onsubmit="agregarTareaManual(event)">
-          <label>CLASIFICACIÓN DE LA ACTIVIDAD:
-            <select id="input-tipo" onchange="alternarCamposPonderacion(this.value)">
-              <option value="porcentual">PORCENTUAL</option>
-              <option value="ordinal">ORDINAL</option>
-              <option value="extra">EXTRA</option>
-            </select>
+        <div class="row" id="row-fecha-hora-inputs">
+          <label>FECHA LÍMITE:
+            <input type="date" id="input-fecha" required>
           </label>
-          <label>ASIGNATURA:
-            <select id="input-materia" required></select>
+          <label>HORA DE ENTREGA:
+            <input type="time" id="input-hora" value="00:00">
           </label>
-          <label>ACTIVIDAD:
-            <input type="text" id="input-actividad" placeholder="Ej. Visita Museo / Cuaderno / Problemario" required>
-          </label>
-          <label>ENLACE DE CLASSROOM:
-            <input type="url" id="input-url-classroom" placeholder="https://classroom.google.com/c/.../a/.../details">
-          </label>
-
-          <label class="checkbox-panel-row">
-            <input type="checkbox" id="input-sin-fecha" class="toggle-crt" onchange="alternarCamposFecha(this.checked)">
-            <span>CONTINUO SIN FECHA</span>
-          </label>
-
-          <div class="row" id="row-fecha-hora-inputs">
-            <label>FECHA LÍMITE:
-              <input type="date" id="input-fecha" required>
-            </label>
-            <label>HORA DE ENTREGA:
-              <input type="time" id="input-hora" value="00:00">
-            </label>
-          </div>
-          <div class="row" id="row-ponderacion-inputs">
-            <label>VALOR:
-              <input type="number" id="input-puntos" value="20" min="1" max="100">
-            </label>
-            <label>BASE DEL PROFESOR:
-              <input type="number" id="input-base" value="100" min="1" max="100">
-            </label>
-          </div>
-          <label>NOTAS:
-            <textarea id="input-detalles" placeholder="Especificaciones, rúbricas o apuntes de la actividad..." style="height:65px; resize:vertical;"></textarea>
-          </label>
-          <button type="submit" class="btn-32 btn-32-primary" style="margin-top:6px;">GUARDAR REGISTRO</button>
-        </form>
-      </section>
-
-      <!-- 5: CONFIGURACIÓN -->
-      <section id="vista-config" class="view-panel">
-        <div class="section-header">
-          <h2>PARÁMETROS DE SISTEMA</h2>
         </div>
+        <div class="row" id="row-ponderacion-inputs">
+          <label>VALOR:
+            <input type="number" id="input-puntos" value="20" min="1" max="100">
+          </label>
+          <label>BASE DEL PROFESOR:
+            <input type="number" id="input-base" value="100" min="1" max="100">
+          </label>
+        </div>
+        <label>NOTAS:
+          <textarea id="input-detalles" placeholder="Especificaciones, rúbricas o apuntes de la actividad..." style="height:65px; resize:vertical;"></textarea>
+        </label>
+        <button type="submit" class="btn-32 btn-32-primary" style="margin-top:6px;">GUARDAR REGISTRO</button>
+      </form>
+    </section>
 
-        <!-- PANEL DE CONTROL FIREBASE FIRESTORE EN TIEMPO REAL -->
-        <div class="action-box" style="border-left: 3px solid var(--green);">
-          <h3 style="color:var(--green);">FIREBASE FIRESTORE // NUBE EN TIEMPO REAL</h3>
-          <p>Pega aquí tu <code>firebaseConfig</code> para sincronizar automáticamente tus datos entre tu celular y computadora:</p>
-          <textarea id="input-firebase-config" placeholder='Pega aquí tu configuración:
+    <!-- 5: CONFIGURACIÓN -->
+    <section id="vista-config" class="view-panel">
+      <div class="section-header">
+        <h2>PARÁMETROS DE SISTEMA</h2>
+      </div>
+
+      <!-- PANEL DE CONTROL FIREBASE FIRESTORE EN TIEMPO REAL -->
+      <div class="action-box" style="border-left: 3px solid var(--green);">
+        <h3 style="color:var(--green);">FIREBASE FIRESTORE // NUBE EN TIEMPO REAL</h3>
+        <p>Pega aquí tu <code>firebaseConfig</code> para sincronizar automáticamente tus datos entre tu celular y computadora:</p>
+        <textarea id="input-firebase-config" placeholder='Pega aquí tu configuración:
 {
   "apiKey": "AIzaSy...",
   "authDomain": "...",
@@ -1568,47 +1561,46 @@
   "messagingSenderId": "...",
   "appId": "..."
 }' style="width:100%; height:110px; font-size:0.78rem; margin-bottom:12px;"></textarea>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button type="button" class="btn-32 btn-32-primary" onclick="guardarConfigFirebase()">GUARDAR Y CONECTAR NUBE</button>
-            <button type="button" class="btn-32 btn-32-danger" onclick="desconectarFirebase()">DESCONECTAR NUBE</button>
-          </div>
-          <p id="firebase-status-msg" style="margin-top:12px; font-size:0.85rem; font-weight:700; color:var(--accent);"></p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-32 btn-32-primary" onclick="guardarConfigFirebase()">GUARDAR Y CONECTAR NUBE</button>
+          <button type="button" class="btn-32 btn-32-danger" onclick="desconectarFirebase()">DESCONECTAR NUBE</button>
         </div>
+        <p id="firebase-status-msg" style="margin-top:12px; font-size:0.85rem; font-weight:700; color:var(--accent);"></p>
+      </div>
 
-        <div class="action-box">
-          <h3>GOOGLE CALENDAR OAUTH 2.0</h3>
-          <p>Configura tu Client ID para habilitar llamadas autorizadas sin intermediarios:</p>
-          <input type="text" id="input-client-id" placeholder="ID...apps.googleusercontent.com" style="width:100%; margin-bottom:12px;">
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button type="button" class="btn-32" onclick="guardarClientId()">GUARDAR ID</button>
-            <button type="button" class="btn-32 btn-32-primary" id="btn-auth-google" onclick="iniciarSesionGoogle()">AUTH GOOGLE</button>
-          </div>
-          <p id="auth-status" style="margin-top:12px; color:var(--accent); font-size:0.85rem; font-weight:600;"></p>
+      <div class="action-box">
+        <h3>GOOGLE CALENDAR OAUTH 2.0</h3>
+        <p>Configura tu Client ID para habilitar llamadas autorizadas sin intermediarios:</p>
+        <input type="text" id="input-client-id" placeholder="ID...apps.googleusercontent.com" style="width:100%; margin-bottom:12px;">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-32" onclick="guardarClientId()">GUARDAR ID</button>
+          <button type="button" class="btn-32 btn-32-primary" id="btn-auth-google" onclick="iniciarSesionGoogle()">AUTH GOOGLE</button>
         </div>
+        <p id="auth-status" style="margin-top:12px; color:var(--accent); font-size:0.85rem; font-weight:600;"></p>
+      </div>
 
-        <div class="action-box">
-          <h3>RESTABLECER SINCRONIZACIÓN DE CALENDAR</h3>
-          <p>Si eliminaste eventos en Google Calendar para reprogramarlos con la nueva hora:</p>
-          <button type="button" class="btn-32 btn-32-primary" onclick="resetearSincronizacionCalendar()">REINICIAR ESTADO CALENDAR</button>
-        </div>
+      <div class="action-box">
+        <h3>RESTABLECER SINCRONIZACIÓN DE CALENDAR</h3>
+        <p>Si eliminaste eventos en Google Calendar para reprogramarlos con la nueva hora:</p>
+        <button type="button" class="btn-32 btn-32-primary" onclick="resetearSincronizacionCalendar()">REINICIAR ESTADO CALENDAR</button>
+      </div>
 
-        <div class="action-box">
-          <h3>RESPALDO Y MIGRACIÓN DE DATOS</h3>
-          <p>Genera o restaura una copia física estructurada de tu base de datos local:</p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button type="button" class="btn-32" onclick="exportarTareas()">DESCARGAR JSON</button>
-            <input type="file" id="import-file" style="display:none;" onchange="importarTareas(event)">
-            <button type="button" class="btn-32" onclick="document.getElementById('import-file').click()">CARGAR JSON</button>
-          </div>
+      <div class="action-box">
+        <h3>RESPALDO Y MIGRACIÓN DE DATOS</h3>
+        <p>Genera o restaura una copia física estructurada de tu base de datos local:</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-32" onclick="exportarTareas()">DESCARGAR JSON</button>
+          <input type="file" id="import-file" style="display:none;" onchange="importarTareas(event)">
+          <button type="button" class="btn-32" onclick="document.getElementById('import-file').click()">CARGAR JSON</button>
         </div>
+      </div>
 
-        <div class="action-box">
-          <h3>PURGA DE MEMORIA // NUEVO SEMESTRE</h3>
-          <p>Reiniciar semestre actual:</p>
-          <button type="button" class="btn-32 btn-32-danger" onclick="ejecutarReinicioSemestre()">REINICIO TOTAL DE SEMESTRE</button>
-        </div>
-      </section>
-    </div>
+      <div class="action-box">
+        <h3>PURGA DE MEMORIA // NUEVO SEMESTRE</h3>
+        <p>Reiniciar semestre actual:</p>
+        <button type="button" class="btn-32 btn-32-danger" onclick="ejecutarReinicioSemestre()">REINICIO TOTAL DE SEMESTRE</button>
+      </div>
+    </section>
   </div>
 
   <!-- MODAL FLOTANTE DE CONTROL MANUAL DE EDICIÓN -->
@@ -1785,7 +1777,6 @@
         hora: sinFecha ? "" : ((t.hora === "12:00:00" || !t.hora) ? "00:00:00" : (t.hora.length === 5 ? t.hora + ":00" : t.hora)),
         puntos: Number(t.puntos) || (tipoVal === 'ordinal' ? 0 : 20),
         base: Number(t.base) || (tipoVal === 'ordinal' ? 0 : 100),
-        forzarDual: Boolean(t.forzarDual),
         urlClassroom: t.urlClassroom || "",
         detalles: t.detalles || "",
         califX: t.califX !== undefined ? t.califX : (t.notaObtenida !== undefined ? t.notaObtenida : null)
@@ -1851,86 +1842,81 @@
     let filtroActual = 'todas';
 
     /* =========================================================================
-       MOTOR DE ZOOM ESTRATÉGICO Y REACOMODO AUTOMÁTICO (NATIVO + BOTONES)
+       ZOOM SEMÁNTICO (BARRA VERTICAL) + DOS MODOS EXCLUSIVOS (CRONOLÓGICO / URGENCIA)
+       Nivel 3 = 100% (1 Columna Operativa con todos los botones)
+       Nivel 2 = 75%  (2 Columnas Lectura Pura, sin botones ni checkbox)
+       Nivel 1 = 50%  (3 Columnas Lectura Panorámica, sin botones ni checkbox)
        ========================================================================= */
-    const initialDPR = window.devicePixelRatio || 1;
-    let appZoomScale = parseFloat(localStorage.getItem("app_zoom_amadeus")) || 1.0;
-    let zoomStageActual = 'normal'; // 'normal' | 'tactico' | 'panoramico'
+    let zoomNivel = parseInt(localStorage.getItem("zoom_nivel_amadeus"), 10);
+    if (![1, 2, 3].includes(zoomNivel)) zoomNivel = 3;
 
-    let modoCronograma = localStorage.getItem("modo_crono_amadeus") || 'auto'; // 'auto' | 'semanas' | 'columnas' | 'urgencia'
-    let modoMaterias = localStorage.getItem("modo_mat_amadeus") || 'auto'; // 'auto' | 'bloques' | 'mosaico' | 'vertical'
+    let modoCronograma = localStorage.getItem("modo_crono_amadeus") || 'cronologico';
+    if (!['cronologico', 'urgencia'].includes(modoCronograma)) modoCronograma = 'cronologico';
 
-    function calcularMetricasZoom() {
-      const nativeRatio = (window.devicePixelRatio || 1) / initialDPR;
-      const pinchScale = (window.visualViewport && window.visualViewport.scale) ? window.visualViewport.scale : 1;
-      const escalaCombinada = nativeRatio * appZoomScale * pinchScale;
-      const anchoEfectivo = window.innerWidth / appZoomScale;
-
-      let nuevaEtapa = 'normal';
-      if (escalaCombinada <= 0.68 || anchoEfectivo >= 1820) {
-        nuevaEtapa = 'panoramico';
-      } else if (escalaCombinada <= 0.88 || anchoEfectivo >= 1320) {
-        nuevaEtapa = 'tactico';
-      } else {
-        nuevaEtapa = 'normal';
-      }
-
-      return {
-        escalaCombinada,
-        anchoEfectivo,
-        nuevaEtapa
-      };
+    function setZoomNivel(val) {
+      const n = Math.min(Math.max(parseInt(val, 10) || 3, 1), 3);
+      zoomNivel = n;
+      localStorage.setItem("zoom_nivel_amadeus", String(zoomNivel));
+      actualizarUIZoomYModo();
+      render();
     }
 
-    function aplicarZoomVisual(forzarRender = false) {
-      appZoomScale = Math.min(Math.max(Number(appZoomScale.toFixed(2)), 0.52), 1.24);
-      document.documentElement.style.setProperty('--app-zoom', appZoomScale);
+    function ajustarZoomNivel(delta) {
+      setZoomNivel(zoomNivel + delta);
+    }
 
-      const { escalaCombinada, nuevaEtapa } = calcularMetricasZoom();
+    function alternarModoCrono() {
+      modoCronograma = (modoCronograma === 'cronologico') ? 'urgencia' : 'cronologico';
+      localStorage.setItem("modo_crono_amadeus", modoCronograma);
+      actualizarUIZoomYModo();
+      render();
+    }
 
-      let boost = 1;
-      if (escalaCombinada <= 0.65) {
-        boost = 1.18;
-      } else if (escalaCombinada <= 0.85) {
-        boost = 1.09;
-      }
-      document.documentElement.style.setProperty('--readability-boost', boost);
-
-      const pctTexto = `${Math.round(escalaCombinada * 100)}%`;
-      const rCrono = document.getElementById("zoom-readout-crono");
-      const rMat = document.getElementById("zoom-readout-mat");
-      if (rCrono) rCrono.innerText = pctTexto;
-      if (rMat) rMat.innerText = pctTexto;
-
-      const stageLabels = {
-        'normal': 'ESCALA: NORMAL',
-        'tactico': 'ZOOM OUT: MOSAICO COMPACTO',
-        'panoramico': 'ZOOM OUT: VISTA PANORÁMICA'
-      };
+    function actualizarUIZoomYModo() {
+      const slider = document.getElementById("zoom-vertical-slider");
+      const readout = document.getElementById("zoom-dock-readout");
+      const appCont = document.getElementById("main-app-container");
       const pillCrono = document.getElementById("stage-indicator-crono");
-      if (pillCrono) pillCrono.innerText = stageLabels[nuevaEtapa];
+      const pillMat = document.getElementById("stage-indicator-mat");
+      const btnModo = document.getElementById("btn-modo-crono");
+      const dock = document.getElementById("floating-zoom-dock");
 
-      if (nuevaEtapa !== zoomStageActual || forzarRender) {
-        zoomStageActual = nuevaEtapa;
-        render();
+      if (slider) slider.value = String(zoomNivel);
+
+      const mapaInfo = {
+        3: { pct: '100%', pill: '1 COLUMNA // OPERATIVO' },
+        2: { pct: '75%', pill: '2 COLUMNAS // LECTURA LIMPIA' },
+        1: { pct: '50%', pill: '3 COLUMNAS // PANORÁMICA' }
+      };
+
+      const info = mapaInfo[zoomNivel] || mapaInfo[3];
+      if (readout) readout.innerText = info.pct;
+      if (pillCrono) pillCrono.innerText = info.pill;
+      if (pillMat) pillMat.innerText = info.pill;
+
+      if (btnModo) {
+        btnModo.innerText = (modoCronograma === 'cronologico')
+          ? 'MODO: CRONOLÓGICO ☰'
+          : 'MODO: URGENCIA ⚡';
+      }
+
+      const vistaActivaId = document.querySelector(".view-panel.active")?.id || "vista-cronograma";
+      const mostrarDock = (vistaActivaId === "vista-cronograma" || vistaActivaId === "vista-materias");
+
+      if (dock) {
+        dock.style.display = mostrarDock ? "flex" : "none";
+      }
+
+      if (appCont) {
+        appCont.classList.toggle("has-zoom-dock", mostrarDock);
+        appCont.classList.toggle("zoom-read-only", zoomNivel < 3);
       }
     }
 
-    function ajustarZoomApp(delta) {
-      appZoomScale += delta;
-      localStorage.setItem("app_zoom_amadeus", appZoomScale.toFixed(2));
-      aplicarZoomVisual(true);
-    }
-
-    function resetearZoomApp() {
-      appZoomScale = 1.0;
-      localStorage.setItem("app_zoom_amadeus", "1.00");
-      aplicarZoomVisual(true);
-    }
-
-    window.addEventListener("resize", () => aplicarZoomVisual(false));
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", () => aplicarZoomVisual(false));
+    function getClaseGridZoom() {
+      if (zoomNivel === 1) return "tasks-grid cols-3";
+      if (zoomNivel === 2) return "tasks-grid cols-2";
+      return "tasks-grid";
     }
 
     function guardarLocal(origenRemoto = false) {
@@ -2063,53 +2049,6 @@
       render();
     }
 
-    function alternarDisposicionCrono() {
-      const orden = ['auto', 'semanas', 'columnas', 'urgencia'];
-      modoCronograma = orden[(orden.indexOf(modoCronograma) + 1) % orden.length];
-      localStorage.setItem("modo_crono_amadeus", modoCronograma);
-      actualizarUIControlDisposicion();
-      render();
-    }
-
-    function alternarDisposicionMat() {
-      const orden = ['auto', 'bloques', 'mosaico', 'vertical'];
-      modoMaterias = orden[(orden.indexOf(modoMaterias) + 1) % orden.length];
-      localStorage.setItem("modo_mat_amadeus", modoMaterias);
-      actualizarUIControlDisposicion();
-      render();
-    }
-
-    function actualizarUIControlDisposicion() {
-      const labelsCrono = {
-        'auto': 'VISTA: AUTO ◈',
-        'semanas': 'VISTA: SEMANAS ☰',
-        'columnas': 'VISTA: COLUMNAS ⊞',
-        'urgencia': 'VISTA: URGENCIA ⚡'
-      };
-      const labelsMat = {
-        'auto': 'VISTA: AUTO ◈',
-        'bloques': 'VISTA: BLOQUES ☰',
-        'mosaico': 'VISTA: MOSAICO ⊞',
-        'vertical': 'VISTA: VERTICAL ▥'
-      };
-
-      const btnCrono = document.getElementById("btn-layout-crono");
-      const btnMat = document.getElementById("btn-layout-mat");
-      const appCont = document.getElementById("main-app-container");
-
-      if (btnCrono) btnCrono.innerText = labelsCrono[modoCronograma] || 'VISTA: AUTO ◈';
-      if (btnMat) btnMat.innerText = labelsMat[modoMaterias] || 'VISTA: AUTO ◈';
-
-      const vistaActiva = document.querySelector(".view-panel.active")?.id;
-      if (appCont) {
-        if (vistaActiva === "vista-materias" && modoMaterias === "vertical") {
-          appCont.classList.add("modo-vertical-estricto");
-        } else {
-          appCont.classList.remove("modo-vertical-estricto");
-        }
-      }
-    }
-
     function alternarCamposPonderacion(tipo) {
       const row = document.getElementById("row-ponderacion-inputs");
       if (row) row.style.display = tipo === 'ordinal' ? 'none' : 'flex';
@@ -2151,12 +2090,6 @@
       const el = document.getElementById("drawer-detalles-" + id);
       if (!el) return;
       el.style.display = (el.style.display === "none" || !el.style.display) ? "block" : "none";
-    }
-
-    function toggleModoDual(id) {
-      tareas = tareas.map(t => t.id === id ? { ...t, forzarDual: !t.forzarDual } : t);
-      guardarLocal();
-      render();
     }
 
     function resetearSincronizacionCalendar() {
@@ -2316,20 +2249,6 @@
         }
       });
     }, 1000);
-
-    function actualizarBaseTarea(id, campo, valor) {
-      const valNum = parseFloat(valor);
-      if (isNaN(valNum) || valNum <= 0) return;
-      tareas = tareas.map(t => {
-        if (t.id === id) {
-          if (campo === 'puntos' && t.puntos !== valNum) return { ...t, puntos: valNum, califX: null };
-          if (campo === 'base' && t.base !== valNum) return { ...t, base: valNum };
-        }
-        return t;
-      });
-      guardarLocal();
-      render();
-    }
 
     function actualizarCalifTarea(id, valor) {
       const valNum = parseFloat(valor);
@@ -2495,8 +2414,7 @@
         if (fbArea) fbArea.value = savedFb;
       }
 
-      actualizarUIControlDisposicion();
-      aplicarZoomVisual(false);
+      actualizarUIZoomYModo();
       inicializarFirebase();
     });
 
@@ -2629,7 +2547,7 @@
       const idx = nombres.indexOf(vista);
       if (idx !== -1 && botones[idx]) botones[idx].classList.add("active");
 
-      actualizarUIControlDisposicion();
+      actualizarUIZoomYModo();
       render();
     }
 
@@ -2684,7 +2602,6 @@
         hora: sinFecha ? "" : horaInput,
         puntos: puntos,
         base: base,
-        forzarDual: false,
         detalles: detalles,
         califX: null,
         completada: false,
@@ -3330,7 +3247,6 @@
           hora,
           puntos,
           base,
-          forzarDual: false,
           detalles: notasCreacion,
           califX: null,
           completada: false,
@@ -3354,7 +3270,6 @@
           hora,
           puntos,
           base,
-          forzarDual: false,
           detalles: notasCreacion,
           califX: null,
           completada: false,
@@ -3377,7 +3292,6 @@
         hora: esSinFecha ? "" : hora,
         puntos,
         base,
-        forzarDual: false,
         detalles: notasCreacion,
         califX: null,
         completada: false,
@@ -3396,10 +3310,10 @@
     }
 
     /* =========================================================================
-       BARRAS CON COLOR NEÓN DE LA MATERIA (CONSERVANDO RECUADROS UNIVERSALES)
+       BARRAS LIMPIAS CON COLOR NEÓN DE LA MATERIA (SIN BOTÓN AJUSTAR BASE)
        ========================================================================= */
 
-    function generarBloqueBarrasActividad(t, esVistaMaterias = false) {
+    function generarBloqueBarrasActividad(t) {
       if (t.tipo === 'ordinal') {
         return `
           <div class="ordinal-card-box">
@@ -3417,7 +3331,6 @@
       const valorEn100 = ((puntosX / baseX) * 100);
 
       const esBase100 = (baseX === 100);
-      const modoUnaBarra = esBase100 && !t.forzarDual;
 
       const wrapperClass = esExtra ? "dual-bars-wrapper extra-wrapper" : "dual-bars-wrapper";
       const wrapperStyle = esExtra ? "" : `border-color: ${colorMat}44;`;
@@ -3432,15 +3345,12 @@
       const pctStyle = esExtra ? "" : `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
       const labelTitle = esExtra ? "PORCENTAJE EXTRA" : "PORCENTAJE";
 
-      if (modoUnaBarra) {
+      if (esBase100) {
         return `
           <div class="${wrapperClass}" style="${wrapperStyle}">
             <div class="bar-row-block">
               <div class="bar-label-sub">
-                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                  <span>${labelTitle}</span>
-                  <button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Editar valor o base del profesor">⚙ AJUSTAR BASE</button>
-                </div>
+                <span>${labelTitle}</span>
                 <span class="${pctClass}" style="${pctStyle}">${esExtra ? '+' : ''}${formatearPorcentaje(valorEn100)}</span>
               </div>
               <div class="bar-container">
@@ -3454,20 +3364,8 @@
           <div class="${wrapperClass}" style="${wrapperStyle}">
             <div class="bar-row-block">
               <div class="bar-label-sub">
-                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                  <span>BASE DEL PROFESOR</span>
-                  ${esBase100 ? `<button class="btn-mode-toggle" onclick="toggleModoDual(${t.id})" title="Unificar en una sola barra de porcentaje">⇤ UNIFICAR</button>` : ''}
-                </div>
-                ${!esVistaMaterias ? `
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <input type="number" class="input-mini" value="${puntosX}" min="1" max="100" onchange="actualizarBaseTarea(${t.id}, 'puntos', this.value)">
-                    <span>/</span>
-                    <input type="number" class="input-mini" value="${baseX}" min="1" max="100" onchange="actualizarBaseTarea(${t.id}, 'base', this.value)">
-                    <span>PTS</span>
-                  </div>
-                ` : `
-                  <span>${puntosX} / ${baseX} PTS</span>
-                `}
+                <span>BASE DEL PROFESOR</span>
+                <span>${puntosX} / ${baseX} PTS</span>
               </div>
               <div class="bar-container">
                 <div class="bar-fill ${esExtra ? 'bar-gold' : ''}" style="${baseFillStyle}"></div>
@@ -3488,22 +3386,16 @@
       }
     }
 
-    function renderizarTarjetaCronograma(t, esCompacto = false) {
+    function renderizarTarjetaCronograma(t) {
       const doom = calcularCuentaRegresiva(t.fecha, t.hora);
       const doomClase = doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer');
       const syncClase = t.sincronizada ? 'sync-ok' : 'sync-pending';
-      const compactClase = esCompacto ? 'card-compact' : '';
       const colorMat = getColorMateria(t.materia);
       const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
-      const bloqueVisual = generarBloqueBarrasActividad(t, false);
-
-      const labelClassroom = esCompacto ? '↗' : 'CLASSROOM ↗';
-      const labelDetalles = esCompacto ? '▾' : 'DETALLES ▾';
-      const labelCalendar = esCompacto ? '📅' : 'CALENDAR';
-      const labelSync = t.sincronizada ? (esCompacto ? 'OK' : 'AGENDADO') : (esCompacto ? 'PENDIENTE' : 'PENDIENTE POR AGENDAR');
+      const bloqueVisual = generarBloqueBarrasActividad(t);
 
       return `
-        <div class="card ${syncClase} ${compactClase} ${t.completada ? 'completada' : ''}">
+        <div class="card ${syncClase} ${t.completada ? 'completada' : ''}">
           <div class="card-body-main">
             <div class="card-top">
               <span class="materia-tag" style="color:${colorMat}; text-shadow:0 0 8px ${colorMat}66;">${normalizarMateria(t.materia).toUpperCase()}:</span>
@@ -3522,14 +3414,14 @@
           <div>
             <div class="card-bottom">
               <div class="card-meta">
-                <span>${esCompacto ? (t.hora || '00:00:00').slice(0, 5) : 'HORA: ' + (t.hora || '00:00:00') + ' HRS'}</span>
-                ${t.sincronizada ? `<span class="badge badge-sync-ok">${labelSync}</span>` : `<span class="badge badge-sync-pending">${labelSync}</span>`}
+                <span>HORA: ${t.hora || '00:00:00'} HRS</span>
+                ${t.sincronizada ? '<span class="badge badge-sync-ok">AGENDADO</span>' : '<span class="badge badge-sync-pending">PENDIENTE POR AGENDAR</span>'}
                 ${t.completada ? '<span class="badge" style="border: 1px solid #334155; color:#64748b; background:transparent;">ARCHIVADO</span>' : ''}
               </div>
               <div class="card-actions">
-                ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')" title="Abrir en Classroom">${labelClassroom}</button>` : ''}
-                <button class="btn-32" onclick="toggleDesgloseDetalles(${t.id})" title="Ver Notas">${labelDetalles}</button>
-                <button class="btn-32" onclick="agendarTareaDirecta(${t.id})" title="Agendar en Calendar">${labelCalendar}</button>
+                ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
+                <button class="btn-32" onclick="toggleDesgloseDetalles(${t.id})">DETALLES ▾</button>
+                <button class="btn-32" onclick="agendarTareaDirecta(${t.id})">CALENDAR</button>
                 <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
                 <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
               </div>
@@ -3550,10 +3442,9 @@
 
     function render() {
       const semanaActualKey = obtenerKeySemanaActual();
-      const esZoomTactico = (zoomStageActual === 'tactico' || zoomStageActual === 'panoramico');
-      const esZoomPanoramico = (zoomStageActual === 'panoramico');
+      const claseGridZoom = getClaseGridZoom();
 
-      // 1. RENDER CRONOGRAMA (REACOMODO AUTOMÁTICO POR ZOOM + MODOS MANUALES)
+      // 1. RENDER CRONOGRAMA (SOLO DOS MODOS: CRONOLÓGICO POR SEMANAS O URGENCIA)
       const cronogramaEl = document.getElementById("lista-cronograma");
       let ordenadas = tareas
         .filter(t => !t.sinFecha && Boolean(t.fecha))
@@ -3586,7 +3477,6 @@
             }
           });
 
-          const gridUrgClass = esZoomTactico ? 'tasks-grid grid-tactico' : 'tasks-grid';
           cronogramaEl.innerHTML = gruposUrgencia
             .filter(g => g.tareas.length > 0)
             .map(g => `
@@ -3595,8 +3485,8 @@
                   <span class="semana-titulo">${g.titulo}</span>
                   <span class="badge-semana-actual">${g.tareas.length} ENTREGA${g.tareas.length > 1 ? 'S' : ''}</span>
                 </div>
-                <div class="${gridUrgClass}">
-                  ${g.tareas.map(t => renderizarTarjetaCronograma(t, esZoomTactico)).join("")}
+                <div class="${claseGridZoom}">
+                  ${g.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
                 </div>
               </div>
             `).join("");
@@ -3614,13 +3504,7 @@
             mapaSemanas[infoSem.key].tareas.push(t);
           });
 
-          const usarBoardColumnas = (modoCronograma === 'columnas') || (modoCronograma === 'auto' && esZoomPanoramico);
-          const usarCardsCompactas = esZoomTactico || usarBoardColumnas;
-          const gridTareasClass = usarBoardColumnas
-            ? 'tasks-grid single-col'
-            : (esZoomTactico ? 'tasks-grid grid-tactico' : 'tasks-grid');
-
-          const bloquesHtml = gruposSemanales.map(grupo => {
+          cronogramaEl.innerHTML = gruposSemanales.map(grupo => {
             const esActual = (grupo.key === semanaActualKey);
             return `
               <div class="semana-bloque ${esActual ? 'semana-actual' : ''}">
@@ -3628,221 +3512,199 @@
                   <span class="semana-titulo">${grupo.titulo}</span>
                   ${esActual ? '<span class="badge-semana-actual">SEMANA EN CURSO</span>' : ''}
                 </div>
-                <div class="${gridTareasClass}">
-                  ${grupo.tareas.map(t => renderizarTarjetaCronograma(t, usarCardsCompactas)).join("")}
+                <div class="${claseGridZoom}">
+                  ${grupo.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
                 </div>
               </div>
             `;
           }).join("");
-
-          cronogramaEl.innerHTML = usarBoardColumnas
-            ? `<div class="semanas-columnas-board">${bloquesHtml}</div>`
-            : bloquesHtml;
         }
       } else {
         cronogramaEl.innerHTML = "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY ENTREGAS CON FECHA REGISTRADAS</p>";
       }
 
-      // 2. RENDER MATERIAS (REACOMODO AUTOMÁTICO POR ZOOM + MODOS MANUALES)
+      // 2. RENDER MATERIAS (POR MATERIA CON GRAN BARRA NEÓN + LECTURA LINEAL POR ZOOM)
       const materiasEl = document.getElementById("lista-materias");
       const materiasConTareas = MATERIAS_OFICIALES.filter(mat =>
         tareas.some(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase()) ||
         ((calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0) > 0
       );
 
-      if (materiasConTareas.length) {
-        const usarMosaicoMaterias = (modoMaterias === 'mosaico') || (modoMaterias === 'auto' && esZoomPanoramico);
-        const usarVerticalMaterias = (modoMaterias === 'vertical');
-        const usarCardsMatCompactas = esZoomTactico || usarMosaicoMaterias;
-        const claseGridTareasMat = (usarMosaicoMaterias || usarVerticalMaterias)
-          ? 'tasks-grid single-col'
-          : (esZoomTactico ? 'tasks-grid grid-tactico' : 'tasks-grid');
-
-        const bloquesMateriasHtml = materiasConTareas.map(mat => {
-          const tareasMat = tareas
-            .filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
-            .sort((a, b) => {
-              const aSin = a.sinFecha || !a.fecha;
-              const bSin = b.sinFecha || !b.fecha;
-              if (aSin && bSin) return 0;
-              if (aSin) return 1;
-              if (bSin) return -1;
-              return new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`);
-            });
-          const colorMat = getColorMateria(mat);
-          
-          const extraManualMat = (calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0;
-          let puntosBase100 = 0;
-          let puntosExtraAct100 = 0;
-
-          tareasMat.forEach(curr => {
-            if (curr.tipo === 'ordinal') return;
-            const b = curr.base || 100;
-            const val = (curr.puntos / b) * 100;
-            if (curr.tipo === 'extra') {
-              puntosExtraAct100 += val;
-            } else {
-              puntosBase100 += val;
-            }
+      materiasEl.innerHTML = materiasConTareas.length ? materiasConTareas.map(mat => {
+        const tareasMat = tareas
+          .filter(t => normalizarMateria(t.materia).toLowerCase() === mat.toLowerCase())
+          .sort((a, b) => {
+            const aSin = a.sinFecha || !a.fecha;
+            const bSin = b.sinFecha || !b.fecha;
+            if (aSin && bSin) return 0;
+            if (aSin) return 1;
+            if (bSin) return -1;
+            return new Date(`${a.fecha}T${a.hora || '00:00:00'}`) - new Date(`${b.fecha}T${b.hora || '00:00:00'}`);
           });
+        const colorMat = getColorMateria(mat);
+        
+        const extraManualMat = (calificacionesSemestre[mat] && Number(calificacionesSemestre[mat].extraP3)) || 0;
+        let puntosBase100 = 0;
+        let puntosExtraAct100 = 0;
 
-          const totalExtra100 = Number((puntosExtraAct100 + extraManualMat).toFixed(2));
-          const matBarStyle = `background: linear-gradient(90deg, ${colorMat}99 0%, ${colorMat} 100%); box-shadow: 0 0 10px ${colorMat}88;`;
-          const matPctStyle = `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
-
-          let badgeCoberturaHtml = '';
-          let textoCoberturaHtml = '';
-          let barraUniversalHtml = '';
-
-          if (totalExtra100 > 0) {
-            const baseLimit = Math.max(100, puntosBase100);
-            const totalScale = baseLimit + totalExtra100;
-            const baseZonePct = (baseLimit / totalScale) * 100;
-            const baseFillInsideZonePct = Math.min((puntosBase100 / baseLimit) * 100, 100);
-            const extraBarPct = (totalExtra100 / totalScale) * 100;
-
-            badgeCoberturaHtml = `<span class="badge" style="border: 1px solid #c084fc; color:#e9d5ff; background: rgba(168,85,247,0.22); box-shadow: 0 0 10px rgba(168,85,247,0.4);">${formatearPorcentaje(puntosBase100)} + ${formatearPorcentaje(totalExtra100)} EXTRA</span>`;
-            textoCoberturaHtml = `
-              <div style="display:flex; align-items:center; gap:8px;">
-                <strong class="pct-destacado" style="font-size:1.22rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong>
-                <strong class="pct-extra" style="font-size:1.22rem;">+ ${formatearPorcentaje(totalExtra100)} EXTRA</strong>
-              </div>
-            `;
-            barraUniversalHtml = `
-              <div class="bar-container" style="height: 15px;">
-                <div class="bar-base-zone" style="width: ${baseZonePct}%;">
-                  <div class="bar-fill" style="width: ${baseFillInsideZonePct}%; ${matBarStyle}"></div>
-                </div>
-                <div class="bar-fill extra-overflow" style="width: ${extraBarPct}%;"></div>
-              </div>
-            `;
+        tareasMat.forEach(curr => {
+          if (curr.tipo === 'ordinal') return;
+          const b = curr.base || 100;
+          const val = (curr.puntos / b) * 100;
+          if (curr.tipo === 'extra') {
+            puntosExtraAct100 += val;
           } else {
-            badgeCoberturaHtml = `<span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${formatearPorcentaje(puntosBase100)}</span>`;
-            textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.22rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong></span>`;
-            barraUniversalHtml = `
-              <div class="bar-container" style="height: 15px;">
-                <div class="bar-fill" style="width: ${Math.min(Math.max(puntosBase100, 0), 100)}%; ${matBarStyle}"></div>
-              </div>
-            `;
+            puntosBase100 += val;
           }
+        });
 
-          const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
-          const pesos = pesosParciales[mat] || { p1: 33.33, p2: 33.33, p3: 33.33 };
-          const p1Val = califs.p1 !== null && califs.p1 !== undefined ? califs.p1 : "";
-          const p2Val = califs.p2 !== null && califs.p2 !== undefined ? califs.p2 : "";
-          const p3Info = calcularP3Materia(mat);
-          const p3Val = p3Info.puntosAcumulados;
-          const p1Num = parseFloat(p1Val);
-          const p2Num = parseFloat(p2Val);
+        const totalExtra100 = Number((puntosExtraAct100 + extraManualMat).toFixed(2));
+        const matBarStyle = `background: linear-gradient(90deg, ${colorMat}99 0%, ${colorMat} 100%); box-shadow: 0 0 10px ${colorMat}88;`;
+        const matPctStyle = `color: ${colorMat}; text-shadow: 0 0 10px ${colorMat}88;`;
 
-          const peso1 = valorRealPonderado(pesos.p1);
-          const peso2 = valorRealPonderado(pesos.p2);
-          const peso3 = valorRealPonderado(pesos.p3);
+        let badgeCoberturaHtml = '';
+        let textoCoberturaHtml = '';
+        let barraUniversalHtml = '';
 
-          let sumaPonderada = 0;
-          let pesoAcumulado = 0;
-          if (!isNaN(p1Num)) { sumaPonderada += p1Num * peso1; pesoAcumulado += peso1; }
-          if (!isNaN(p2Num)) { sumaPonderada += p2Num * peso2; pesoAcumulado += peso2; }
-          if (p3Val !== null && p3Val !== undefined) { sumaPonderada += p3Val * peso3; pesoAcumulado += peso3; }
+        if (totalExtra100 > 0) {
+          const baseLimit = Math.max(100, puntosBase100);
+          const totalScale = baseLimit + totalExtra100;
+          const baseZonePct = (baseLimit / totalScale) * 100;
+          const baseFillInsideZonePct = Math.min((puntosBase100 / baseLimit) * 100, 100);
+          const extraBarPct = (totalExtra100 / totalScale) * 100;
 
-          let saesMateriaBadge = '';
-          if (pesoAcumulado > 0) {
-            const promMateria = sumaPonderada / pesoAcumulado;
-            const saesData = calcularRedondeoSAES(promMateria);
-            saesMateriaBadge = `<span class="badge" style="border:1px solid #ffffff; color:#ffffff; background:#1e293b;">SAES: ${saesData.enteroSAES}</span>`;
-          }
-
-          return `
-            <div class="materia-bloque" style="border-color: ${colorMat}44;">
-              <div class="materia-header">
-                <div class="materia-title-row">
-                  <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
-                  <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                    ${saesMateriaBadge}
-                    ${badgeCoberturaHtml}
-                  </div>
-                </div>
-                
-                <div class="materia-universal-bar">
-                  <div class="bar-label-sub">
-                    <span>COBERTURA TOTAL:</span>
-                    ${textoCoberturaHtml}
-                  </div>
-                  ${barraUniversalHtml}
-                </div>
-              </div>
-
-              <div class="${claseGridTareasMat}">
-                ${tareasMat.map(t => {
-                  const esSinFecha = t.sinFecha || !t.fecha;
-                  const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
-                  const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
-                  const bloqueMateriaVisual = generarBloqueBarrasActividad(t, true);
-                  const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
-
-                  const timingHtml = esSinFecha
-                    ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>${extraTimingBadge}`
-                    : `<span class="fecha-destacada" style="color:${colorMat};">${formatearFechaLarga(t.fecha)}</span>
-                       <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
-                       ${extraTimingBadge}`;
-
-                  const horaHtml = esSinFecha
-                    ? `<span>CONTINUO SIN FECHA</span>`
-                    : `<span>${usarCardsMatCompactas ? (t.hora || '00:00:00').slice(0, 5) : 'HORA: ' + (t.hora || '00:00:00') + ' HRS'}</span>`;
-
-                  const lblClass = usarCardsMatCompactas ? '↗' : 'CLASSROOM ↗';
-                  const lblDet = usarCardsMatCompactas ? '▾' : 'DETALLES ▾';
-
-                  return `
-                    <div class="card ${usarCardsMatCompactas ? 'card-compact' : ''} ${t.completada ? 'completada' : ''}">
-                      <div class="card-body-main">
-                        <div class="card-top">
-                          <span class="actividad-texto" style="font-weight:700; color:#ffffff;">${t.actividad}</span>
-                        </div>
-
-                        <div class="card-timing">
-                          ${timingHtml}
-                        </div>
-
-                        ${bloqueMateriaVisual}
-                      </div>
-
-                      <div>
-                        <div class="card-bottom">
-                          <div class="card-meta">
-                            ${horaHtml}
-                          </div>
-                          <div class="card-actions">
-                            ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">${lblClass}</button>` : ''}
-                            <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">${lblDet}</button>
-                            <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
-                            <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
-                          </div>
-                        </div>
-
-                        <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
-                          <div class="details-top-bar">
-                            <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
-                            <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
-                          </div>
-                          <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
-                          ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
-                        </div>
-                      </div>
-                    </div>
-                  `;
-                }).join("")}
-              </div>
+          badgeCoberturaHtml = `<span class="badge" style="border: 1px solid #c084fc; color:#e9d5ff; background: rgba(168,85,247,0.22); box-shadow: 0 0 10px rgba(168,85,247,0.4);">${formatearPorcentaje(puntosBase100)} + ${formatearPorcentaje(totalExtra100)} EXTRA</span>`;
+          textoCoberturaHtml = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <strong class="pct-destacado" style="font-size:1.22rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong>
+              <strong class="pct-extra" style="font-size:1.22rem;">+ ${formatearPorcentaje(totalExtra100)} EXTRA</strong>
             </div>
           `;
-        }).join("");
+          barraUniversalHtml = `
+            <div class="bar-container" style="height: 15px;">
+              <div class="bar-base-zone" style="width: ${baseZonePct}%;">
+                <div class="bar-fill" style="width: ${baseFillInsideZonePct}%; ${matBarStyle}"></div>
+              </div>
+              <div class="bar-fill extra-overflow" style="width: ${extraBarPct}%;"></div>
+            </div>
+          `;
+        } else {
+          badgeCoberturaHtml = `<span class="badge" style="border: 1px solid ${colorMat}; color:${colorMat}; background: ${colorMat}1a;">${formatearPorcentaje(puntosBase100)}</span>`;
+          textoCoberturaHtml = `<span><strong class="pct-destacado" style="font-size:1.22rem; ${matPctStyle}">${formatearPorcentaje(puntosBase100)}</strong></span>`;
+          barraUniversalHtml = `
+            <div class="bar-container" style="height: 15px;">
+              <div class="bar-fill" style="width: ${Math.min(Math.max(puntosBase100, 0), 100)}%; ${matBarStyle}"></div>
+            </div>
+          `;
+        }
 
-        materiasEl.innerHTML = usarMosaicoMaterias
-          ? `<div class="materias-mosaico-board">${bloquesMateriasHtml}</div>`
-          : bloquesMateriasHtml;
-      } else {
-        materiasEl.innerHTML = "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
-      }
+        const califs = calificacionesSemestre[mat] || { p1: null, p2: null, extraP3: 0 };
+        const pesos = pesosParciales[mat] || { p1: 33.33, p2: 33.33, p3: 33.33 };
+        const p1Val = califs.p1 !== null && califs.p1 !== undefined ? califs.p1 : "";
+        const p2Val = califs.p2 !== null && califs.p2 !== undefined ? califs.p2 : "";
+        const p3Info = calcularP3Materia(mat);
+        const p3Val = p3Info.puntosAcumulados;
+        const p1Num = parseFloat(p1Val);
+        const p2Num = parseFloat(p2Val);
+
+        const peso1 = valorRealPonderado(pesos.p1);
+        const peso2 = valorRealPonderado(pesos.p2);
+        const peso3 = valorRealPonderado(pesos.p3);
+
+        let sumaPonderada = 0;
+        let pesoAcumulado = 0;
+        if (!isNaN(p1Num)) { sumaPonderada += p1Num * peso1; pesoAcumulado += peso1; }
+        if (!isNaN(p2Num)) { sumaPonderada += p2Num * peso2; pesoAcumulado += peso2; }
+        if (p3Val !== null && p3Val !== undefined) { sumaPonderada += p3Val * peso3; pesoAcumulado += peso3; }
+
+        let saesMateriaBadge = '';
+        if (pesoAcumulado > 0) {
+          const promMateria = sumaPonderada / pesoAcumulado;
+          const saesData = calcularRedondeoSAES(promMateria);
+          saesMateriaBadge = `<span class="badge" style="border:1px solid #ffffff; color:#ffffff; background:#1e293b;">SAES: ${saesData.enteroSAES}</span>`;
+        }
+
+        return `
+          <div class="materia-bloque" style="border-color: ${colorMat}44;">
+            <div class="materia-header">
+              <div class="materia-title-row">
+                <span class="materia-titulo" style="color:${colorMat}; text-shadow:0 0 10px ${colorMat}66;">${mat.toUpperCase()}</span>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  ${saesMateriaBadge}
+                  ${badgeCoberturaHtml}
+                </div>
+              </div>
+              
+              <div class="materia-universal-bar">
+                <div class="bar-label-sub">
+                  <span>COBERTURA TOTAL:</span>
+                  ${textoCoberturaHtml}
+                </div>
+                ${barraUniversalHtml}
+              </div>
+            </div>
+
+            <div class="${claseGridZoom}">
+              ${tareasMat.map(t => {
+                const esSinFecha = t.sinFecha || !t.fecha;
+                const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
+                const doomClase = doom ? (doom.zero ? 'countdown-timer zero' : (doom.urgente ? 'countdown-timer urgente' : 'countdown-timer')) : '';
+                const bloqueMateriaVisual = generarBloqueBarrasActividad(t);
+                const extraTimingBadge = t.tipo === 'extra' ? `<span class="badge-extra">EXTRA</span>` : '';
+
+                const timingHtml = esSinFecha
+                  ? `<span class="badge-sin-fecha">CONTINUO SIN FECHA</span>${extraTimingBadge}`
+                  : `<span class="fecha-destacada" style="color:${colorMat};">${formatearFechaLarga(t.fecha)}</span>
+                     <span class="${doomClase}" data-fecha="${t.fecha}" data-hora="${t.hora || '00:00:00'}">${doom.texto}</span>
+                     ${extraTimingBadge}`;
+
+                const horaHtml = esSinFecha
+                  ? `<span>CONTINUO SIN FECHA</span>`
+                  : `<span>HORA: ${t.hora || '00:00:00'} HRS</span>`;
+
+                return `
+                  <div class="card ${t.completada ? 'completada' : ''}">
+                    <div class="card-body-main">
+                      <div class="card-top">
+                        <span class="actividad-texto" style="font-weight:700; color:#ffffff;">${t.actividad}</span>
+                      </div>
+
+                      <div class="card-timing">
+                        ${timingHtml}
+                      </div>
+
+                      ${bloqueMateriaVisual}
+                    </div>
+
+                    <div>
+                      <div class="card-bottom">
+                        <div class="card-meta">
+                          ${horaHtml}
+                        </div>
+                        <div class="card-actions">
+                          ${t.urlClassroom ? `<button class="btn-32" style="border-color:var(--accent); color:var(--accent);" onclick="abrirClassroom('${t.urlClassroom}')">CLASSROOM ↗</button>` : ''}
+                          <button class="btn-32" onclick="toggleDesgloseDetalles('mat-${t.id}')">DETALLES ▾</button>
+                          <input type="checkbox" class="toggle-crt" ${t.completada ? 'checked' : ''} onclick="alternarTarea(${t.id})" title="Marcar completada / pendiente">
+                          <button class="btn-32 btn-32-danger" onclick="eliminarTarea(${t.id}, this)">X</button>
+                        </div>
+                      </div>
+
+                      <div id="drawer-detalles-mat-${t.id}" class="card-details-drawer" style="display:none;">
+                        <div class="details-top-bar">
+                          <span class="details-title-tag">NOTAS DE LA ACTIVIDAD:</span>
+                          <button class="btn-32 btn-32-primary" style="font-size:0.75rem; padding:4px 10px;" onclick="abrirEditorManualDirecto(${t.id})">EDITAR</button>
+                        </div>
+                        <div class="details-text-content">${t.detalles ? t.detalles : '<em>Sin notas registradas.</em>'}</div>
+                        ${t.urlClassroom ? `<div style="margin-top:8px;"><a href="${t.urlClassroom}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">🔗 ENLACE DIRECTO A CLASSROOM</a></div>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }).join("") : "<p style='color:#ffffff; text-align:center; padding:24px;'>NO HAY REGISTROS POR ASIGNATURA</p>";
 
       // 3. RENDER EVALUACIÓN
       const evalP3El = document.getElementById("lista-evaluacion-p3");
