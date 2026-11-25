@@ -48,6 +48,16 @@
       --text-main: #ffffff;
       --bevel-high: rgba(255, 255, 255, 0.08);
       --bevel-shadow: rgba(0, 0, 0, 0.6);
+
+      /* Variables dinámicas del Zoom de Encuadre */
+      --zoom-factor: 1;
+      --fit-cols: 1;
+      --text-legibility-scale: 1;
+      --card-pad-y: 16px;
+      --card-pad-x: 16px;
+      --card-gap: 11px;
+      --bar-height: 15px;
+      --smooth-curve: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     * {
@@ -65,31 +75,41 @@
         linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px);
       background-size: 100% 100%, 32px 32px, 32px 32px;
       color: var(--text-main);
-      padding: 24px 16px;
+      padding: 20px 14px;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ESCENARIO DE ZOOM REAL CON ANIMACIÓN FLUIDA */
+    #zoom-viewport-shell {
+      width: calc(100% / var(--zoom-factor));
+      transform: scale(var(--zoom-factor));
+      transform-origin: top left;
+      transition: transform 0.36s var(--smooth-curve), width 0.36s var(--smooth-curve);
+      will-change: transform, width;
     }
 
     .app-container {
-      width: 96%;
-      max-width: 1760px;
+      width: 97%;
+      max-width: 1920px;
       margin: 0 auto;
-      transition: padding-right 0.2s ease;
+      transition: padding-right 0.32s var(--smooth-curve), max-width 0.32s var(--smooth-curve);
     }
 
     .app-container.has-zoom-dock {
-      padding-right: 64px;
+      padding-right: 62px;
     }
 
     @media (max-width: 600px) {
       .app-container.has-zoom-dock {
-        padding-right: 52px;
+        padding-right: 48px;
       }
     }
 
-    /* BARRA FLOTANTE VERTICAL DE ZOOM SEMÁNTICO */
+    /* BARRA FLOTANTE VERTICAL DE ZOOM PROGRESIVO */
     .floating-zoom-dock {
       position: fixed;
-      right: 12px;
+      right: 10px;
       top: 50%;
       transform: translateY(-50%);
       z-index: 9000;
@@ -104,6 +124,7 @@
         0 8px 24px rgba(0, 0, 0, 0.75),
         0 0 14px rgba(56, 189, 248, 0.25),
         inset 1px 1px 0px var(--bevel-high);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
     .zoom-dock-tag {
@@ -124,7 +145,7 @@
       display: grid;
       place-content: center;
       cursor: pointer;
-      transition: all 0.12s ease;
+      transition: all 0.16s var(--smooth-curve);
     }
 
     .btn-dock-step:hover {
@@ -135,7 +156,7 @@
 
     .vertical-slider-track-box {
       width: 28px;
-      height: 112px;
+      height: 126px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -145,7 +166,7 @@
     .vertical-zoom-slider {
       -webkit-appearance: none;
       appearance: none;
-      width: 104px;
+      width: 118px;
       height: 6px;
       background: #060a14;
       border: 1px solid #2a3a5a;
@@ -163,6 +184,11 @@
       border: 2px solid #ffffff;
       box-shadow: 0 0 10px var(--accent-glow);
       cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .vertical-zoom-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
     }
 
     .vertical-zoom-slider::-moz-range-thumb {
@@ -176,19 +202,19 @@
     }
 
     .zoom-dock-readout {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: #fbbf24;
       letter-spacing: 0.5px;
       text-align: center;
-      min-width: 34px;
+      min-width: 38px;
     }
 
     header {
       max-width: 1120px;
-      margin: 0 auto 20px auto;
+      margin: 0 auto 18px auto;
       text-align: center;
-      padding: 16px 20px;
+      padding: 14px 20px;
       background: linear-gradient(180deg, #162035 0%, #0d1322 100%);
       border: 1px solid var(--card-border-default);
       box-shadow: 
@@ -196,6 +222,7 @@
         inset -1px -1px 0px var(--bevel-shadow),
         0 8px 24px rgba(0, 0, 0, 0.4);
       position: relative;
+      transition: all 0.32s var(--smooth-curve);
     }
 
     .cloud-status-badge {
@@ -225,7 +252,7 @@
     }
 
     h1 {
-      font-size: 1.8rem;
+      font-size: 1.75rem;
       font-weight: 700;
       letter-spacing: 4px;
       color: #ffffff;
@@ -235,7 +262,7 @@
     }
 
     .subtitle {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--accent);
       letter-spacing: 2px;
       margin-top: 4px;
@@ -246,17 +273,18 @@
 
     .nav-tabs {
       max-width: 1120px;
-      margin: 0 auto 24px auto;
+      margin: 0 auto 20px auto;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 6px;
       background: #090d16;
       padding: 6px;
       border: 1px solid #1a2333;
+      transition: all 0.32s var(--smooth-curve);
     }
 
     .tab-btn {
-      padding: 12px 4px;
+      padding: 11px 4px;
       background: linear-gradient(180deg, #1b253a 0%, #111827 100%);
       border: 1px solid #23314d;
       color: #ffffff;
@@ -268,7 +296,7 @@
       box-shadow: 
         inset 1px 1px 0px rgba(255, 255, 255, 0.1),
         inset -1px -1px 0px rgba(0, 0, 0, 0.5);
-      transition: all 0.15s ease;
+      transition: all 0.18s var(--smooth-curve);
     }
 
     .tab-btn:hover {
@@ -288,7 +316,7 @@
 
     .view-panel {
       display: none;
-      animation: panelFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: panelFade 0.28s var(--smooth-curve);
     }
 
     .view-panel.active {
@@ -303,7 +331,7 @@
     }
 
     @keyframes panelFade {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -311,11 +339,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       border-left: 3px solid var(--accent);
       padding: 4px 0 4px 12px;
       flex-wrap: wrap;
       gap: 10px;
+      transition: all 0.32s var(--smooth-curve);
     }
 
     h2 {
@@ -336,9 +365,10 @@
     .filter-bar {
       display: flex;
       gap: 8px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
       align-items: center;
+      transition: all 0.32s var(--smooth-curve);
     }
 
     .filter-btn {
@@ -350,7 +380,7 @@
       padding: 7px 14px;
       cursor: pointer;
       letter-spacing: 0.5px;
-      transition: all 0.15s ease;
+      transition: all 0.18s var(--smooth-curve);
     }
 
     .filter-btn:hover {
@@ -376,13 +406,48 @@
       letter-spacing: 1px;
     }
 
+    /* PODA PROGRESIVA AL HACER ZOOM OUT PARA QUE QUEPAN MÁS TAREAS EN PANTALLA */
+    .zoom-prune-header header,
+    .zoom-prune-header .nav-tabs {
+      max-width: 100%;
+      margin-bottom: 10px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .zoom-prune-header h1 {
+      font-size: 1.35rem;
+    }
+
+    .zoom-prune-filters .filter-bar {
+      margin-bottom: 10px;
+    }
+
+    .zoom-prune-chrome .section-header .controls-cluster > :not(#btn-modo-crono),
+    .zoom-prune-chrome .filter-bar .filter-btn {
+      opacity: 0.25;
+      pointer-events: none;
+      max-width: 0;
+      padding: 0;
+      margin: 0;
+      border-width: 0;
+      overflow: hidden;
+      transition: all 0.28s var(--smooth-curve);
+    }
+
     /* BLOQUES SEMANALES Y DE URGENCIA */
     .semana-bloque {
-      margin-bottom: 26px;
-      background: rgba(10, 15, 29, 0.65);
+      margin-bottom: 20px;
+      background: rgba(10, 15, 29, 0.68);
       border: 1px solid #1e2d48;
-      padding: 16px;
+      padding: 14px;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      transition: all 0.34s var(--smooth-curve);
+    }
+
+    .zoom-prune-chrome .semana-bloque {
+      margin-bottom: 12px;
+      padding: 10px 12px;
     }
 
     .semana-bloque.semana-actual {
@@ -399,20 +464,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 11px;
-      margin-bottom: 14px;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
       border-bottom: 2px solid #233554;
       flex-wrap: wrap;
       gap: 8px;
+      transition: all 0.28s var(--smooth-curve);
+    }
+
+    .zoom-prune-chrome .semana-header {
+      padding-bottom: 6px;
+      margin-bottom: 9px;
     }
 
     .semana-titulo {
-      font-size: 1.15rem;
+      font-size: calc(1.12rem * var(--text-legibility-scale));
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 1.8px;
       color: #ffffff;
       text-transform: uppercase;
       text-shadow: 0 0 10px var(--accent-glow);
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .badge-semana-actual {
@@ -426,33 +498,17 @@
       text-shadow: 0 0 6px var(--accent-glow);
     }
 
-    /* CUADRÍCULA LINEAL POR NIVEL DE ZOOM SEMÁNTICO (1 -> 2 -> 3 COLUMNAS LEGIBLES) */
+    /* CUADRÍCULA LINEAL DINÁMICA POR NIVEL DE ZOOM */
     .tasks-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
+      grid-template-columns: repeat(var(--fit-cols, 1), minmax(0, 1fr));
+      gap: var(--card-gap, 12px);
       align-items: stretch;
+      transition: grid-template-columns 0.36s var(--smooth-curve), gap 0.32s var(--smooth-curve);
     }
 
-    .tasks-grid.cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .tasks-grid.cols-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    @media (max-width: 960px) {
-      .tasks-grid.cols-3 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 600px) {
-      .tasks-grid.cols-2,
-      .tasks-grid.cols-3 {
+    @media (max-width: 720px) {
+      .tasks-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -460,28 +516,33 @@
     .card {
       background: linear-gradient(180deg, #172138 0%, #111827 100%);
       border: 2px solid var(--card-border-default);
-      padding: 16px;
+      padding: var(--card-pad-y, 15px) var(--card-pad-x, 16px);
       margin-bottom: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 11px;
+      gap: var(--card-gap, 10px);
       box-shadow: 
         inset 1px 1px 0px var(--bevel-high),
         inset -1px -1px 0px var(--bevel-shadow),
         0 6px 16px rgba(0, 0, 0, 0.35);
-      transition: border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.3s ease, filter 0.3s ease;
+      transition: 
+        padding 0.32s var(--smooth-curve),
+        gap 0.32s var(--smooth-curve),
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        opacity 0.28s ease,
+        filter 0.28s ease;
       position: relative;
     }
 
-    /* MODO LECTURA PURA AL HACER ZOOM OUT (OCULTA BOTONES, HORA, CHECKBOX Y NOTAS) */
-    .zoom-read-only .card {
-      padding: 14px 15px;
-      gap: 9px;
+    /* PODA DE ELEMENTOS SECUNDARIOS AL ALEJAR EL ZOOM */
+    .zoom-hide-bottom .card-bottom,
+    .zoom-hide-bottom .card-details-drawer {
+      display: none !important;
     }
 
-    .zoom-read-only .card-bottom,
-    .zoom-read-only .card-details-drawer {
+    .zoom-hide-countdown .countdown-timer {
       display: none !important;
     }
 
@@ -534,14 +595,15 @@
     .card-body-main {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
     }
 
     .card-top {
-      font-size: 1.05rem;
-      line-height: 1.38;
+      font-size: calc(1.02rem * var(--text-legibility-scale));
+      line-height: 1.32;
       font-weight: 600;
       color: #ffffff;
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .materia-tag {
@@ -558,28 +620,30 @@
     .card-timing {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       flex-wrap: wrap;
     }
 
     .fecha-destacada {
-      font-size: 0.96rem;
+      font-size: calc(0.94rem * var(--text-legibility-scale));
       font-weight: 700;
       color: var(--accent);
-      letter-spacing: 1px;
+      letter-spacing: 0.9px;
       text-transform: uppercase;
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .countdown-timer {
-      font-size: 1.02rem;
+      font-size: calc(0.96rem * var(--text-legibility-scale));
       font-weight: 700;
       color: #fbbf24;
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(251, 191, 36, 0.5);
-      padding: 5px 12px;
+      padding: 4px 10px;
       display: inline-block;
       letter-spacing: 0.8px;
       box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 10px rgba(251, 191, 36, 0.25);
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .countdown-timer.urgente {
@@ -599,7 +663,7 @@
     .ordinal-card-box {
       background: rgba(245, 158, 11, 0.08);
       border: 1px dashed var(--amber);
-      padding: 10px 14px;
+      padding: 8px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -610,10 +674,10 @@
       background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
       border: 1px solid #fbbf24;
       color: #ffffff;
-      padding: 4px 12px;
-      font-size: 0.8rem;
+      padding: 4px 11px;
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.4px;
       text-shadow: 0 0 6px rgba(251, 191, 36, 0.6);
       box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
     }
@@ -622,34 +686,37 @@
       background: linear-gradient(180deg, #7e22ce 0%, #4c1d95 100%);
       border: 1px solid #d8b4fe;
       color: #ffffff;
-      padding: 5px 13px;
-      font-size: 1.02rem;
+      padding: 4px 12px;
+      font-size: calc(0.94rem * var(--text-legibility-scale));
       font-weight: 700;
       display: inline-block;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.4px;
       text-shadow: 0 0 8px rgba(216, 180, 254, 0.85);
       box-shadow: 0 0 14px rgba(168, 85, 247, 0.55), inset 1px 1px 0px rgba(255, 255, 255, 0.25);
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .badge-sin-fecha {
-      font-size: 1.02rem;
+      font-size: calc(0.94rem * var(--text-legibility-scale));
       font-weight: 700;
       color: #f472b6;
       background: rgba(244, 114, 182, 0.12);
       border: 1px solid rgba(244, 114, 182, 0.55);
-      padding: 5px 13px;
+      padding: 4px 12px;
       display: inline-block;
       letter-spacing: 1px;
       box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 10px rgba(244, 114, 182, 0.25);
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .dual-bars-wrapper {
-      background: rgba(11, 16, 28, 0.7);
+      background: rgba(11, 16, 28, 0.72);
       border: 1px solid #1a253a;
-      padding: 11px 13px;
+      padding: 9px 12px;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 8px;
+      transition: padding 0.28s var(--smooth-curve);
     }
 
     .dual-bars-wrapper.extra-wrapper {
@@ -667,23 +734,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.82rem;
+      font-size: calc(0.8rem * var(--text-legibility-scale));
       color: #ffffff;
       font-weight: 700;
       letter-spacing: 0.5px;
       flex-wrap: wrap;
       gap: 6px;
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .bar-container {
       width: 100%;
-      height: 15px;
+      height: var(--bar-height, 14px);
       background: #080d1a;
       border: 1px solid #1e293b;
       position: relative;
       overflow: hidden;
       box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.8);
       display: flex;
+      transition: height 0.28s var(--smooth-curve);
     }
 
     .bar-base-zone {
@@ -730,19 +799,21 @@
     }
 
     .pct-destacado {
-      font-size: 1.18rem;
+      font-size: calc(1.12rem * var(--text-legibility-scale));
       font-weight: 700;
       color: #38bdf8;
       text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
       letter-spacing: 0.5px;
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .pct-extra {
-      font-size: 1.18rem;
+      font-size: calc(1.12rem * var(--text-legibility-scale));
       font-weight: 700;
       color: #c084fc;
       text-shadow: 0 0 8px rgba(192, 132, 252, 0.55);
       letter-spacing: 0.5px;
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .card-bottom {
@@ -841,7 +912,7 @@
         inset 1px 1px 0px var(--bevel-high),
         inset -1px -1px 0px var(--bevel-shadow),
         0 2px 6px rgba(0, 0, 0, 0.4);
-      transition: all 0.1s ease;
+      transition: all 0.14s var(--smooth-curve);
     }
 
     .btn-32:hover {
@@ -938,20 +1009,33 @@
     }
 
     .materia-bloque {
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       background: #0c1220;
       border: 1px solid #1a2438;
-      padding: 16px;
+      padding: 15px;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+      transition: all 0.32s var(--smooth-curve);
+    }
+
+    .zoom-prune-chrome .materia-bloque {
+      margin-bottom: 12px;
+      padding: 11px 13px;
     }
 
     .materia-header {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 9px;
+      margin-bottom: 13px;
       border-bottom: 1px solid #22304d;
-      padding-bottom: 12px;
+      padding-bottom: 11px;
+      transition: all 0.28s var(--smooth-curve);
+    }
+
+    .zoom-prune-chrome .materia-header {
+      gap: 6px;
+      margin-bottom: 9px;
+      padding-bottom: 8px;
     }
 
     .materia-title-row {
@@ -963,9 +1047,10 @@
     }
 
     .materia-titulo {
-      font-size: 1.15rem;
+      font-size: calc(1.12rem * var(--text-legibility-scale));
       font-weight: 700;
       letter-spacing: 1.5px;
+      transition: font-size 0.28s var(--smooth-curve);
     }
 
     .materia-universal-bar {
@@ -1376,183 +1461,184 @@
   </style>
 </head>
 <body>
-  <!-- BARRA VERTICAL FLOTANTE DE ZOOM SEMÁNTICO -->
-  <aside id="floating-zoom-dock" class="floating-zoom-dock" title="Zoom de Lectura (1, 2 o 3 columnas legibles)">
+  <!-- BARRA VERTICAL FLOTANTE DE ZOOM DE ENCUADRE -->
+  <aside id="floating-zoom-dock" class="floating-zoom-dock" title="Zoom de Encuadre: ajusta progresivamente cuántas tareas caben en pantalla con animación fluida">
     <span class="zoom-dock-tag">ZOOM</span>
-    <button class="btn-dock-step" onclick="ajustarZoomNivel(1)" title="Acercar / Detalle Operativo">+</button>
+    <button class="btn-dock-step" onclick="pasoZoomEncuadre(0.10)" title="Acercar / Detalle Completo">+</button>
     <div class="vertical-slider-track-box">
-      <input type="range" id="zoom-vertical-slider" class="vertical-zoom-slider" min="1" max="3" step="1" value="3" oninput="setZoomNivel(this.value)">
+      <input type="range" id="zoom-vertical-slider" class="vertical-zoom-slider" min="50" max="100" step="5" value="100" oninput="setZoomEncuadre(this.value / 100)">
     </div>
-    <button class="btn-dock-step" onclick="ajustarZoomNivel(-1)" title="Alejar / Visión Panorámica">−</button>
-    <span class="zoom-dock-readout" id="zoom-dock-readout">100%</span>
+    <button class="btn-dock-step" onclick="pasoZoomEncuadre(-0.10)" title="Alejar / Encajar Más Tareas">−</button>
+    <button class="zoom-dock-readout" id="zoom-dock-readout" onclick="setZoomEncuadre(1.0)" title="Clic para restaurar 100%">100%</button>
   </aside>
 
-  <div id="main-app-container" class="app-container has-zoom-dock">
-    <header>
-      <div id="cloud-badge" class="cloud-status-badge cloud-offline">NUBE: DESCONECTADA</div>
-      <h1>AMADEUS SYSTEM</h1>
-      <p class="subtitle">V.3.8</p>
-    </header>
+  <div id="zoom-viewport-shell">
+    <div id="main-app-container" class="app-container has-zoom-dock">
+      <header>
+        <div id="cloud-badge" class="cloud-status-badge cloud-offline">NUBE: DESCONECTADA</div>
+        <h1>AMADEUS SYSTEM</h1>
+        <p class="subtitle">V.3.8</p>
+      </header>
 
-    <nav class="nav-tabs">
-      <button class="tab-btn active" onclick="cambiarVista('cronograma')">CRONOGRAMA</button>
-      <button class="tab-btn" onclick="cambiarVista('materias')">MATERIAS</button>
-      <button class="tab-btn" onclick="cambiarVista('evaluacion')">EVALUACIÓN</button>
-      <button class="tab-btn" onclick="cambiarVista('datos')">J.A.R.V.I.S</button>
-      <button class="tab-btn" onclick="cambiarVista('config')">CONFIG</button>
-    </nav>
+      <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="cambiarVista('cronograma')">CRONOGRAMA</button>
+        <button class="tab-btn" onclick="cambiarVista('materias')">MATERIAS</button>
+        <button class="tab-btn" onclick="cambiarVista('evaluacion')">EVALUACIÓN</button>
+        <button class="tab-btn" onclick="cambiarVista('datos')">J.A.R.V.I.S</button>
+        <button class="tab-btn" onclick="cambiarVista('config')">CONFIG</button>
+      </nav>
 
-    <!-- 1: CRONOGRAMA -->
-    <section id="vista-cronograma" class="view-panel active">
-      <div class="section-header">
-        <h2>ENTREGAS</h2>
-        <div class="controls-cluster">
-          <button class="btn-32 btn-32-layout" id="btn-modo-crono" onclick="alternarModoCrono()">MODO: CRONOLÓGICO ☰</button>
-          <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
-          <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
-        </div>
-      </div>
-
-      <div class="filter-bar">
-        <button class="filter-btn active" id="flt-todas" onclick="setFiltro('todas')">VER TODAS</button>
-        <button class="filter-btn" id="flt-activas" onclick="setFiltro('activas')">ACTIVAS</button>
-        <button class="filter-btn" id="flt-completadas" onclick="setFiltro('completadas')">COMPLETADAS</button>
-        <span class="stage-pill" id="stage-indicator-crono">1 COLUMNA // OPERATIVO</span>
-      </div>
-
-      <div id="lista-cronograma"></div>
-    </section>
-
-    <!-- 2: MATERIAS -->
-    <section id="vista-materias" class="view-panel">
-      <div class="section-header">
-        <h2>POR MATERIA</h2>
-        <div class="controls-cluster">
-          <span class="stage-pill" id="stage-indicator-mat">1 COLUMNA // OPERATIVO</span>
-          <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
-        </div>
-      </div>
-      <div id="lista-materias"></div>
-    </section>
-
-    <!-- 3: EVALUACIÓN -->
-    <section id="vista-evaluacion" class="view-panel">
-      <div class="section-header">
-        <h2>3ER PARCIAL // RENDIMIENTO</h2>
-      </div>
-      <div id="lista-evaluacion-p3"></div>
-
-      <div class="section-header" style="margin-top: 36px;">
-        <h2>MATRIZ SEMESTRAL DE CALIFICACIONES</h2>
-      </div>
-
-      <div class="table-container">
-        <table class="matrix-table">
-          <thead>
-            <tr>
-              <th>ASIGNATURA</th>
-              <th>1ER PARCIAL</th>
-              <th>2DO PARCIAL</th>
-              <th>3ER PARCIAL</th>
-              <th>PROMEDIO SAES</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-matriz-body"></tbody>
-        </table>
-      </div>
-
-      <div class="hud-promedio-box">
-        <div class="hud-title">PROMEDIO GENERAL SEMESTRAL SAES</div>
-        <div class="hud-number" id="hud-promedio-general">0.00</div>
-        <div class="hud-meta" id="hud-estado-academico">ESCALA PONDERADA OFICIAL // REDONDEO A ENTEROS POR ASIGNATURA</div>
-      </div>
-    </section>
-
-    <!-- 4: CONSOLA & REGISTRO (J.A.R.V.I.S) -->
-    <section id="vista-datos" class="view-panel">
-      <div class="chat-box">
-        <div class="chat-header">
-          <span class="terminal-tag">SYS // CORE</span>
-          <span style="font-size: 0.85rem; color: #ffffff; font-weight:600;">PROCESADOR Y CONTROL INTEGRAL</span>
-        </div>
-
-        <div id="chat-history" class="chat-history">
-          <div class="chat-msg bot">
-            J.A.R.V.I.S EN LÍNEA.<br>
-            • <strong>REGISTRAR:</strong> <em>"problemario de álgebra para el 25 de noviembre a las 21:00 vale 20/30"</em><br>
-            • <strong>CLASIFICACIÓN Y TIEMPO:</strong> palabras clave <em>extra</em>, <em>ordinal</em>, <em>continuo sin fecha</em>, <em>link</em>, <em>notas:</em><br>
-            • <strong>MODIFICAR:</strong> <em>"edita problemario: fecha 28 de noviembre, hora 18:00, valor 25/30, tipo extra, continuo sin fecha"</em><br>
-            • <strong>GESTIONAR:</strong> <em>completa</em>, <em>reactiva</em>, <em>elimina</em>, <em>renombra</em>, <em>saqué</em>, <em>pesos</em>, <em>resumen</em>, <em>comandos</em>
+      <!-- 1: CRONOGRAMA -->
+      <section id="vista-cronograma" class="view-panel active">
+        <div class="section-header">
+          <h2>ENTREGAS</h2>
+          <div class="controls-cluster">
+            <button class="btn-32 btn-32-layout" id="btn-modo-crono" onclick="alternarModoCrono()">MODO: CRONOLÓGICO ☰</button>
+            <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
+            <button class="btn-32 btn-32-primary" onclick="sincronizarTodasLasTareas()">TODO A CALENDAR</button>
           </div>
         </div>
 
-        <div class="chat-input-row">
-          <textarea id="chat-input" placeholder="Escribe comando, entrega, edición o consulta a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
-          <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
+        <div class="filter-bar">
+          <button class="filter-btn active" id="flt-todas" onclick="setFiltro('todas')">VER TODAS</button>
+          <button class="filter-btn" id="flt-activas" onclick="setFiltro('activas')">ACTIVAS</button>
+          <button class="filter-btn" id="flt-completadas" onclick="setFiltro('completadas')">COMPLETADAS</button>
+          <span class="stage-pill" id="stage-indicator-crono">ENCUADRE 100% // 1 COL</span>
         </div>
-      </div>
 
-      <div class="section-header">
-        <h2>REGISTRO MANUAL DIRECTO</h2>
-      </div>
+        <div id="lista-cronograma"></div>
+      </section>
 
-      <form id="form-tarea" onsubmit="agregarTareaManual(event)">
-        <label>CLASIFICACIÓN DE LA ACTIVIDAD:
-          <select id="input-tipo" onchange="alternarCamposPonderacion(this.value)">
-            <option value="porcentual">PORCENTUAL</option>
-            <option value="ordinal">ORDINAL</option>
-            <option value="extra">EXTRA</option>
-          </select>
-        </label>
-        <label>ASIGNATURA:
-          <select id="input-materia" required></select>
-        </label>
-        <label>ACTIVIDAD:
-          <input type="text" id="input-actividad" placeholder="Ej. Visita Museo / Cuaderno / Problemario" required>
-        </label>
-        <label>ENLACE DE CLASSROOM:
-          <input type="url" id="input-url-classroom" placeholder="https://classroom.google.com/c/.../a/.../details">
-        </label>
-
-        <label class="checkbox-panel-row">
-          <input type="checkbox" id="input-sin-fecha" class="toggle-crt" onchange="alternarCamposFecha(this.checked)">
-          <span>CONTINUO SIN FECHA</span>
-        </label>
-
-        <div class="row" id="row-fecha-hora-inputs">
-          <label>FECHA LÍMITE:
-            <input type="date" id="input-fecha" required>
-          </label>
-          <label>HORA DE ENTREGA:
-            <input type="time" id="input-hora" value="00:00">
-          </label>
+      <!-- 2: MATERIAS -->
+      <section id="vista-materias" class="view-panel">
+        <div class="section-header">
+          <h2>POR MATERIA</h2>
+          <div class="controls-cluster">
+            <span class="stage-pill" id="stage-indicator-mat">ENCUADRE 100% // 1 COL</span>
+            <button class="btn-32" onclick="abrirEditorManualDirecto()">MODIFICADOR MANUAL</button>
+          </div>
         </div>
-        <div class="row" id="row-ponderacion-inputs">
-          <label>VALOR:
-            <input type="number" id="input-puntos" value="20" min="1" max="100">
-          </label>
-          <label>BASE DEL PROFESOR:
-            <input type="number" id="input-base" value="100" min="1" max="100">
-          </label>
+        <div id="lista-materias"></div>
+      </section>
+
+      <!-- 3: EVALUACIÓN -->
+      <section id="vista-evaluacion" class="view-panel">
+        <div class="section-header">
+          <h2>3ER PARCIAL // RENDIMIENTO</h2>
         </div>
-        <label>NOTAS:
-          <textarea id="input-detalles" placeholder="Especificaciones, rúbricas o apuntes de la actividad..." style="height:65px; resize:vertical;"></textarea>
-        </label>
-        <button type="submit" class="btn-32 btn-32-primary" style="margin-top:6px;">GUARDAR REGISTRO</button>
-      </form>
-    </section>
+        <div id="lista-evaluacion-p3"></div>
 
-    <!-- 5: CONFIGURACIÓN -->
-    <section id="vista-config" class="view-panel">
-      <div class="section-header">
-        <h2>PARÁMETROS DE SISTEMA</h2>
-      </div>
+        <div class="section-header" style="margin-top: 36px;">
+          <h2>MATRIZ SEMESTRAL DE CALIFICACIONES</h2>
+        </div>
 
-      <!-- PANEL DE CONTROL FIREBASE FIRESTORE EN TIEMPO REAL -->
-      <div class="action-box" style="border-left: 3px solid var(--green);">
-        <h3 style="color:var(--green);">FIREBASE FIRESTORE // NUBE EN TIEMPO REAL</h3>
-        <p>Pega aquí tu <code>firebaseConfig</code> para sincronizar automáticamente tus datos entre tu celular y computadora:</p>
-        <textarea id="input-firebase-config" placeholder='Pega aquí tu configuración:
+        <div class="table-container">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>ASIGNATURA</th>
+                <th>1ER PARCIAL</th>
+                <th>2DO PARCIAL</th>
+                <th>3ER PARCIAL</th>
+                <th>PROMEDIO SAES</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-matriz-body"></tbody>
+          </table>
+        </div>
+
+        <div class="hud-promedio-box">
+          <div class="hud-title">PROMEDIO GENERAL SEMESTRAL SAES</div>
+          <div class="hud-number" id="hud-promedio-general">0.00</div>
+          <div class="hud-meta" id="hud-estado-academico">ESCALA PONDERADA OFICIAL // REDONDEO A ENTEROS POR ASIGNATURA</div>
+        </div>
+      </section>
+
+      <!-- 4: CONSOLA & REGISTRO (J.A.R.V.I.S) -->
+      <section id="vista-datos" class="view-panel">
+        <div class="chat-box">
+          <div class="chat-header">
+            <span class="terminal-tag">SYS // CORE</span>
+            <span style="font-size: 0.85rem; color: #ffffff; font-weight:600;">PROCESADOR Y CONTROL INTEGRAL</span>
+          </div>
+
+          <div id="chat-history" class="chat-history">
+            <div class="chat-msg bot">
+              J.A.R.V.I.S EN LÍNEA.<br>
+              • <strong>REGISTRAR:</strong> <em>"problemario de álgebra para el 25 de noviembre a las 21:00 vale 20/30"</em><br>
+              • <strong>CLASIFICACIÓN Y TIEMPO:</strong> palabras clave <em>extra</em>, <em>ordinal</em>, <em>continuo sin fecha</em>, <em>link</em>, <em>notas:</em><br>
+              • <strong>MODIFICAR:</strong> <em>"edita problemario: fecha 28 de noviembre, hora 18:00, valor 25/30, tipo extra, continuo sin fecha"</em><br>
+              • <strong>GESTIONAR:</strong> <em>completa</em>, <em>reactiva</em>, <em>elimina</em>, <em>renombra</em>, <em>saqué</em>, <em>pesos</em>, <em>resumen</em>, <em>comandos</em>
+            </div>
+          </div>
+
+          <div class="chat-input-row">
+            <textarea id="chat-input" placeholder="Escribe comando, entrega, edición o consulta a J.A.R.V.I.S..." onkeydown="verificarEnter(event)"></textarea>
+            <button class="btn-32 btn-32-primary" onclick="enviarMensajeChat()">ENVIAR</button>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h2>REGISTRO MANUAL DIRECTO</h2>
+        </div>
+
+        <form id="form-tarea" onsubmit="agregarTareaManual(event)">
+          <label>CLASIFICACIÓN DE LA ACTIVIDAD:
+            <select id="input-tipo" onchange="alternarCamposPonderacion(this.value)">
+              <option value="porcentual">PORCENTUAL</option>
+              <option value="ordinal">ORDINAL</option>
+              <option value="extra">EXTRA</option>
+            </select>
+          </label>
+          <label>ASIGNATURA:
+            <select id="input-materia" required></select>
+          </label>
+          <label>ACTIVIDAD:
+            <input type="text" id="input-actividad" placeholder="Ej. Visita Museo / Cuaderno / Problemario" required>
+          </label>
+          <label>ENLACE DE CLASSROOM:
+            <input type="url" id="input-url-classroom" placeholder="https://classroom.google.com/c/.../a/.../details">
+          </label>
+
+          <label class="checkbox-panel-row">
+            <input type="checkbox" id="input-sin-fecha" class="toggle-crt" onchange="alternarCamposFecha(this.checked)">
+            <span>CONTINUO SIN FECHA</span>
+          </label>
+
+          <div class="row" id="row-fecha-hora-inputs">
+            <label>FECHA LÍMITE:
+              <input type="date" id="input-fecha" required>
+            </label>
+            <label>HORA DE ENTREGA:
+              <input type="time" id="input-hora" value="00:00">
+            </label>
+          </div>
+          <div class="row" id="row-ponderacion-inputs">
+            <label>VALOR:
+              <input type="number" id="input-puntos" value="20" min="1" max="100">
+            </label>
+            <label>BASE DEL PROFESOR:
+              <input type="number" id="input-base" value="100" min="1" max="100">
+            </label>
+          </div>
+          <label>NOTAS:
+            <textarea id="input-detalles" placeholder="Especificaciones, rúbricas o apuntes de la actividad..." style="height:65px; resize:vertical;"></textarea>
+          </label>
+          <button type="submit" class="btn-32 btn-32-primary" style="margin-top:6px;">GUARDAR REGISTRO</button>
+        </form>
+      </section>
+
+      <!-- 5: CONFIGURACIÓN -->
+      <section id="vista-config" class="view-panel">
+        <div class="section-header">
+          <h2>PARÁMETROS DE SISTEMA</h2>
+        </div>
+
+        <!-- PANEL DE CONTROL FIREBASE FIRESTORE EN TIEMPO REAL -->
+        <div class="action-box" style="border-left: 3px solid var(--green);">
+          <h3 style="color:var(--green);">FIREBASE FIRESTORE // NUBE EN TIEMPO REAL</h3>
+          <p>Pega aquí tu <code>firebaseConfig</code> para sincronizar automáticamente tus datos entre tu celular y computadora:</p>
+          <textarea id="input-firebase-config" placeholder='Pega aquí tu configuración:
 {
   "apiKey": "AIzaSy...",
   "authDomain": "...",
@@ -1561,46 +1647,47 @@
   "messagingSenderId": "...",
   "appId": "..."
 }' style="width:100%; height:110px; font-size:0.78rem; margin-bottom:12px;"></textarea>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button type="button" class="btn-32 btn-32-primary" onclick="guardarConfigFirebase()">GUARDAR Y CONECTAR NUBE</button>
-          <button type="button" class="btn-32 btn-32-danger" onclick="desconectarFirebase()">DESCONECTAR NUBE</button>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn-32 btn-32-primary" onclick="guardarConfigFirebase()">GUARDAR Y CONECTAR NUBE</button>
+            <button type="button" class="btn-32 btn-32-danger" onclick="desconectarFirebase()">DESCONECTAR NUBE</button>
+          </div>
+          <p id="firebase-status-msg" style="margin-top:12px; font-size:0.85rem; font-weight:700; color:var(--accent);"></p>
         </div>
-        <p id="firebase-status-msg" style="margin-top:12px; font-size:0.85rem; font-weight:700; color:var(--accent);"></p>
-      </div>
 
-      <div class="action-box">
-        <h3>GOOGLE CALENDAR OAUTH 2.0</h3>
-        <p>Configura tu Client ID para habilitar llamadas autorizadas sin intermediarios:</p>
-        <input type="text" id="input-client-id" placeholder="ID...apps.googleusercontent.com" style="width:100%; margin-bottom:12px;">
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button type="button" class="btn-32" onclick="guardarClientId()">GUARDAR ID</button>
-          <button type="button" class="btn-32 btn-32-primary" id="btn-auth-google" onclick="iniciarSesionGoogle()">AUTH GOOGLE</button>
+        <div class="action-box">
+          <h3>GOOGLE CALENDAR OAUTH 2.0</h3>
+          <p>Configura tu Client ID para habilitar llamadas autorizadas sin intermediarios:</p>
+          <input type="text" id="input-client-id" placeholder="ID...apps.googleusercontent.com" style="width:100%; margin-bottom:12px;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn-32" onclick="guardarClientId()">GUARDAR ID</button>
+            <button type="button" class="btn-32 btn-32-primary" id="btn-auth-google" onclick="iniciarSesionGoogle()">AUTH GOOGLE</button>
+          </div>
+          <p id="auth-status" style="margin-top:12px; color:var(--accent); font-size:0.85rem; font-weight:600;"></p>
         </div>
-        <p id="auth-status" style="margin-top:12px; color:var(--accent); font-size:0.85rem; font-weight:600;"></p>
-      </div>
 
-      <div class="action-box">
-        <h3>RESTABLECER SINCRONIZACIÓN DE CALENDAR</h3>
-        <p>Si eliminaste eventos en Google Calendar para reprogramarlos con la nueva hora:</p>
-        <button type="button" class="btn-32 btn-32-primary" onclick="resetearSincronizacionCalendar()">REINICIAR ESTADO CALENDAR</button>
-      </div>
-
-      <div class="action-box">
-        <h3>RESPALDO Y MIGRACIÓN DE DATOS</h3>
-        <p>Genera o restaura una copia física estructurada de tu base de datos local:</p>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button type="button" class="btn-32" onclick="exportarTareas()">DESCARGAR JSON</button>
-          <input type="file" id="import-file" style="display:none;" onchange="importarTareas(event)">
-          <button type="button" class="btn-32" onclick="document.getElementById('import-file').click()">CARGAR JSON</button>
+        <div class="action-box">
+          <h3>RESTABLECER SINCRONIZACIÓN DE CALENDAR</h3>
+          <p>Si eliminaste eventos en Google Calendar para reprogramarlos con la nueva hora:</p>
+          <button type="button" class="btn-32 btn-32-primary" onclick="resetearSincronizacionCalendar()">REINICIAR ESTADO CALENDAR</button>
         </div>
-      </div>
 
-      <div class="action-box">
-        <h3>PURGA DE MEMORIA // NUEVO SEMESTRE</h3>
-        <p>Reiniciar semestre actual:</p>
-        <button type="button" class="btn-32 btn-32-danger" onclick="ejecutarReinicioSemestre()">REINICIO TOTAL DE SEMESTRE</button>
-      </div>
-    </section>
+        <div class="action-box">
+          <h3>RESPALDO Y MIGRACIÓN DE DATOS</h3>
+          <p>Genera o restaura una copia física estructurada de tu base de datos local:</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn-32" onclick="exportarTareas()">DESCARGAR JSON</button>
+            <input type="file" id="import-file" style="display:none;" onchange="importarTareas(event)">
+            <button type="button" class="btn-32" onclick="document.getElementById('import-file').click()">CARGAR JSON</button>
+          </div>
+        </div>
+
+        <div class="action-box">
+          <h3>PURGA DE MEMORIA // NUEVO SEMESTRE</h3>
+          <p>Reiniciar semestre actual:</p>
+          <button type="button" class="btn-32 btn-32-danger" onclick="ejecutarReinicioSemestre()">REINICIO TOTAL DE SEMESTRE</button>
+        </div>
+      </section>
+    </div>
   </div>
 
   <!-- MODAL FLOTANTE DE CONTROL MANUAL DE EDICIÓN -->
@@ -1842,57 +1929,106 @@
     let filtroActual = 'todas';
 
     /* =========================================================================
-       ZOOM SEMÁNTICO (BARRA VERTICAL) + DOS MODOS EXCLUSIVOS (CRONOLÓGICO / URGENCIA)
-       Nivel 3 = 100% (1 Columna Operativa con todos los botones)
-       Nivel 2 = 75%  (2 Columnas Lectura Pura, sin botones ni checkbox)
-       Nivel 1 = 50%  (3 Columnas Lectura Panorámica, sin botones ni checkbox)
+       MOTOR DE ZOOM DE ENCUADRE PROGRESIVO (0.50 -> 1.00) + 2 MODOS
+       Al alejar (bajar zoomFactor), el escenario se ajusta con animación fluida
+       y aumenta la densidad de columnas para que quepan más tareas sin scroll,
+       podando elementos secundarios y reforzando la legibilidad del texto.
        ========================================================================= */
-    let zoomNivel = parseInt(localStorage.getItem("zoom_nivel_amadeus"), 10);
-    if (![1, 2, 3].includes(zoomNivel)) zoomNivel = 3;
+    let zoomFactor = parseFloat(localStorage.getItem("zoom_factor_amadeus"));
+    if (isNaN(zoomFactor) || zoomFactor < 0.50 || zoomFactor > 1.00) zoomFactor = 1.00;
 
     let modoCronograma = localStorage.getItem("modo_crono_amadeus") || 'cronologico';
     if (!['cronologico', 'urgencia'].includes(modoCronograma)) modoCronograma = 'cronologico';
 
-    function setZoomNivel(val) {
-      const n = Math.min(Math.max(parseInt(val, 10) || 3, 1), 3);
-      zoomNivel = n;
-      localStorage.setItem("zoom_nivel_amadeus", String(zoomNivel));
-      actualizarUIZoomYModo();
-      render();
+    function calcularEstadoEncuadre(z) {
+      let cols = 1;
+      if (z <= 0.60) cols = 3;
+      else if (z <= 0.85) cols = 2;
+      else cols = 1;
+
+      // Compensación tipográfica para que el texto siga legible al hacer zoom out
+      const legibilityScale = Number((1 / Math.pow(z, 0.28)).toFixed(3));
+      const padY = Math.round(11 + z * 5);
+      const padX = Math.round(12 + z * 4);
+      const gap = Math.round(8 + z * 4);
+      const barH = Math.round(12 + z * 3);
+
+      return {
+        cols,
+        legibilityScale,
+        padY,
+        padX,
+        gap,
+        barH,
+        ocultarBottom: z <= 0.85,
+        ocultarCountdown: z <= 0.65,
+        podarCabecera: z <= 0.70,
+        podarControles: z <= 0.80
+      };
     }
 
-    function ajustarZoomNivel(delta) {
-      setZoomNivel(zoomNivel + delta);
+    function aplicarParametrosEncuadre(z) {
+      const root = document.documentElement;
+      const appCont = document.getElementById("main-app-container");
+      const est = calcularEstadoEncuadre(z);
+
+      root.style.setProperty('--zoom-factor', z.toFixed(2));
+      root.style.setProperty('--fit-cols', String(est.cols));
+      root.style.setProperty('--text-legibility-scale', String(est.legibilityScale));
+      root.style.setProperty('--card-pad-y', `${est.padY}px`);
+      root.style.setProperty('--card-pad-x', `${est.padX}px`);
+      root.style.setProperty('--card-gap', `${est.gap}px`);
+      root.style.setProperty('--bar-height', `${est.barH}px`);
+
+      if (appCont) {
+        appCont.classList.toggle("zoom-hide-bottom", est.ocultarBottom);
+        appCont.classList.toggle("zoom-hide-countdown", est.ocultarCountdown);
+        appCont.classList.toggle("zoom-prune-header", est.podarCabecera);
+        appCont.classList.toggle("zoom-prune-chrome", est.podarControles);
+      }
+
+      const pct = `${Math.round(z * 100)}%`;
+      const slider = document.getElementById("zoom-vertical-slider");
+      const readout = document.getElementById("zoom-dock-readout");
+      const pillCrono = document.getElementById("stage-indicator-crono");
+      const pillMat = document.getElementById("stage-indicator-mat");
+
+      if (slider) slider.value = String(Math.round(z * 100));
+      if (readout) readout.innerText = pct;
+
+      const etiquetaEstado = `ENCUADRE ${pct} // ${est.cols} COL${est.cols > 1 ? 'S' : ''}`;
+      if (pillCrono) pillCrono.innerText = etiquetaEstado;
+      if (pillMat) pillMat.innerText = etiquetaEstado;
+    }
+
+    function setZoomEncuadre(nuevoValor) {
+      const clamped = Math.min(Math.max(Number(parseFloat(nuevoValor).toFixed(2)), 0.50), 1.00);
+      const prevCols = calcularEstadoEncuadre(zoomFactor).cols;
+      zoomFactor = clamped;
+      localStorage.setItem("zoom_factor_amadeus", zoomFactor.toFixed(2));
+      aplicarParametrosEncuadre(zoomFactor);
+
+      const nextCols = calcularEstadoEncuadre(zoomFactor).cols;
+      if (prevCols !== nextCols) {
+        render();
+      }
+    }
+
+    function pasoZoomEncuadre(delta) {
+      setZoomEncuadre(zoomFactor + delta);
     }
 
     function alternarModoCrono() {
       modoCronograma = (modoCronograma === 'cronologico') ? 'urgencia' : 'cronologico';
       localStorage.setItem("modo_crono_amadeus", modoCronograma);
-      actualizarUIZoomYModo();
+      actualizarUIModo();
       render();
     }
 
-    function actualizarUIZoomYModo() {
-      const slider = document.getElementById("zoom-vertical-slider");
-      const readout = document.getElementById("zoom-dock-readout");
+    function actualizarUIModo() {
       const appCont = document.getElementById("main-app-container");
-      const pillCrono = document.getElementById("stage-indicator-crono");
-      const pillMat = document.getElementById("stage-indicator-mat");
       const btnModo = document.getElementById("btn-modo-crono");
       const dock = document.getElementById("floating-zoom-dock");
-
-      if (slider) slider.value = String(zoomNivel);
-
-      const mapaInfo = {
-        3: { pct: '100%', pill: '1 COLUMNA // OPERATIVO' },
-        2: { pct: '75%', pill: '2 COLUMNAS // LECTURA LIMPIA' },
-        1: { pct: '50%', pill: '3 COLUMNAS // PANORÁMICA' }
-      };
-
-      const info = mapaInfo[zoomNivel] || mapaInfo[3];
-      if (readout) readout.innerText = info.pct;
-      if (pillCrono) pillCrono.innerText = info.pill;
-      if (pillMat) pillMat.innerText = info.pill;
 
       if (btnModo) {
         btnModo.innerText = (modoCronograma === 'cronologico')
@@ -1906,17 +2042,9 @@
       if (dock) {
         dock.style.display = mostrarDock ? "flex" : "none";
       }
-
       if (appCont) {
         appCont.classList.toggle("has-zoom-dock", mostrarDock);
-        appCont.classList.toggle("zoom-read-only", zoomNivel < 3);
       }
-    }
-
-    function getClaseGridZoom() {
-      if (zoomNivel === 1) return "tasks-grid cols-3";
-      if (zoomNivel === 2) return "tasks-grid cols-2";
-      return "tasks-grid";
     }
 
     function guardarLocal(origenRemoto = false) {
@@ -2414,7 +2542,8 @@
         if (fbArea) fbArea.value = savedFb;
       }
 
-      actualizarUIZoomYModo();
+      aplicarParametrosEncuadre(zoomFactor);
+      actualizarUIModo();
       inicializarFirebase();
     });
 
@@ -2547,7 +2676,7 @@
       const idx = nombres.indexOf(vista);
       if (idx !== -1 && botones[idx]) botones[idx].classList.add("active");
 
-      actualizarUIZoomYModo();
+      actualizarUIModo();
       render();
     }
 
@@ -3310,7 +3439,7 @@
     }
 
     /* =========================================================================
-       BARRAS LIMPIAS CON COLOR NEÓN DE LA MATERIA (SIN BOTÓN AJUSTAR BASE)
+       BARRAS LIMPIAS CON COLOR NEÓN DE LA MATERIA
        ========================================================================= */
 
     function generarBloqueBarrasActividad(t) {
@@ -3442,7 +3571,6 @@
 
     function render() {
       const semanaActualKey = obtenerKeySemanaActual();
-      const claseGridZoom = getClaseGridZoom();
 
       // 1. RENDER CRONOGRAMA (SOLO DOS MODOS: CRONOLÓGICO POR SEMANAS O URGENCIA)
       const cronogramaEl = document.getElementById("lista-cronograma");
@@ -3485,7 +3613,7 @@
                   <span class="semana-titulo">${g.titulo}</span>
                   <span class="badge-semana-actual">${g.tareas.length} ENTREGA${g.tareas.length > 1 ? 'S' : ''}</span>
                 </div>
-                <div class="${claseGridZoom}">
+                <div class="tasks-grid">
                   ${g.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
                 </div>
               </div>
@@ -3512,7 +3640,7 @@
                   <span class="semana-titulo">${grupo.titulo}</span>
                   ${esActual ? '<span class="badge-semana-actual">SEMANA EN CURSO</span>' : ''}
                 </div>
-                <div class="${claseGridZoom}">
+                <div class="tasks-grid">
                   ${grupo.tareas.map(t => renderizarTarjetaCronograma(t)).join("")}
                 </div>
               </div>
@@ -3644,7 +3772,7 @@
               </div>
             </div>
 
-            <div class="${claseGridZoom}">
+            <div class="tasks-grid">
               ${tareasMat.map(t => {
                 const esSinFecha = t.sinFecha || !t.fecha;
                 const doom = !esSinFecha ? calcularCuentaRegresiva(t.fecha, t.hora) : null;
